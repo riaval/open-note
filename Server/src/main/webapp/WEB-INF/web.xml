@@ -1,0 +1,40 @@
+<!DOCTYPE web-app PUBLIC
+ "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+ "http://java.sun.com/dtd/web-app_2_3.dtd" >
+
+<web-app>
+  <display-name>Archetype Created Web Application</display-name>
+  <filter>
+  	<filter-name>SyntaxFilter</filter-name>
+  	<display-name>SyntaxFilter</display-name>
+  	<description></description>
+  	<filter-class>web.SyntaxFilter</filter-class>
+  </filter>
+  <filter-mapping>
+  	<filter-name>SyntaxFilter</filter-name>
+  	<url-pattern>/SyntaxFilter</url-pattern>
+  </filter-mapping>
+  
+  <servlet>
+  	<servlet-name>Servlet</servlet-name>
+  	<display-name>Servlet</display-name>
+  	<description></description>
+  	<servlet-class>web.Servlet</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+  	<servlet-name>Servlet</servlet-name>
+  	<url-pattern></url-pattern>
+  	<url-pattern>/users/*</url-pattern>
+ 	<url-pattern>/groups/*</url-pattern>
+ 	<url-pattern>/notes</url-pattern>
+ 	<url-pattern>/simplenotes/*</url-pattern>
+  </servlet-mapping>
+
+  <error-page>
+    <error-code>404</error-code>
+    <location>/index.jsp</location>
+  </error-page>
+</web-app>
+
+
