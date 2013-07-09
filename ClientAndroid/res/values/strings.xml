@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">OpenNote</string>
+    <string name="title_welcome">Welcome to OpenNote</string>
+    <string name="action_settings">Settings</string>
+	<string name="title_section1">Log in</string>
+    <string name="title_section2">Sign Up</string>
+
+</resources>
