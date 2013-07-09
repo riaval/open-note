@@ -7,7 +7,7 @@ import data.entity.User;
 
 public class UserDAO extends DAO{
 	public User createUser(String login, String email, String password, String firstName, String secondName)
-            throws Exception {
+			throws Exception {
         try {
             begin();
             User user = new User(login, email, password, firstName, secondName);

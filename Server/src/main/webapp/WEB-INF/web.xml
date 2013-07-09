@@ -1,40 +1,27 @@
-<!DOCTYPE web-app PUBLIC
- "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
- "http://java.sun.com/dtd/web-app_2_3.dtd" >
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app id="WebApp_ID" version="2.4"
+            xmlns="http://java.sun.com/xml/ns/j2ee"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee
+                 http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+   <display-name>WebApiServlet</display-name>
+   <!-- Application class name -->
+   <context-param>
+      <param-name>org.restlet.application</param-name>
+      <param-value>
+         webapi.WebAPIApplication
+      </param-value>
+   </context-param>
 
-<web-app>
-  <display-name>Archetype Created Web Application</display-name>
-  <filter>
-  	<filter-name>SyntaxFilter</filter-name>
-  	<display-name>SyntaxFilter</display-name>
-  	<description></description>
-  	<filter-class>web.SyntaxFilter</filter-class>
-  </filter>
-  <filter-mapping>
-  	<filter-name>SyntaxFilter</filter-name>
-  	<url-pattern>/SyntaxFilter</url-pattern>
-  </filter-mapping>
-  
-  <servlet>
-  	<servlet-name>Servlet</servlet-name>
-  	<display-name>Servlet</display-name>
-  	<description></description>
-  	<servlet-class>web.Servlet</servlet-class>
-  </servlet>
-  
-  <servlet-mapping>
-  	<servlet-name>Servlet</servlet-name>
-  	<url-pattern></url-pattern>
-  	<url-pattern>/users/*</url-pattern>
- 	<url-pattern>/groups/*</url-pattern>
- 	<url-pattern>/notes</url-pattern>
- 	<url-pattern>/simplenotes/*</url-pattern>
-  </servlet-mapping>
+   <!-- Restlet adapter -->
+   <servlet>
+      <servlet-name>RestletServlet</servlet-name>
+      <servlet-class>org.restlet.ext.servlet.ServerServlet</servlet-class>
+   </servlet>
 
-  <error-page>
-    <error-code>404</error-code>
-    <location>/index.jsp</location>
-  </error-page>
+   <!-- Catch all requests -->
+   <servlet-mapping>
+      <servlet-name>RestletServlet</servlet-name>
+      <url-pattern>/api/*</url-pattern>
+   </servlet-mapping>
 </web-app>
-
-
