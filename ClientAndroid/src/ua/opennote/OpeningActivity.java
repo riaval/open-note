@@ -1,6 +1,8 @@
-package com.opennote;
+package ua.opennote;
 
 import java.util.Locale;
+
+import com.opennote.R;
 
 import android.app.ActionBar;
 import android.app.FragmentTransaction;

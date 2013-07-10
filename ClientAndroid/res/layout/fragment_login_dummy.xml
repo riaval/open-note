@@ -9,54 +9,56 @@
     tools:context=".MainActivity$DummySectionFragment" >
 
     <TextView
-        android:id="@+id/textView1"
+        android:id="@+id/loginInView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:text="User login" />
+        android:text="User login"
+        android:textStyle="bold" />
 
     <EditText
-        android:id="@+id/edit_existingLogin"
+        android:id="@+id/loginInEdit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textView1"
-        android:ems="10" />
+        android:layout_below="@+id/loginInView"
+        android:ems="10"
+        android:inputType="text" >
+    
+    	<requestFocus />
+	</EditText>
 
 	<TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="1dp"
-        android:layout_below="@+id/edit_existingLogin"
-        android:text="Password" />
-
-    <EditText
-        android:id="@+id/edit_existingPass"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/textView2"
-        android:ems="10"
-        android:inputType="textPassword" >
-
-        <requestFocus />
-    </EditText>
-
-	<CheckBox
-	    android:id="@+id/checkBox1"
+	    android:id="@+id/passInView"
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
-	    android:layout_alignLeft="@+id/edit_existingPass"
-	    android:layout_below="@+id/edit_existingPass"
+	    android:layout_below="@+id/loginInEdit"
+	    android:layout_marginTop="10dp"
+	    android:text="Password"
+	    android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/passInEdit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/passInView"
+        android:ems="10"
+        android:inputType="textPassword" />
+
+	<CheckBox
+	    android:id="@+id/passInChBx"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_below="@+id/passInEdit"
 	    android:layout_marginTop="10dp"
 	    android:text="Show password" />
 
 	<Button
-	    android:id="@+id/button1"
+	    android:id="@+id/signInBt"
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
-	    android:layout_alignLeft="@+id/checkBox1"
-	    android:layout_below="@+id/checkBox1"
+	    android:layout_below="@+id/passInChBx"
 	    android:layout_marginTop="10dp"
+	    android:enabled="false"
 	    android:text="Sign in" />
 
 </RelativeLayout>

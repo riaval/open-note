@@ -8,6 +8,75 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".MainActivity$DummySectionFragment" >
 
+    <TextView
+        android:id="@+id/loginUpView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:text="User login"
+        android:textStyle="bold" />
+    
+    <EditText
+        android:id="@+id/loginUpEdit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/loginUpView"
+        android:ems="10"
+        android:hint="6—15 characters"
+        android:inputType="text" />
+    
+    <TextView
+        android:id="@+id/fuullNameUpView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/loginUpEdit"
+        android:layout_marginTop="10dp"
+        android:text="Full name"
+        android:textStyle="bold" />
 
+    <EditText
+        android:id="@+id/fuullNameUpEdit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/fuullNameUpView"
+        android:ems="10"
+        android:hint="First and last name"
+        android:inputType="textPersonName" />
+
+    <TextView
+        android:id="@+id/passUpView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/fuullNameUpEdit"
+        android:layout_marginTop="10dp"
+        android:text="Password"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/passUpEdit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/passUpView"
+        android:ems="10"
+        android:hint="At least 6 characters"
+        android:fontFamily="sans-serif"
+        android:inputType="textPassword" />
+    
+	<CheckBox
+        android:id="@+id/passUpChBx"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/passUpEdit"
+		android:layout_marginTop="10dp"
+        android:text="Show password" />
+
+	<Button
+	    android:id="@+id/signUpBt"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_below="@+id/passUpChBx"
+	    android:layout_marginTop="10dp"
+	    android:enabled="false"
+	    android:text="Sign up for OpenNote" />
 
 </RelativeLayout>
