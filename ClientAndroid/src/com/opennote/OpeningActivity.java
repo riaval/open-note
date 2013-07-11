@@ -1,4 +1,4 @@
-package ua.opennote;
+package com.opennote;
 
 import java.util.Locale;
 
