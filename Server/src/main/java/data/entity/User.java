@@ -10,13 +10,16 @@ import javax.persistence.Id;
 
 @Entity
 public class User {
-	Long id;
+	long id;
 	String login;
 	String email;
 	String password;
 	String firstName;
 	String secondName;
 	Date date;
+	
+	public User(){
+	}
 	
 	public User(String login, String email, String password, String firstName, String secondName) {
         this.login = login;
@@ -87,7 +90,7 @@ public class User {
     protected long getId() {
         return id;
     }
-	protected void setId(Long id){
+	protected void setId(long id){
 		this.id = id;
 	}
 }

@@ -1,12 +1,12 @@
 package webapi;
 
-import org.restlet.data.Form;
 import org.restlet.data.Status;
-import org.restlet.representation.Representation;
 import org.restlet.resource.Get;
 import org.restlet.resource.Post;
 import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
+
+import com.google.gson.Gson;
 
 import data.dao.UserDAO;
 import data.entity.User;
@@ -48,9 +48,21 @@ public class UserResource extends ServerResource {
         
     }
     
-//    @Get
-//    public String getUserData() {
-//        return "hello, world";
-//    }
+    @Get("json")
+    public String getUserData() {
+    	try {
+    		UserDAO userDAO = new UserDAO();
+			User user = userDAO.retrieveUser(userLogin);
+			
+			Gson gson = new Gson();
+			return gson.toJson(user);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return "Error";
+		}
+    	
+        
+    }
 
 }
