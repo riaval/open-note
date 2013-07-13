@@ -1,4 +1,4 @@
-package webapi;
+package controller;
 
 import org.restlet.Application;
 import org.restlet.Restlet;

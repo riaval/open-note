@@ -1,22 +1,20 @@
-package data.dao;
+package dao;
 
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 
-import data.entity.User;
+import domain.User;
 
 public class UserDAO extends DAO{
-	public User createUser(String login, String email, String password, String firstName, String secondName)
-			throws Exception {
+	
+	public void createUser(User user) throws Exception {
         try {
             begin();
-            User user = new User(login, email, password, firstName, secondName);
             getSession().save(user);
             commit();
-            return user;
         } catch (HibernateException e) {
             rollback();
-            throw new Exception("Could not create user " + login, e);
+            throw new Exception("Could not create user " + user.getLogin(), e);
         }
     }
 
@@ -34,14 +32,16 @@ public class UserDAO extends DAO{
         }
     }
 
-    public void deleteUser( User user ) throws Exception {
+    public void deleteUserByLogin(String login) throws Exception {
         try {
             begin();
-            getSession().delete(user);
+            Query q = getSession().createQuery("delete from User where login in (:login) ");
+            q.setString("login", login);
+            q.executeUpdate();
             commit();
         } catch (HibernateException e) {
             rollback();
-            throw new Exception("Could not delete user " + user.getLogin(), e);
+            throw new Exception("Could not delete user " + login, e);
         }
     }
 }

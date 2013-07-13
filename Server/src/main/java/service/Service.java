@@ -1,19 +1,23 @@
-package data.dao;
+package service;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.AnnotationConfiguration;
 
-public class DAO {
+import dao.DAO;
+import dao.HibernateUtil;
+
+public abstract class Service {
+	
     private static final Logger log = Logger.getAnonymousLogger();
     private static final ThreadLocal session = new ThreadLocal();
-    private static final SessionFactory sessionFactory =
-            new AnnotationConfiguration().configure().buildSessionFactory();
+    private static final SessionFactory sessionFactory = new AnnotationConfiguration().configure().buildSessionFactory();
 
-    protected DAO() {
+    protected Service() {
     }
 
     public static Session getSession() {
@@ -51,4 +55,5 @@ public class DAO {
         getSession().close();
         DAO.session.set(null);
     }
+	
 }

@@ -9,7 +9,7 @@
    <context-param>
       <param-name>org.restlet.application</param-name>
       <param-value>
-         webapi.WebAPIApplication
+         controller.WebAPIApplication
       </param-value>
    </context-param>
 

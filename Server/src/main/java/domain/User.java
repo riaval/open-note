@@ -1,34 +1,44 @@
-package data.entity;
+package domain;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 @Entity
 public class User {
-	long id;
-	String login;
-	String email;
-	String password;
-	String firstName;
-	String secondName;
-	Date date;
+	private long id;
+	private String login;
+	private String fullName;
+	private String password;
+	private String email;
+	private Date date;
+	Set<Session> sessions;
 	
 	public User(){
 	}
 	
-	public User(String login, String email, String password, String firstName, String secondName) {
+	public User(String login, String fullName, String password, String email) {
         this.login = login;
-        this.email = email;
+        this.fullName = fullName;
         this.password = password;
-        this.firstName = firstName;
-        this.secondName = secondName;
+        this.email = email;
         date = Calendar.getInstance().getTime();
     }
+	
+	@OneToMany(mappedBy="user")
+	public Set<Session> getSession(){
+		return sessions;
+	}
+	public void setSession(Set<Session> sessions){
+		this.sessions = sessions;
+	}
 	
 //	login
 	@Column(unique=true, nullable = false, length = 24)
@@ -39,13 +49,13 @@ public class User {
 		this.login = login;
 	}
 	
-//	email
-	@Column(unique=true, nullable = false, length = 45)
-	public String getEmail() {
-        return email;
+//	full name
+	@Column(unique=false, nullable = false, length = 36)
+	public String getFullName() {
+        return fullName;
     }
-	public void setEmail(String email){
-		this.email = email;
+	public void setFullName(String firstName){
+		this.fullName = firstName;
 	}
 	
 //	password
@@ -57,22 +67,13 @@ public class User {
 		this.password = password;
 	}
 	
-//	first name
-	@Column(unique=false, nullable = false, length = 36)
-	public String getFirstName() {
-        return firstName;
+//	email
+	@Column(unique=true, nullable = false, length = 45)
+	public String getEmail() {
+        return email;
     }
-	public void setFirstName(String firstName){
-		this.firstName = firstName;
-	}
-	
-//	second name
-	@Column(unique=false, nullable = false, length = 36)
-	public String getSecondName() {
-        return secondName;
-    }
-	public void setSecondName(String secondName){
-		this.secondName = secondName;
+	public void setEmail(String email){
+		this.email = email;
 	}
 	
 //	date

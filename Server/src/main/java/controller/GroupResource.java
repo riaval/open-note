@@ -1,4 +1,4 @@
-package webapi;
+package controller;
 
 import org.restlet.resource.Post;
 import org.restlet.resource.ServerResource;
