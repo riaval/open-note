@@ -8,6 +8,11 @@
   <name>Server Maven Webapp</name>
   <url>http://maven.apache.org</url>
   
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+  </properties>
+  
   <repositories>
   
 	<repository>  
@@ -90,9 +95,7 @@
 		<plugin>
 		    <groupId>org.apache.maven.plugins</groupId>
 		    <artifactId>maven-war-plugin</artifactId>
-		    <configuration>
-		        <warName>${project.artifactId}</warName>
-		    </configuration>
+		    <version>2.3</version>
 		</plugin>
     
 		<plugin>

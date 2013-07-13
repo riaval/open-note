@@ -1,48 +1,62 @@
 package service;
 
-import domain.Session;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
-import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
-
-import dao.DAO;
 import dao.DAOFactory;
 import dao.HibernateUtil;
+import domain.Session;
 import domain.User;
 
 public class UserService {
 
-	public void createUser(String login, String fullName, String password, String email, String hostIp) throws Exception{
+	public long createUser(String login, String fullName, String password, String email, String hostIp) throws Exception {
 		if(login.length() < 6){
 			throw new IllegalArgumentException("Login length < 6 characters.");
 		}
-
+		if(password.length() < 6){
+			throw new IllegalArgumentException("Password length < 6 characters.");
+		}
 		
-		User user = new User(login, fullName, password, email);
+		User user = new User(login, fullName, passwordHash(password), email);
 		Session session = new Session(hostIp);
+		session.setUser(user);
 		
-//		open session
-		DAO.begin();
-		sess.beginTransaction();
+		HibernateUtil.beginTransaction();
+		DAOFactory.getUserDAO().save(user);
+		DAOFactory.getSessionDAO().save(session);
+		HibernateUtil.commitTransaction();
 		
-		DAOFactory.getUserDAO().createUser(user);
-		DAOFactory.getSessionDAO().addUser(user);
-		
-		sess.getTransaction().commit();
-		
-
+		return session.getId();
 	}
 	
-	public User getUser(String login) throws Exception{
-		return DAOFactory.getUserDAO().retrieveUser(login);
-	}
 	
-	public void editUser(User user){
+	private String passwordHash(String password) throws NoSuchAlgorithmException{
+		final String SALT = "sflprt49fhi2";
+		String hash1 = null;
+		String hash2 = null;
+		try {
+			hash1 = getHash(password);
+			hash2 = getHash(hash1 + SALT);
+		} catch (NoSuchAlgorithmException e) {
+			throw new NoSuchAlgorithmException("Could not get hash", e);
+		}
 		
+		return hash2;
 	}
 	
-	public void deleteUser(String login) throws Exception{
-		DAOFactory.getUserDAO().deleteUserByLogin(login);
+	private String getHash(String str) throws NoSuchAlgorithmException{
+		 
+		MessageDigest md = MessageDigest.getInstance("MD5");
+		md.update(str.getBytes());
+		
+		byte byteData[] = md.digest();
+		
+		StringBuffer sb = new StringBuffer();
+		for (int i = 0; i < byteData.length; i++) {
+			sb.append(Integer.toString((byteData[i] & 0xff) + 0x100, 16).substring(1));
+		}
+		
+		return sb.toString();
 	}
-
 }

@@ -1,14 +1,62 @@
 package dao;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import org.hibernate.HibernateException;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.cfg.AnnotationConfiguration;
+import java.util.List;
 
-public class DAOImpl {
-	
+import org.hibernate.Query;
+import org.hibernate.Session;
+
+public abstract class DAOImpl<T> implements DAO<T> {
+	 
+    protected Session getSession() {
+        return HibernateUtil.getSession();
+    }
+ 
+    public void save(T entity) {
+        Session hibernateSession = this.getSession();
+        hibernateSession.saveOrUpdate(entity);
+    }
+ 
+    public void merge(T entity) {
+        Session hibernateSession = this.getSession();
+        hibernateSession.merge(entity);
+    }
+ 
+    public void delete(T entity) {
+        Session hibernateSession = this.getSession();
+        hibernateSession.delete(entity);
+    }
+ 
+    @SuppressWarnings("unchecked")
+	public List<T> findMany(Query query) {
+        List<T> t;
+        t = (List<T>) query.list();
+        return t;
+    }
+ 
+    @SuppressWarnings("unchecked")
+	public T findOne(Query query) {
+        T t;
+        t = (T) query.uniqueResult();
+        return t;
+    }
+ 
+    @SuppressWarnings("unchecked")
+	public T findByID(Class<T> clazz, long id) {
+        Session hibernateSession = this.getSession();
+        T t = null;
+        t = (T) hibernateSession.get(clazz, id);
+        return t;
+    }
+ 
+    @SuppressWarnings("unchecked")
+	public List<T> findAll(Class<T> clazz) {
+        Session hibernateSession = this.getSession();
+        List<T> T = null;
+        Query query = hibernateSession.createQuery("from " + clazz.getName());
+        T = query.list();
+        return T;
+    }
+    
 }
 
 

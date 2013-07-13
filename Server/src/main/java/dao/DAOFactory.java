@@ -2,60 +2,60 @@ package dao;
 
 public class DAOFactory {
 	
-	private static GroupDAO groupDAO;
-	private static GroupRoleDAO groupRoleDAO;
-	private static InviteDAO inviteDAO;
-	private static SessionDAO sessionDAO;
-	private static SimpleNoteDAO simpleNoteDAO;
-	private static UserDAO userDAO;
-	private static UserGroupDAO userGroupDAO;
-	private static UserSimpleNoteDAO userSimpleNoteDAO;
+	private static GroupDAOImpl groupDAO;
+	private static GroupRoleDAOImpl groupRoleDAO;
+	private static InviteDAOImpl inviteDAO;
+	private static SessionDAOImpl sessionDAO;
+	private static SimpleNoteDAOImpl simpleNoteDAO;
+	private static UserDAOImpl userDAO;
+	private static UserGroupDAOImpl userGroupDAO;
+	private static UserSimpleNoteDAOImpl userSimpleNoteDAO;
 	
-	public static GroupDAO getGroupDAO() {
+	public static GroupDAOImpl getGroupDAO() {
 		if(groupDAO == null){
-			groupDAO = new GroupDAO();
+			groupDAO = new GroupDAOImpl();
 		}
 		return groupDAO;
 	}
-	public static GroupRoleDAO getGroupRoleDAO() {
+	public static GroupRoleDAOImpl getGroupRoleDAO() {
 		if(groupRoleDAO == null){
-			groupRoleDAO = new GroupRoleDAO();
+			groupRoleDAO = new GroupRoleDAOImpl();
 		}
 		return groupRoleDAO;
 	}
-	public static InviteDAO getInviteDAO() {
+	public static InviteDAOImpl getInviteDAO() {
 		if(inviteDAO == null){
-			inviteDAO = new InviteDAO();
+			inviteDAO = new InviteDAOImpl();
 		}
 		return inviteDAO;
 	}
-	public static SessionDAO getSessionDAO() {
+	public static SessionDAOImpl getSessionDAO() {
 		if(sessionDAO == null){
-			sessionDAO = new SessionDAO();
+			sessionDAO = new SessionDAOImpl();
 		}
 		return sessionDAO;
 	}
-	public static SimpleNoteDAO getSimpleNoteDAO() {
+	public static SimpleNoteDAOImpl getSimpleNoteDAO() {
 		if(simpleNoteDAO == null){
-			simpleNoteDAO = new SimpleNoteDAO();
+			simpleNoteDAO = new SimpleNoteDAOImpl();
 		}
 		return simpleNoteDAO;
 	}
-	public static UserDAO getUserDAO() {
+	public static UserDAOImpl getUserDAO() {
 		if(userDAO == null){
-			userDAO = new UserDAO();
+			userDAO = new UserDAOImpl();
 		}
 		return userDAO;
 	}
-	public static UserGroupDAO getUserGroupDAO() {
+	public static UserGroupDAOImpl getUserGroupDAO() {
 		if(userGroupDAO == null){
-			userGroupDAO = new UserGroupDAO();
+			userGroupDAO = new UserGroupDAOImpl();
 		}
 		return userGroupDAO;
 	}
-	public static UserSimpleNoteDAO getUserSimpleNoteDAO() {
+	public static UserSimpleNoteDAOImpl getUserSimpleNoteDAO() {
 		if(userSimpleNoteDAO == null){
-			userSimpleNoteDAO = new UserSimpleNoteDAO();
+			userSimpleNoteDAO = new UserSimpleNoteDAOImpl();
 		}
 		return userSimpleNoteDAO;
 	}

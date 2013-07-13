@@ -10,7 +10,6 @@ import service.UserService;
 
 import com.google.gson.Gson;
 
-import dao.UserDAO;
 import domain.User;
 
 public class UserResource extends ServerResource {
@@ -19,7 +18,7 @@ public class UserResource extends ServerResource {
 	
     @Override
     protected void doInit() throws ResourceException {
-//        this.userLogin = (String) getRequest().getAttributes().get("userLogin");
+        this.userLogin = (String) getRequest().getAttributes().get("userLogin");
 
         // Get the item directly from the "persistence layer".
 //        this.item = getItems().get(itemName);
@@ -32,7 +31,7 @@ public class UserResource extends ServerResource {
 //		UserDAO userDAO = new UserDAO();
 		try {
 			UserService us = new UserService();
-			us.createUser("test2", "name2", "pass2", "mail2", "ip2");
+			long sessionID = us.createUser(userLogin, "qqqqname2", "qqqqqpass2", "qqqqmail2", getClientInfo().getAddress());
 //			User user = userDAO.createUser(
 //					  userLogin
 //					, getQueryValue("fullName")
@@ -41,7 +40,7 @@ public class UserResource extends ServerResource {
 //			);
 //			setStatus(Status.SUCCESS_CREATED);
 //			return Status.SUCCESS_CREATED.toString();
-			return getClientInfo().getAddress();
+			return ((Long)sessionID).toString();
 		} catch (Exception e) {
 			setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
 			e.printStackTrace();

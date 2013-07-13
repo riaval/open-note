@@ -59,7 +59,7 @@ public class User {
 	}
 	
 //	password
-	@Column(unique=false, nullable = false, length = 24)
+	@Column(unique=false, nullable = false, length = 124)
 	public String getPassword() {
         return password;
     }

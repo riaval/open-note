@@ -42,7 +42,7 @@ public class Session {
 	@Id
     @GeneratedValue
     @Column(unique = true, nullable = false)
-    protected long getId() {
+    public long getId() {
         return id;
     }
 	protected void setId(long id){
