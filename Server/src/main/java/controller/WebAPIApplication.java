@@ -15,8 +15,8 @@ public class WebAPIApplication extends Application {
         // new instance of HelloWorldResource.
         Router router = new Router(getContext());
 
-        // User
         router.attach("/users/{userLogin}", UserResource.class);
+        router.attach("/sessions/{userLogin}", SessionResource.class);
         
         // Group
 //        router.attach("/groups/{groupSlug}", GroupResource.class);

@@ -1,8 +1,16 @@
 package dao;
 
+import org.hibernate.Query;
+
 import domain.User;
 
 public class UserDAOImpl extends DAOImpl<User>{
+	
+	public User findByLogin(String login){
+		Query query = getSession().createQuery("from User where login = :login");
+		query.setString("login", login);
+		return findOne(query);
+	}
 	
 }
 	
