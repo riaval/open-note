@@ -58,7 +58,8 @@
 	    android:layout_height="wrap_content"
 	    android:layout_below="@+id/passInChBx"
 	    android:layout_marginTop="10dp"
-	    android:enabled="false"
+	    android:enabled="true"
+	    android:onClick="signInAction"
 	    android:text="Sign in" />
 
 </RelativeLayout>

@@ -7,7 +7,7 @@ import domain.User;
 
 public class UserService {
 
-	public long createUser(String login, String fullName, String password, String email, String hostIp) throws Exception {
+	public String createUser(String login, String fullName, String password, String hostIp, String hostAgent) throws Exception {
 		if(login.length() < 6){
 			throw new IllegalArgumentException("Login length < 6 characters.");
 		}
@@ -15,14 +15,14 @@ public class UserService {
 			throw new IllegalArgumentException("Password length < 6 characters.");
 		}
 		
-		String passwordHash = ServiceUtil.passwordHash(password);
+		String passwordHash = ServiceUtil.getSaltMD5(password);
+		String clientHash = ServiceUtil.getSaltMD5(hostIp + hostAgent);
 		User user = new User(
 				  login
 				, fullName
 				, passwordHash
-				, email
 		);
-		Session session = new Session(hostIp);
+		Session session = new Session(clientHash);
 		session.setUser(user);
 		
 		HibernateUtil.beginTransaction();
@@ -30,7 +30,7 @@ public class UserService {
 		DAOFactory.getSessionDAO().save(session);
 		HibernateUtil.commitTransaction();
 		
-		return session.getId();
+		return session.getHash();
 	}
 
 }

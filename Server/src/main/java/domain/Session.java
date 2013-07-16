@@ -11,13 +11,13 @@ import javax.persistence.ManyToOne;
 public class Session {
 	private long id;
 	private User user;
-	private String ip;
+	private String hash;
 	
 	public Session(){
 	}
 	
-	public Session(String ip) {
-		this.ip = ip;
+	public Session(String hash) {
+		this.hash = hash;
 	}
 	
 //	user
@@ -30,19 +30,19 @@ public class Session {
 		this.user = user;
 	}
 
-//	ip
-	@Column(unique=false, nullable = false, length = 40)
-	public String getIp() {
-        return ip;
+//	hash
+	@Column(unique=false, nullable = false, length = 140)
+	public String getHash() {
+        return hash;
     }
-	public void setIp(String ip){
-		this.ip = ip;
+	public void setHash(String hash){
+		this.hash = hash;
 	}
 
 	@Id
     @GeneratedValue
     @Column(unique = true, nullable = false)
-    public long getId() {
+	protected long getId() {
         return id;
     }
 	protected void setId(long id){

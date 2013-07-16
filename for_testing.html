@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>Forms fotr testing</title>
+</head>
+
+<body id="main_body" >
+		<p>Default login -- login33. Go to source for options.</p>
+		<hr>
+
+		<h5>POST   /sessions/{userLogin} -- Get session number (authentication)</h5>
+		<form method="post" action="http://localhost:8080/api/sessions/login33"><!-- ______________________ login -->
+			<label>password</label><br>
+			<input name="password" type="text" value="qqqqname2"/>
+			<input class="button_text" type="submit" name="submit" value="Submit" />
+		</form>
+
+		<h5>POST   /users/{userLogin} -- Create a new user</h5>
+		<form method="post" action="http://localhost:8080/api/users/login33"><!-- ____________________________ login -->
+			<label>full name</label><br>
+			<input name="fullName" type="text" value="fullName"/><br>
+			<label>password</label><br>
+			<input name="password" type="text" value="password"/> 
+			<input type="submit" name="submit" value="Submit" />
+		</form>
+
+</body>
+</html>

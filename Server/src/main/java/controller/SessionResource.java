@@ -1,33 +1,61 @@
 package controller;
 
+import org.restlet.data.Form;
 import org.restlet.data.Status;
+import org.restlet.representation.Representation;
 import org.restlet.resource.Post;
 import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
 
 import service.SessionService;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
+
 public class SessionResource extends ServerResource {
 	
 	private String userLogin;
 	
-    @Override
-    protected void doInit() throws ResourceException {
-        this.userLogin = (String) getRequest().getAttributes().get("userLogin");
-    }
+	@Override
+	protected void doInit() throws ResourceException {
+	    this.userLogin = (String) getRequest().getAttributes().get("userLogin");
+	}
 	
 	@Post
-	public String openSession(){
+	public String openSession(Representation entity){
+		Form form = new Form(entity);
 		try {
-			SessionService ss = new SessionService();
+			SessionService sessionService = new SessionService();
+			
+			String password = form.getFirstValue("password");
 			String hostIp = getClientInfo().getAddress();
-			long sessionId = ss.openSession(userLogin, "qqqqqpass2", hostIp);
-			return ((Long)sessionId).toString();
-		} catch (Exception e) {
+			String hostAgent = getClientInfo().getAgent();
+			
+			String sessionHash = sessionService.openSession(
+					  userLogin
+					, password
+					, hostIp
+					, hostAgent
+			);
+			
+			setStatus(Status.SUCCESS_OK);
+			return openSessionJson(sessionHash);
+		} catch (IllegalArgumentException e) {
 			setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-			e.printStackTrace();
-			return Status.CLIENT_ERROR_BAD_REQUEST.toString();
+			return ErrorFactory.Json.clientBadRequest();
+		} catch (Exception e) {
+			setStatus(Status.SERVER_ERROR_INTERNAL);
+			return ErrorFactory.Json.serverInternalError();
 		}
+	}
+	
+	private String openSessionJson(String sessionHash) {
+		JsonPrimitive jsonPrimitive = new JsonPrimitive(sessionHash);
+		JsonObject jsonObject = new JsonObject();
+		
+		jsonObject.add("session_hash", jsonPrimitive);
+		
+		return jsonObject.toString();
 	}
 	
 }

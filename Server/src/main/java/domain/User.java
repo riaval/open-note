@@ -2,6 +2,7 @@ package domain;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -18,24 +19,24 @@ public class User {
 	private String passwordHash;
 	private String email;
 	private Date date;
-	Set<Session> sessions;
+	List<Session> sessions;
 	
 	public User(){
 	}
 	
-	public User(String login, String fullName, String passwordHash, String email) {
+	public User(String login, String fullName, String passwordHash) {
 		this.login = login;
 		this.fullName = fullName;
 		this.passwordHash = passwordHash;
-		this.email = email;
+//		this.email = ""; null or ""
 		date = Calendar.getInstance().getTime();
 	}
 	
 	@OneToMany(mappedBy="user")
-	public Set<Session> getSession(){
+	public List<Session> getSession(){
 		return sessions;
 	}
-	public void setSession(Set<Session> sessions){
+	public void setSession(List<Session> sessions){
 		this.sessions = sessions;
 	}
 	
@@ -67,7 +68,7 @@ public class User {
 	}
 	
 //	email
-	@Column(unique=true, nullable = false, length = 45)
+	@Column(unique=false, nullable = true, length = 45)
 	public String getEmail() {
 		return email;
 	}
@@ -87,7 +88,7 @@ public class User {
 	@Id
 	@GeneratedValue
 	@Column(unique = true, nullable = false)
-	protected long getId() {
+	public long getId() {
 		return id;
 	}
 	protected void setId(long id){

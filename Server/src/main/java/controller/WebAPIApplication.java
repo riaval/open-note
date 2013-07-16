@@ -18,16 +18,10 @@ public class WebAPIApplication extends Application {
         router.attach("/users/{userLogin}", UserResource.class);
         router.attach("/sessions/{userLogin}", SessionResource.class);
         
-        // Group
+//        Group
 //        router.attach("/groups/{groupSlug}", GroupResource.class);
 //        router.attach("/groups/", GroupResource.class);
         
-        // Group-user
-//        router.attach("/groups/{GroupID}/users/{userLogin}", GroupUserResource.class);
-        
-        // Invitations
-        
-        // SimpleNotes
         return router;
     }
 

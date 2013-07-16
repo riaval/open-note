@@ -5,13 +5,13 @@ import java.security.NoSuchAlgorithmException;
 
 public class ServiceUtil {
 
-	static public String passwordHash(String password) throws NoSuchAlgorithmException{
+	static public String getSaltMD5(String password) throws NoSuchAlgorithmException{
 		final String SALT = "sflprt49fhi2";
 		String hash1 = null;
 		String hash2 = null;
 		try {
-			hash1 = getHash(password);
-			hash2 = getHash(hash1 + SALT);
+			hash1 = getMD5(password);
+			hash2 = getMD5(hash1 + SALT);
 		} catch (NoSuchAlgorithmException e) {
 			throw new NoSuchAlgorithmException("Could not get hash", e);
 		}
@@ -19,7 +19,7 @@ public class ServiceUtil {
 		return hash2;
 	}
 	
-	static private String getHash(String str) throws NoSuchAlgorithmException{
+	static private String getMD5(String str) throws NoSuchAlgorithmException{
 		 
 		MessageDigest md = MessageDigest.getInstance("MD5");
 		md.update(str.getBytes());
