@@ -8,6 +8,7 @@ import java.io.IOException;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.Menu;
@@ -16,28 +17,23 @@ import android.widget.Toast;
 import com.opennote.R;
 
 public class MainActivity extends Activity {
-
-	
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-	    try {
-	    	File sdcard = Environment.getExternalStorageDirectory();
-	    	File file = new File(sdcard,"data/OpenNote/Session.txt");
-	    	BufferedReader br = new BufferedReader(new FileReader(file));
-			Context context = getApplicationContext();
-			Toast.makeText(context, br.readLine(), 20).show();
-//			FileWriter f = new FileWriter("/sdcard/data/OpenNote/Session.txt");
-			//f.append("long hash number");
-//			f.close();
-		} catch (IOException e) {
+		
+		SharedPreferences sharedPref = getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+//		SharedPreferences.Editor editor = sharedPref.edit();
+//		editor.clear();
+//		editor.commit();
+		String value = sharedPref.getString("session_hash", null);
+		
+		if(value == null){
 			Intent intent = new Intent(this, OpeningActivity.class);
 			startActivity(intent);
 			this.finish();
 		}
-
 	}
 
 	@Override

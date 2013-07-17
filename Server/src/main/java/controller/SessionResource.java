@@ -38,13 +38,12 @@ public class SessionResource extends ServerResource {
 					, hostAgent
 			);
 			
-			setStatus(Status.SUCCESS_OK);
 			return openSessionJson(sessionHash);
 		} catch (IllegalArgumentException e) {
-			setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
+			e.printStackTrace();
 			return ErrorFactory.Json.clientBadRequest();
 		} catch (Exception e) {
-			setStatus(Status.SERVER_ERROR_INTERNAL);
+			e.printStackTrace();
 			return ErrorFactory.Json.serverInternalError();
 		}
 	}

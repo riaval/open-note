@@ -4,6 +4,7 @@ import java.util.Locale;
 
 import android.app.ActionBar;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -15,7 +16,6 @@ import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.foxykeep.datadroid.requestmanager.Request;
 import com.foxykeep.datadroid.requestmanager.RequestManager.RequestListener;
@@ -192,38 +192,46 @@ public class OpeningActivity extends FragmentActivity implements
 		requestManager.execute(request, requestListener);
 	}
 	
-	RequestListener requestListener = new RequestListener() {
+	public void signUpAction(View view){
+		EditText loginInEdit   = (EditText)findViewById(R.id.loginUpEdit);
+		EditText fullNameUpEdit   = (EditText)findViewById(R.id.fullNameUpEdit);
+		EditText passInEdit   = (EditText)findViewById(R.id.passUpEdit);
 		
+		String login = loginInEdit.getText().toString();
+		String fullName = fullNameUpEdit.getText().toString();
+		String password = passInEdit.getText().toString();
+		
+		Request request = RequestFactory.getSignUpRequest(login, fullName, password);
+		requestManager.execute(request, requestListener);
+	}
+	
+	RequestListener requestListener = new RequestListener(){
+
 		@Override
 		public void onRequestFinished(Request request, Bundle resultData) {
-			Toast.makeText(getApplicationContext(), "Finished", 5).show();
-//			listView.onRefreshComplete();
+			Intent intent = new Intent(OpeningActivity.this, MainActivity.class);
+			startActivity(intent);
+			OpeningActivity.this.finish();
 		}
-		
-		void showError() {
-			Toast.makeText(getApplicationContext(), "Error", 5).show();
-//			listView.onRefreshComplete();
-//			AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-//			builder.
-//				setTitle(android.R.string.dialog_alert_title).
-//				setMessage(getString(R.string.faled_to_load_data)).
-//				create().
-//				show();
-		}
-		
-		@Override
-		public void onRequestDataError(Request request) {
-			showError();
-		}
-		
-		@Override
-		public void onRequestCustomError(Request request, Bundle resultData) {
-			showError();
-		}
-		
+
 		@Override
 		public void onRequestConnectionError(Request request, int statusCode) {
-			showError();
+			// TODO Auto-generated method stub
+			
 		}
+
+		@Override
+		public void onRequestDataError(Request request) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void onRequestCustomError(Request request, Bundle resultData) {
+			// TODO Auto-generated method stub
+			
+		}
+		
 	};
+
 }

@@ -26,7 +26,7 @@
         android:inputType="text" />
     
     <TextView
-        android:id="@+id/fuullNameUpView"
+        android:id="@+id/fullNameUpView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/loginUpEdit"
@@ -35,10 +35,10 @@
         android:textStyle="bold" />
 
     <EditText
-        android:id="@+id/fuullNameUpEdit"
+        android:id="@+id/fullNameUpEdit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/fuullNameUpView"
+        android:layout_below="@+id/fullNameUpView"
         android:ems="10"
         android:hint="First and last name"
         android:inputType="textPersonName" />
@@ -47,7 +47,7 @@
         android:id="@+id/passUpView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/fuullNameUpEdit"
+        android:layout_below="@+id/fullNameUpEdit"
         android:layout_marginTop="10dp"
         android:text="Password"
         android:textStyle="bold" />
@@ -76,7 +76,7 @@
 	    android:layout_height="wrap_content"
 	    android:layout_below="@+id/passUpChBx"
 	    android:layout_marginTop="10dp"
-	    android:enabled="false"
+	    android:onClick="signUpAction"
 	    android:text="Sign up for OpenNote" />
 
 </RelativeLayout>
