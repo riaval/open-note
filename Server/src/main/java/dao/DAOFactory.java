@@ -8,8 +8,6 @@ public class DAOFactory {
 	private static SessionDAOImpl sessionDAO;
 	private static SimpleNoteDAOImpl simpleNoteDAO;
 	private static UserDAOImpl userDAO;
-	private static UserGroupDAOImpl userGroupDAO;
-	private static UserSimpleNoteDAOImpl userSimpleNoteDAO;
 	
 	public static GroupDAOImpl getGroupDAO() {
 		if(groupDAO == null){
@@ -46,18 +44,6 @@ public class DAOFactory {
 			userDAO = new UserDAOImpl();
 		}
 		return userDAO;
-	}
-	public static UserGroupDAOImpl getUserGroupDAO() {
-		if(userGroupDAO == null){
-			userGroupDAO = new UserGroupDAOImpl();
-		}
-		return userGroupDAO;
-	}
-	public static UserSimpleNoteDAOImpl getUserSimpleNoteDAO() {
-		if(userSimpleNoteDAO == null){
-			userSimpleNoteDAO = new UserSimpleNoteDAOImpl();
-		}
-		return userSimpleNoteDAO;
 	}
 	
 }

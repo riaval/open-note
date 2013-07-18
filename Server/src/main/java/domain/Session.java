@@ -7,6 +7,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+
 @Entity
 public class Session {
 	private long id;
@@ -21,6 +23,7 @@ public class Session {
 	}
 	
 //	user
+	@JsonIgnore
 	@ManyToOne
     @JoinColumn(name="user", referencedColumnName="id", nullable=false)
 	public User getUser() {
@@ -31,7 +34,7 @@ public class Session {
 	}
 
 //	hash
-	@Column(unique=false, nullable = false, length = 140)
+	@Column(unique=true, nullable = false, length = 140)
 	public String getHash() {
         return hash;
     }

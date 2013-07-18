@@ -12,6 +12,12 @@ public class UserDAOImpl extends DAOImpl<User>{
 		return findOne(query);
 	}
 	
+//	public User findBySessionHash(String sessionHash){
+//		Query query = getSession().createQuery("from User where login = :login");
+//		query.setString("login", login);
+//		return findOne(query);
+//	}
+	
 }
 	
 //	public void createUser(User user) throws Exception {

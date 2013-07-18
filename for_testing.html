@@ -6,22 +6,36 @@
 </head>
 
 <body id="main_body" >
-		<p>Default login -- login33. Go to source for options.</p>
-		<hr>
 
 		<h5>POST   /sessions/{userLogin} -- Get session number (authentication)</h5>
-		<form method="post" action="http://localhost:8080/api/sessions/login33"><!-- ______________________ login -->
+		<form method="post" action="http://localhost:8080/api/sessions/newUser"><!-- ______________________ login -->
 			<label>password</label><br>
 			<input name="password" type="text" value="qqqqname2"/>
 			<input class="button_text" type="submit" name="submit" value="Submit" />
 		</form>
 
 		<h5>POST   /users/{userLogin} -- Create a new user</h5>
-		<form method="post" action="http://localhost:8080/api/users/login33"><!-- ____________________________ login -->
+		<form method="post" action="http://localhost:8080/api/users/newUser"><!-- ____________________________ login -->
 			<label>full name</label><br>
-			<input name="fullName" type="text" value="fullName"/><br>
+			<input name="full_name" type="text" value="fullName"/><br>
 			<label>password</label><br>
 			<input name="password" type="text" value="password"/> 
+			<input type="submit" name="submit" value="Submit" />
+		</form>
+
+		<h5>POST   /groups/{groupSlug}</h5>
+		<form method="post" action="http://localhost:8080/api/groups/newUserGroup3"><!-- ____________________________ slug -->
+			<label>name</label><br>
+			<input name="name" type="text" value="groupName"/><br>
+			<label>session_hash</label><br>
+			<input name="session_hash" type="text" value="c7ae8f2a56d2627f1be46d3c69c232ad"/> 
+			<input type="submit" name="submit" value="Submit" />
+		</form>
+
+		<h5>GET    /groups/GroupID/users/</h5>
+		<form method="get" action="http://localhost:8080/api/groups/">
+			<label>session_hash</label><br>
+			<input name="session_hash" type="text" value="c7ae8f2a56d2627f1be46d3c69c232ad"/> 
 			<input type="submit" name="submit" value="Submit" />
 		</form>
 

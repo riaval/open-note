@@ -15,12 +15,11 @@ public class WebAPIApplication extends Application {
         // new instance of HelloWorldResource.
         Router router = new Router(getContext());
 
-        router.attach("/users/{userLogin}", UserResource.class);
-        router.attach("/sessions/{userLogin}", SessionResource.class);
-        
-//        Group
-//        router.attach("/groups/{groupSlug}", GroupResource.class);
-//        router.attach("/groups/", GroupResource.class);
+        router.attach("/sessions/{login}", SessionResource.class);
+        router.attach("/users/{login}", UserResource.class);
+
+        router.attach("/groups/{slug}", GroupResource.class);
+        router.attach("/groups/", GroupResource.class);
         
         return router;
     }

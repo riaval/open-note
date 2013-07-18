@@ -1,62 +1,57 @@
 package controller;
 
 import org.restlet.data.Form;
-import org.restlet.data.Status;
+import org.restlet.ext.jackson.JacksonRepresentation;
 import org.restlet.representation.Representation;
+import org.restlet.resource.Get;
 import org.restlet.resource.Post;
 import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
 
-import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
-
 import service.UserService;
+import domain.Session;
 
 public class UserResource extends ServerResource {
 	
-	private String userLogin;
+	private String login;
 	
 	@Override
 	protected void doInit() throws ResourceException {
-	    this.userLogin = (String) getRequest().getAttributes().get("userLogin");
+	    this.login = (String) getRequest().getAttributes().get("login");
 	}
 	
 	@Post
-	public String createUser(Representation entity) {
+	public Representation createUser(Representation entity) {
 		Form form = new Form(entity);
 		try {
 			UserService userService = new UserService();
 			
-			String fullName = form.getFirstValue("fullName");
+			String fullName = form.getFirstValue("full_name");
 			String password = form.getFirstValue("password");
 			String hostIp = getClientInfo().getAddress();
 			String hostAgent = getClientInfo().getAgent();
 			
-			String sessionHash = userService.createUser(
-					  userLogin
+			Session session = userService.createUser(
+					  login
 					, fullName
 					, password
 					, hostIp
 					, hostAgent
 			);
 	
-			return openSessionJson(sessionHash);
+			return openSessionJson(session);
 		} catch (IllegalArgumentException e) {
 			e.printStackTrace();
-			return ErrorFactory.Json.clientBadRequest();
+			return null;
 		} catch (Exception e) {
 			e.printStackTrace();
-			return ErrorFactory.Json.serverInternalError();
+			return null;
 		}
 	}
 	
-	private String openSessionJson(String sessionHash) {
-		JsonPrimitive jsonPrimitive = new JsonPrimitive(sessionHash);
-		JsonObject jsonObject = new JsonObject();
-		
-		jsonObject.add("session_hash", jsonPrimitive);
-		
-		return jsonObject.toString();
+	@Get("json")
+	private Representation openSessionJson(Session session){
+		return new JacksonRepresentation<Session>(session);
 	}
 
 }

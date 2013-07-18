@@ -2,14 +2,25 @@ package domain;
 
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.MapKeyJoinColumn;
 import javax.persistence.OneToMany;
+
+import org.codehaus.jackson.annotate.JsonIgnore;
 
 @Entity
 public class User {
@@ -19,7 +30,8 @@ public class User {
 	private String passwordHash;
 	private String email;
 	private Date date;
-	List<Session> sessions;
+	private Set<Session> sessions = new HashSet<Session>();
+	private Map<Group, GroupRole> groups = new HashMap<Group, GroupRole>();
 	
 	public User(){
 	}
@@ -30,14 +42,6 @@ public class User {
 		this.passwordHash = passwordHash;
 //		this.email = ""; null or ""
 		date = Calendar.getInstance().getTime();
-	}
-	
-	@OneToMany(mappedBy="user")
-	public List<Session> getSession(){
-		return sessions;
-	}
-	public void setSession(List<Session> sessions){
-		this.sessions = sessions;
 	}
 	
 //	login
@@ -83,6 +87,31 @@ public class User {
 	}
 	public void setDate(Date date){
 		this.date = date;
+	}
+	
+//	sessions
+	@JsonIgnore
+	@OneToMany(mappedBy="user")
+	public Set<Session> getSession(){
+		return sessions;
+	}
+	public void setSession(Set<Session> sessions){
+		this.sessions = sessions;
+	}
+	
+//	Group_Role
+	@JsonIgnore
+	@ManyToMany(fetch=FetchType.EAGER, cascade = CascadeType.ALL)
+	@JoinTable(name = "UserGroup", catalog = "opennote",
+		joinColumns = @JoinColumn(name = "user", nullable = false, unique = false), 
+		inverseJoinColumns = @JoinColumn(name = "groupRole",	nullable = false, unique = false) )
+	@MapKeyJoinColumn(name = "[group]")
+	@ElementCollection	
+	public Map<Group, GroupRole> getGroups() {
+		return this.groups;
+	}
+	public void setGroups(Map<Group, GroupRole> groups) {
+		this.groups = groups;
 	}
 
 	@Id

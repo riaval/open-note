@@ -30,7 +30,7 @@ public final class SignUpOperation implements Operation {
 
 		NetworkConnection connection = new NetworkConnection(context, address);
 		HashMap<String, String> params = new HashMap<String, String>();
-		params.put("fullName", request.getString("fullName"));
+		params.put("session_hash", request.getString("session_hash"));
 		params.put("password", request.getString("password"));
 		connection.setParameters(params);
 

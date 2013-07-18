@@ -6,9 +6,8 @@ import domain.Session;
 
 public class SessionDAOImpl extends DAOImpl<Session> {
 	
-	public Session findByUserIDAndHash(long id, String hash){
-		Query query = getSession().createQuery("from Session where user = :id and hash = :hash");
-		query.setLong("id", id);
+	public Session findByHash(String hash){
+		Query query = getSession().createQuery("from Session where hash = :hash");
 		query.setString("hash", hash);
 		return findOne(query);
 	}
