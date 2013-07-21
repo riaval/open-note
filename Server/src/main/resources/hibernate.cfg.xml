@@ -15,5 +15,8 @@
         <mapping class="domain.Session"/>
         <mapping class="domain.Group"/>
         <mapping class="domain.GroupRole"/>
+        <mapping class="domain.SimpleNote"/>
+        <mapping class="domain.UserGroup"/>
+        <mapping class="domain.Invite"/>
     </session-factory>
 </hibernate-configuration>

@@ -1,5 +1,7 @@
 package dao;
 
-public class SimpleNoteDAOImpl extends DAOImpl {
+import domain.SimpleNote;
+
+public class SimpleNoteDAOImpl extends DAOImpl<SimpleNote> {
 
 }

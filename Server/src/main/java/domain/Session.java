@@ -1,7 +1,9 @@
 package domain;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -24,8 +26,8 @@ public class Session {
 	
 //	user
 	@JsonIgnore
-	@ManyToOne
-    @JoinColumn(name="user", referencedColumnName="id", nullable=false)
+	@ManyToOne(fetch=FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name="[user]", nullable=false)
 	public User getUser() {
 		return user;
 	}

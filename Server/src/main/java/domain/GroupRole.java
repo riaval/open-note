@@ -1,19 +1,14 @@
 package domain;
 
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.MapKeyJoinColumn;
+import javax.persistence.OneToMany;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 
@@ -21,7 +16,7 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 public class GroupRole {
 	private long id;
 	private String role;
-	private Map<Group, User> groupUser = new HashMap<Group, User>();	
+	private Set<UserGroup> userGroups = new HashSet<UserGroup>();	
 	
 	public GroupRole(){
 	}
@@ -39,19 +34,14 @@ public class GroupRole {
 		this.role = role;
 	}
 	
-//	Group_User
+//	UserGroup
 	@JsonIgnore
-	@ManyToMany(fetch=FetchType.EAGER, cascade = CascadeType.ALL)
-	@JoinTable(name = "UserGroup", catalog = "opennote",
-		joinColumns = @JoinColumn(name = "groupRole", nullable = false, unique = false), 
-		inverseJoinColumns = @JoinColumn(name = "user",	nullable = false, unique = false) )
-	@MapKeyJoinColumn(name = "[group]")
-	@ElementCollection
-	public Map<Group, User> getGroupUser() {
-		return this.groupUser;
+	@OneToMany(mappedBy="groupRole")
+	public Set<UserGroup> getUserGroup() {
+		return this.userGroups;
 	}
-	public void setGroupUser(Map<Group, User> groupUser) {
-		this.groupUser = groupUser;
+	public void setUserGroup(Set<UserGroup> userGroups) {
+		this.userGroups = userGroups;
 	}
 
 	@Id

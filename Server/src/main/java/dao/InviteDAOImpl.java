@@ -1,5 +1,7 @@
 package dao;
 
-public class InviteDAOImpl extends DAOImpl {
+import domain.Invite;
+
+public class InviteDAOImpl extends DAOImpl<Invite> {
 
 }

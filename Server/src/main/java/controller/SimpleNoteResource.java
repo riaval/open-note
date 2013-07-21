@@ -12,47 +12,51 @@ import org.restlet.resource.Post;
 import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
 
-import service.GroupService;
-import domain.Group;
+import service.SimpleNoteService;
+import domain.SimpleNote;
 
-public class GroupResource extends ServerResource {
+public class SimpleNoteResource extends ServerResource {
 
-	private String slug;
+	private String groupSlug;
+//	private long snoteID;
 
 	@Override
 	protected void doInit() throws ResourceException {
-		this.slug = (String) getRequest().getAttributes().get("slug");
+		this.groupSlug = getRequest().getAttributes().get("groupSlug").toString();
+//		this.snoteID = Long.parseLong(getRequest().getAttributes().get("snoteID").toString());
 	}
 
 	@Post
-	public String createGroup(Representation entity) {
+	public String createSimpleNote(Representation entity) {
 		Form form = new Form(entity);
 		try {
-			GroupService groupService = new GroupService();
+			SimpleNoteService simpleNoteService = new SimpleNoteService();
 
-			String name = form.getFirstValue("name");
+			String title = form.getFirstValue("title");
+			String body = form.getFirstValue("body");
 			String sessionHash = form.getFirstValue("session_hash");
 
-			groupService.createGroup(slug, name, sessionHash);
+			simpleNoteService.createSimpleNote(title, body, groupSlug, sessionHash);
 
-			return "hello world";
+			return "createSimpleNote";
 		} catch (IllegalArgumentException e) {
 			e.printStackTrace();
-			return HttpStatusFactory.Json.clientBadRequest();
+			return null;
 		} catch (Exception e) {
 			e.printStackTrace();
-			return HttpStatusFactory.Json.serverInternalError();
+			return null;
 		}
 	}
-
+	
 	@Get("json")
 	public Representation getGroups() {
+		SimpleNoteService simpleNoteService = new SimpleNoteService();
 		try {
-			GroupService groupService = new GroupService();
 			String sessionHash = getQuery().getValues("session_hash");
-			Set<Group> groups = groupService.getGroups(sessionHash);
+			Set<SimpleNote> simpleNotes = simpleNoteService.getSimpleNotes(groupSlug, sessionHash);
+			System.out.println(simpleNotes.isEmpty());
 
-			return new JacksonRepresentation<Set<Group>>(groups);
+			return new JacksonRepresentation<Set<SimpleNote>>(simpleNotes);
 		} catch (IllegalArgumentException e) {
 			e.printStackTrace();
 			return new StringRepresentation("Item created",

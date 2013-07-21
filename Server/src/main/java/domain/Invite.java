@@ -10,14 +10,14 @@ import javax.persistence.ManyToOne;
 @Entity
 public class Invite {
 	private long id;
-	private long user;
-	private long userGroup;
-	private long groupRole;
+	private User user;
+	private UserGroup userGroup;
+	private GroupRole groupRole;
 	
 	public Invite(){
 	}
 	
-	public Invite(long user, long userGroup, long groupRole) {
+	public Invite(User user, UserGroup userGroup, GroupRole groupRole) {
 		this.user = user;
 		this.userGroup = userGroup;
 		this.groupRole = groupRole;
@@ -25,34 +25,31 @@ public class Invite {
 	
 //	user
 	@ManyToOne
-    @JoinColumn(name = "User")
-	@Column(unique = false, nullable = false)
-	public long getUser() {
+    @JoinColumn(name = "[user]")
+	public User getUser() {
 		return user;
 	}
-	public void setUser(long user) {
+	public void setUser(User user) {
 		this.user = user;
 	}
 	
 //	userGroup
 	@ManyToOne
-    @JoinColumn(name = "UserGroup")
-	@Column(unique = false, nullable = false)
-	public long getUserGroup() {
+    @JoinColumn(name = "[userGroup]")
+	public UserGroup getUserGroup() {
 		return userGroup;
 	}
-	public void setUserGroup(long userGroup) {
+	public void setUserGroup(UserGroup userGroup) {
 		this.userGroup = userGroup;
 	}
 	
 //	groupRole
 	@ManyToOne
-    @JoinColumn(name = "GroupRole")
-	@Column(unique = false, nullable = false)
-	public long getGroupRole() {
+    @JoinColumn(name = "[groupRole]")
+	public GroupRole getGroupRole() {
 		return groupRole;
 	}
-	public void setGroupRole(long groupRole) {
+	public void setGroupRole(GroupRole groupRole) {
 		this.groupRole = groupRole;
 	}
 	

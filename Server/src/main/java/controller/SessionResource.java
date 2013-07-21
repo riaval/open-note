@@ -12,31 +12,27 @@ import service.SessionService;
 import domain.Session;
 
 public class SessionResource extends ServerResource {
-	
+
 	private String login;
-	
+
 	@Override
 	protected void doInit() throws ResourceException {
-	    this.login = (String) getRequest().getAttributes().get("login");
+		this.login = (String) getRequest().getAttributes().get("login");
 	}
-	
+
 	@Post
-	public Representation openSession(Representation entity){
+	public Representation openSession(Representation entity) {
 		Form form = new Form(entity);
 		try {
 			SessionService sessionService = new SessionService();
-			
+
 			String password = form.getFirstValue("password");
 			String hostIp = getClientInfo().getAddress();
 			String hostAgent = getClientInfo().getAgent();
-			
-			Session session = sessionService.openSession(
-					  login
-					, password
-					, hostIp
-					, hostAgent
-			);
-			
+
+			Session session = sessionService.openSession(login, password,
+					hostIp, hostAgent);
+
 			return openSessionJson(session);
 		} catch (IllegalArgumentException e) {
 			e.printStackTrace();
@@ -46,10 +42,10 @@ public class SessionResource extends ServerResource {
 			return null;
 		}
 	}
-	
+
 	@Get("json")
-	private Representation openSessionJson(Session session){
+	private Representation openSessionJson(Session session) {
 		return new JacksonRepresentation<Session>(session);
 	}
-	
+
 }

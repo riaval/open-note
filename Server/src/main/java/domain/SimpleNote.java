@@ -1,11 +1,24 @@
 package domain;
 
+import java.util.Calendar;
 import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+
+import org.codehaus.jackson.annotate.JsonAnyGetter;
+import org.codehaus.jackson.annotate.JsonGetter;
+import org.codehaus.jackson.annotate.JsonIgnore;
+import org.codehaus.jackson.annotate.JsonManagedReference;
+import org.codehaus.jackson.annotate.JsonProperty;
+import org.codehaus.jackson.annotate.JsonRawValue;
+import org.codehaus.jackson.annotate.JsonSubTypes;
+import org.codehaus.jackson.annotate.JsonValue;
+import org.codehaus.jackson.map.annotate.JsonFilter;
 
 @Entity
 public class SimpleNote {
@@ -13,14 +26,15 @@ public class SimpleNote {
 	private String title;
 	private String body;
 	private Date date;
+	private UserGroup userGroup = new UserGroup();	
 	
 	public SimpleNote(){
 	}
 	
-	public SimpleNote(String title, String body, Date date) {
+	public SimpleNote(String title, String body) {
 		this.title = title;
 		this.body = body;
-		this.date = date;
+		this.date = Calendar.getInstance().getTime();
 	}
 	
 //	title
@@ -49,7 +63,18 @@ public class SimpleNote {
 	public void setDate(Date date) {
 		this.date = date;
 	}
-
+	
+//	UserGroup
+	@JsonIgnore
+	@ManyToOne
+    @JoinColumn(name="[userGroup]", nullable=false)
+	public UserGroup getUserGroup() {
+		return userGroup;
+	}
+	public void setUserGroup(UserGroup userGroup) {
+		this.userGroup = userGroup;
+	}
+	
 	@Id
     @GeneratedValue
     @Column(unique = true, nullable = false)
@@ -60,4 +85,10 @@ public class SimpleNote {
 		this.id = id;
 	}
 
+//	JSON
+	@JsonProperty("user")
+	public String setUser() {
+		return this.userGroup.getUser().getLogin();
+	}
+	
 }

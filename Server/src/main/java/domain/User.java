@@ -2,22 +2,14 @@ package domain;
 
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.MapKeyJoinColumn;
 import javax.persistence.OneToMany;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
@@ -31,7 +23,8 @@ public class User {
 	private String email;
 	private Date date;
 	private Set<Session> sessions = new HashSet<Session>();
-	private Map<Group, GroupRole> groups = new HashMap<Group, GroupRole>();
+	private Set<UserGroup> userGroups = new HashSet<UserGroup>();
+	private Set<Invite> invites = new HashSet<Invite>();
 	
 	public User(){
 	}
@@ -41,7 +34,7 @@ public class User {
 		this.fullName = fullName;
 		this.passwordHash = passwordHash;
 //		this.email = ""; null or ""
-		date = Calendar.getInstance().getTime();
+		this.date = Calendar.getInstance().getTime();
 	}
 	
 //	login
@@ -63,6 +56,7 @@ public class User {
 	}
 	
 //	passwordHash
+	@JsonIgnore
 	@Column(unique=false, nullable = false, length = 124)
 	public String getPasswordHash() {
 		return passwordHash;
@@ -72,6 +66,7 @@ public class User {
 	}
 	
 //	email
+	@JsonIgnore
 	@Column(unique=false, nullable = true, length = 45)
 	public String getEmail() {
 		return email;
@@ -81,6 +76,7 @@ public class User {
 	}
 	
 //	date
+	@JsonIgnore
 	@Column(unique=false, nullable = false)
 	public Date getDate() {
 		return date;
@@ -91,7 +87,7 @@ public class User {
 	
 //	sessions
 	@JsonIgnore
-	@OneToMany(mappedBy="user")
+	@OneToMany(mappedBy="user", fetch=FetchType.EAGER)
 	public Set<Session> getSession(){
 		return sessions;
 	}
@@ -99,28 +95,34 @@ public class User {
 		this.sessions = sessions;
 	}
 	
-//	Group_Role
+//	UserGroup
 	@JsonIgnore
-	@ManyToMany(fetch=FetchType.EAGER, cascade = CascadeType.ALL)
-	@JoinTable(name = "UserGroup", catalog = "opennote",
-		joinColumns = @JoinColumn(name = "user", nullable = false, unique = false), 
-		inverseJoinColumns = @JoinColumn(name = "groupRole",	nullable = false, unique = false) )
-	@MapKeyJoinColumn(name = "[group]")
-	@ElementCollection	
-	public Map<Group, GroupRole> getGroups() {
-		return this.groups;
+	@OneToMany(mappedBy="user", fetch=FetchType.EAGER)
+	public Set<UserGroup> getUserGroups() {
+		return this.userGroups;
 	}
-	public void setGroups(Map<Group, GroupRole> groups) {
-		this.groups = groups;
+	public void setUserGroups(Set<UserGroup> userGroups) {
+		this.userGroups = userGroups;
 	}
-
+	
+//	Invite
+	@JsonIgnore
+	@OneToMany(mappedBy="user", fetch=FetchType.EAGER)
+	public Set<Invite> getInvites() {
+		return invites;
+	}
+	public void setInvites(Set<Invite> invites) {
+		this.invites = invites;
+	}
+	
 	@Id
 	@GeneratedValue
 	@Column(unique = true, nullable = false)
-	public long getId() {
+	protected long getId() {
 		return id;
 	}
 	protected void setId(long id){
 		this.id = id;
 	}
+
 }

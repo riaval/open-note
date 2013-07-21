@@ -12,30 +12,28 @@ import org.restlet.resource.Post;
 import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
 
-import service.GroupService;
-import domain.Group;
+import service.InviteService;
+import domain.Invite;
 
-public class GroupResource extends ServerResource {
-
+public class InviteResource extends ServerResource{
+	
 	private String slug;
+	private String login;
 
 	@Override
 	protected void doInit() throws ResourceException {
 		this.slug = (String) getRequest().getAttributes().get("slug");
+		this.login = (String) getRequest().getAttributes().get("login");
 	}
-
+	
 	@Post
-	public String createGroup(Representation entity) {
+	public String createInvite(Representation entity) {
 		Form form = new Form(entity);
 		try {
-			GroupService groupService = new GroupService();
-
-			String name = form.getFirstValue("name");
+			InviteService inviteService = new InviteService();
 			String sessionHash = form.getFirstValue("session_hash");
-
-			groupService.createGroup(slug, name, sessionHash);
-
-			return "hello world";
+			inviteService.createInvite(slug, login, sessionHash);
+			return "OK";
 		} catch (IllegalArgumentException e) {
 			e.printStackTrace();
 			return HttpStatusFactory.Json.clientBadRequest();
@@ -44,15 +42,15 @@ public class GroupResource extends ServerResource {
 			return HttpStatusFactory.Json.serverInternalError();
 		}
 	}
-
+	
 	@Get("json")
-	public Representation getGroups() {
+	public Representation getInvites() {
 		try {
-			GroupService groupService = new GroupService();
+			InviteService inviteService = new InviteService();
 			String sessionHash = getQuery().getValues("session_hash");
-			Set<Group> groups = groupService.getGroups(sessionHash);
+			Set<Invite> invites = inviteService.getInvites(sessionHash);
 
-			return new JacksonRepresentation<Set<Group>>(groups);
+			return new JacksonRepresentation<Set<Invite>>(invites);
 		} catch (IllegalArgumentException e) {
 			e.printStackTrace();
 			return new StringRepresentation("Item created",
@@ -63,5 +61,5 @@ public class GroupResource extends ServerResource {
 					MediaType.TEXT_PLAIN);
 		}
 	}
-
+	
 }

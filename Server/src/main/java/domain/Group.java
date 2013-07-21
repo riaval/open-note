@@ -1,19 +1,13 @@
 package domain;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.HashSet;
+import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.MapKeyJoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
@@ -21,13 +15,14 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 @Entity
-@Table(catalog = "opennote")
+@Table(catalog="opennote")
 public class Group{
+	
 	private long id;
 	private String slug;
 	private String name;
-	private Map<User, GroupRole> users = new HashMap<User, GroupRole>();
-	
+	private Set<UserGroup> userGroups = new HashSet<UserGroup>();	
+//	private Set<SimpleNote> simpleNotes = new HashSet<SimpleNote>();
 	
 	public Group(){
 	}
@@ -38,7 +33,7 @@ public class Group{
 	}
 	
 //	slug
-	@Column(name = "[slug]", unique=true, nullable = false, length = 20)
+	@Column(name="[slug]", unique=true, nullable = false, length = 20)
 	public String getSlug() {
 	    return slug;
 	}
@@ -47,7 +42,7 @@ public class Group{
 	}
 	
 //	name
-	@Column(name = "[name]", unique=false, nullable = false, length = 30)
+	@Column(name="[name]", unique=false, nullable = false, length = 30)
 	public String getName() {
 	    return name;
 	}
@@ -57,19 +52,33 @@ public class Group{
 	
 //	User_Role
 	@JsonIgnore
-	@ManyToMany(fetch=FetchType.EAGER, cascade = CascadeType.ALL)
-	@JoinTable(name = "UserGroup", catalog = "opennote",
-		joinColumns = @JoinColumn(name = "[group]", nullable = false, unique = false), 
-		inverseJoinColumns = @JoinColumn(name = "groupRole",	nullable = false, unique = false) )
-	@MapKeyJoinColumn(name = "user")
-	@ElementCollection	
-	public Map<User, GroupRole> getUsers() {
-		return this.users;
+	@OneToMany(mappedBy="group")
+	public Set<UserGroup> getUserGroup() {
+		return this.userGroups;
 	}
-	public void setUsers(Map<User, GroupRole> users) {
-		this.users = users;
+	public void setUserGroup(Set<UserGroup> userGroups) {
+		this.userGroups = userGroups;
 	}
-
+	
+//	@JsonIgnore
+//	@OneToMany(fetch=FetchType.EAGER, cascade = CascadeType.ALL)
+//	@JoinTable(name = "UserGroup", catalog = "opennote",
+//		joinColumns = @JoinColumn(name = "[group]", nullable = false, unique = false), 
+//		inverseJoinColumns = @JoinColumn(name = "groupRole",	nullable = false, unique = false) )
+//	@MapKeyJoinColumn(name = "user")
+//	@ElementCollection	
+	
+//	@ManyToMany(fetch=FetchType.EAGER)
+//    @JoinTable(name="SimpleNote",
+//    joinColumns={@JoinColumn(name="[group]")},
+//    inverseJoinColumns={@JoinColumn(name="[id]")} )
+//	public Set<SimpleNote> getSimpleNotes() {
+//		return simpleNotes;
+//	}
+//	public void setSimpleNotes(Set<SimpleNote> simpleNotes) {
+//		this.simpleNotes = simpleNotes;
+//	}
+	
 	@Id
 	@GeneratedValue
 	@Column(unique = true, nullable = false)
@@ -86,4 +95,46 @@ public class Group{
 		json.put("name", this.name);
 		return json.toString();
 	}
+	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + (int) (id ^ (id >>> 32));
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + ((slug == null) ? 0 : slug.hashCode());
+		result = prime * result
+				+ ((userGroups == null) ? 0 : userGroups.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Group other = (Group) obj;
+		if (id != other.id)
+			return false;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		if (slug == null) {
+			if (other.slug != null)
+				return false;
+		} else if (!slug.equals(other.slug))
+			return false;
+		if (userGroups == null) {
+			if (other.userGroups != null)
+				return false;
+		} else if (!userGroups.equals(other.userGroups))
+			return false;
+		return true;
+	}
+	
 }
