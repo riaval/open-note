@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    <string-array name="drawer_header">
+        <item>Accaunt</item>
+        <item>Groups</item>
+        <item>Additional</item>
+    </string-array>
+    
+    <string-array name="drawer_accaunt_text_in">
+        <item>--LOGIN--</item>
+        <item>Invites</item>
+        <item>Search</item>
+    </string-array>
+    
+     <string-array name="drawer_accaunt_text_out">
+        <item>Authorization</item>
+    </string-array>
+    
+    <string-array name="drawer_group_text_in">
+        <item>All notes</item>
+        <item>Local</item>
+        <item>Create group</item>
+    </string-array>
+    
+    <string-array name="drawer_group_text_out">
+        <item>Local</item>
+    </string-array>
+    
+    <string-array name="drawer_additional_text">
+        <item>Feedback</item>
+        <item>Settings</item>
+    </string-array>
+
+    <string-array name="drawer_accaunt_icon">
+        <item>@drawable/user</item>
+        <item>@drawable/invite</item>
+        <item>@drawable/search</item>
+    </string-array>
+
+    <string-array name="drawer_group_icon">
+        <item>@drawable/all_notes</item>
+        <item>@drawable/local</item>
+        <item>@drawable/create_group</item>
+    </string-array>
+    
+    <string-array name="drawer_additional_icon">
+        <item>@drawable/feedback</item>
+        <item>@drawable/settings</item>
+    </string-array>
+    
+</resources>
