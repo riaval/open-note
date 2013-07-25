@@ -26,6 +26,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.opennote.R;
+import com.opennote.ui.local.LocalFragment;
 
 public class MainActivity extends Activity {	
 	private DrawerLayout mDrawerLayout;

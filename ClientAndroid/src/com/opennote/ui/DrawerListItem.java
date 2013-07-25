@@ -10,9 +10,9 @@ public class DrawerListItem {
 	private int icon;
 	private int value;
 
-	public final static int ICON_ITEM = 0;
-	public final static int TEXT_ITEM = 1;
-	public final static int VALUE_ITEM = 2;
+	public final static int ICON_ITEM = 1;
+	public final static int TEXT_ITEM = 2;
+	public final static int VALUE_ITEM = 3;
 	
 	public DrawerListItem() {
 	}

@@ -15,7 +15,7 @@ import android.widget.TextView;
 import com.opennote.R;
 
 public class DrawerArrayAdapter extends ArrayAdapter<DrawerListItem> {
-	private static final String tag = "CountryArrayAdapter";
+	private static final String tag = "DrawerArrayAdapter";
 	private Context context;
 	private List<DrawerListItem> items = new ArrayList<DrawerListItem>();
 
