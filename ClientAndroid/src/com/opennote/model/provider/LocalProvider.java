@@ -12,7 +12,7 @@ import android.net.Uri;
 
 import com.opennote.model.provider.Contract.LocalNotes;
 
-public class RestProvider extends ContentProvider {
+public class LocalProvider extends ContentProvider {
 	final String TAG = getClass().getSimpleName();
 	
 	private static final String TABLE_LOCAL_NOTES = "local_notes";

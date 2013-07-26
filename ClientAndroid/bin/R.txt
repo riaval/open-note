@@ -37,10 +37,9 @@ int drawable textlines 0x7f020017
 int drawable uranus 0x7f020018
 int drawable user 0x7f020019
 int drawable venus 0x7f02001a
-int id action_new 0x7f09001d
-int id action_refresh 0x7f09001e
-int id action_settings 0x7f09001f
-int id button1 0x7f09001c
+int id action_new 0x7f09001c
+int id action_refresh 0x7f09001d
+int id action_settings 0x7f09001e
 int id content_frame 0x7f090001
 int id drawer_layout 0x7f090000
 int id fullNameUpEdit 0x7f090012
@@ -79,7 +78,6 @@ int layout fragment_signup_dummy 0x7f030006
 int layout list_header 0x7f030007
 int layout local_item 0x7f030008
 int layout note_fragment 0x7f030009
-int layout test 0x7f03000a
 int menu main 0x7f080000
 int menu menu_local 0x7f080001
 int menu opening 0x7f080002

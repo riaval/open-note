@@ -40,7 +40,7 @@
         </activity>
 
         <provider
-            android:name="com.opennote.model.provider.RestProvider"
+            android:name="com.opennote.model.provider.LocalProvider"
             android:authorities="com.opennote"
             android:exported="false"/>
         <service

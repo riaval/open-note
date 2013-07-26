@@ -62,10 +62,9 @@ public final class R {
         public static final int venus=0x7f02001a;
     }
     public static final class id {
-        public static final int action_new=0x7f09001d;
-        public static final int action_refresh=0x7f09001e;
-        public static final int action_settings=0x7f09001f;
-        public static final int button1=0x7f09001c;
+        public static final int action_new=0x7f09001c;
+        public static final int action_refresh=0x7f09001d;
+        public static final int action_settings=0x7f09001e;
         public static final int content_frame=0x7f090001;
         public static final int drawer_layout=0x7f090000;
         public static final int fullNameUpEdit=0x7f090012;
@@ -106,7 +105,6 @@ public final class R {
         public static final int list_header=0x7f030007;
         public static final int local_item=0x7f030008;
         public static final int note_fragment=0x7f030009;
-        public static final int test=0x7f03000a;
     }
     public static final class menu {
         public static final int main=0x7f080000;

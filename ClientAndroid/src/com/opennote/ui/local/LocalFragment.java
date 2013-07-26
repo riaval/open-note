@@ -14,14 +14,20 @@ import android.view.MenuItem;
 import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
+import android.widget.TextView;
 
 import com.opennote.R;
 import com.opennote.model.provider.Contract.LocalNotes;
 import com.opennote.ui.createnote.CreateNoteActivity;
 
 public class LocalFragment extends Fragment {
+	public static final String ID_VALUE_MESSAGE = "id";
+	public static final String TITLE_VALUE_MESSAGE = "title";
+	public static final String BODY_VALUE_MESSAGE = "body";
+	
 	private static final int LOADER_ID = 1;
 	private final String[] PROJECTION = { 
 			LocalNotes._ID,
@@ -52,7 +58,8 @@ public class LocalFragment extends Fragment {
 //        ListView listView = (ListView)rootView;
 //        listView.setAdapter(accauntAdapter);
         
-        adapter = new SimpleCursorAdapter(getActivity(),
+        adapter = new SimpleCursorAdapter(
+        		getActivity(),
 	            R.layout.local_item, 
 	            null, 
 	            new String[]{ LocalNotes.TITLE, LocalNotes.BODY, LocalNotes.DATE },
@@ -60,6 +67,7 @@ public class LocalFragment extends Fragment {
 	            0);
         ListView listView = (ListView)rootView;
         listView.setAdapter(adapter);
+        listView.setOnItemClickListener(new LocalListClickListener());
         
         getLoaderManager().initLoader(LOADER_ID, null, loaderCallbacks);
         
@@ -95,7 +103,7 @@ public class LocalFragment extends Fragment {
                 PROJECTION,
                 null,
                 null,
-                null
+                LocalNotes._ID + " DESC"
             );
         }
 
@@ -109,5 +117,20 @@ public class LocalFragment extends Fragment {
             adapter.swapCursor(null);
         }
     };
-
+    
+    private class LocalListClickListener implements ListView.OnItemClickListener {
+		@Override
+		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+			String title = ((TextView) view.findViewById(R.id.local_title)).getText().toString();
+			String body = ((TextView) view.findViewById(R.id.local_body)).getText().toString();
+			
+			// Starting update activity
+			Intent intent = new Intent(getActivity(), CreateNoteActivity.class);
+			intent.putExtra(ID_VALUE_MESSAGE, id);
+			intent.putExtra(TITLE_VALUE_MESSAGE, title);
+			intent.putExtra(BODY_VALUE_MESSAGE, body);
+			startActivity(intent);
+		}
+	}
+    
 }
