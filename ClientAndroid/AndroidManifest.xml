@@ -23,7 +23,6 @@
             android:label="@string/title_activity_main" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -40,6 +39,10 @@
                 android:value="com.opennote.ui.MainActivity" />
         </activity>
 
+        <provider
+            android:name="com.opennote.model.provider.RestProvider"
+            android:authorities="com.opennote"
+            android:exported="false"/>
         <service
             android:name="com.opennote.model.service.RestService"
             android:exported="false" />
