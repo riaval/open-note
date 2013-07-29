@@ -10,6 +10,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
+import org.codehaus.jackson.annotate.JsonProperty;
 
 @Entity
 public class Session {
@@ -36,6 +37,7 @@ public class Session {
 	}
 
 //	hash
+	@JsonProperty("session_hash")
 	@Column(unique=true, nullable = false, length = 140)
 	public String getHash() {
         return hash;

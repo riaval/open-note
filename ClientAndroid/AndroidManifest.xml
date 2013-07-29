@@ -41,7 +41,11 @@
 
         <provider
             android:name="com.opennote.model.provider.LocalProvider"
-            android:authorities="com.opennote"
+            android:authorities="com.opennote.local"
+            android:exported="false"/>
+        <provider
+            android:name="com.opennote.model.provider.GroupProvider"
+            android:authorities="com.opennote.group"
             android:exported="false"/>
         <service
             android:name="com.opennote.model.service.RestService"

@@ -49,7 +49,14 @@ public class DrawerListItem {
 	static List<DrawerListItem> generateItems(String[] texts, TypedArray icons) {
 		List<DrawerListItem> list = new ArrayList<DrawerListItem>();
 		for (int i = 0; i < texts.length; i++) {
-			DrawerListItem item = new DrawerListItem(texts[i], icons.getResourceId(i, -1));
+//			System.out.println(icons.getResourceId(1, -1));
+			DrawerListItem item;
+			try {
+				item = new DrawerListItem(texts[i], icons.getResourceId(i, -1));
+			} catch (Exception e) {
+				item = new DrawerListItem(texts[i], -1);
+			}
+			
 			list.add(item);
 		}
 		

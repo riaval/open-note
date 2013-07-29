@@ -1,5 +1,7 @@
 package com.opennote.ui;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import android.app.Activity;
@@ -11,6 +13,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
@@ -25,6 +28,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.opennote.R;
+import com.opennote.model.provider.GroupContact;
+import com.opennote.ui.accaunt.InvitesFragment;
+import com.opennote.ui.accaunt.SearchFragment;
+import com.opennote.ui.accaunt.SignInFragment;
+import com.opennote.ui.accaunt.SignUpFragment;
+import com.opennote.ui.accaunt.UserFragment;
+import com.opennote.ui.additional.FeedbackFragment;
+import com.opennote.ui.additional.SettingsFragment;
+import com.opennote.ui.local.AllNotesFragment;
+import com.opennote.ui.local.CreateGroupFragment;
+import com.opennote.ui.local.GroupFragment;
 import com.opennote.ui.local.LocalFragment;
 
 public class MainActivity extends Activity {	
@@ -35,8 +49,10 @@ public class MainActivity extends Activity {
 	private CharSequence mDrawerTitle;
 	private CharSequence mTitle;
 	private String[] mFragmentTitles;
+//	private String selectedItem;
 	
 	private boolean authorized = false;
+	private String mUserLogin;
 
 	// Adapter for ListView Contents
 	private SeparatedListAdapter adapter;
@@ -49,7 +65,6 @@ public class MainActivity extends Activity {
 		authorized = isAuthorized();
 
 		mTitle = mDrawerTitle = getTitle();
-		mFragmentTitles = getResources().getStringArray(R.array.planets_array);
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 		mDrawerList = (ListView) findViewById(R.id.left_drawer);
 
@@ -93,16 +108,13 @@ public class MainActivity extends Activity {
 	
 	private boolean isAuthorized(){
 		SharedPreferences sharedPref = getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+		String value = sharedPref.getString(getString(R.string.session_hash), null);
 //		SharedPreferences.Editor editor = sharedPref.edit();
 //		editor.clear();
 //		editor.commit();
-		String value = sharedPref.getString("session_hash", null);
 		
 		if(value == null){
 			return false;
-//			Intent intent = new Intent(this, OpeningActivity.class);
-//			startActivity(intent);
-//			this.finish();
 		}
 		return true;
 	}
@@ -120,14 +132,34 @@ public class MainActivity extends Activity {
 		
 		// Get Drawer values
 		if (authorized){
-			accauntText = getResources().getStringArray(R.array.drawer_accaunt_text_in);
-			accauntIcon = getResources().obtainTypedArray(R.array.drawer_accaunt_icon);
-			groupText = getResources().getStringArray(R.array.drawer_group_text_in);
+			// get user login from SharedPreferences
+			SharedPreferences sharedPref = getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+			mUserLogin = sharedPref.getString(getString(R.string.user_login), null);		
+			List<String> accauntList = new ArrayList<String>( Arrays.asList( getResources().getStringArray(R.array.drawer_accaunt_text_in) ) );
+			accauntList.add(0, mUserLogin);
+			
+			// get groups from SQLite
+			Cursor cursor = this.getContentResolver().query(
+					  GroupContact.Group.CONTENT_URI
+					, null
+					, null
+					, null
+					, null
+				);
+			List<String> groupList = new ArrayList<String>( Arrays.asList( getResources().getStringArray(R.array.drawer_group_text_in) ) );
+			while(cursor.moveToNext()) {
+				
+				groupList.add(cursor.getString(1));
+			}
+			
+			accauntText = accauntList.toArray(new String[accauntList.size()]) ;
+			accauntIcon = getResources().obtainTypedArray(R.array.drawer_accaunt_icon_in);
+			groupText = groupList.toArray(new String[groupList.size()]);
 			groupIcon = getResources().obtainTypedArray(R.array.drawer_group_icon);
 		}
 		else {
 			accauntText = getResources().getStringArray(R.array.drawer_accaunt_text_out);
-			accauntIcon = getResources().obtainTypedArray(R.array.drawer_accaunt_icon);
+			accauntIcon = getResources().obtainTypedArray(R.array.drawer_accaunt_icon_out);
 			groupText = getResources().getStringArray(R.array.drawer_group_text_out);
 			groupIcon = getResources().obtainTypedArray(R.array.drawer_group_icon);	
 		}
@@ -202,16 +234,37 @@ public class MainActivity extends Activity {
 	}
 
 	private void selectItem(String text) {
-		// update the main content by replacing fragments
-		Fragment fragment = new LocalFragment();
-		fragment.setHasOptionsMenu(true);
-//		Fragment fragment = new PlanetFragment();
-//		Bundle args = new Bundle();
-//		args.putInt(PlanetFragment.ARG_PLANET_NUMBER, position);
-//		fragment.setArguments(args);
+		Fragment fragment = null;
 
-		FragmentManager fragmentManager = getFragmentManager();
-		fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
+		if(text.equals(mUserLogin)){
+			fragment = new UserFragment();
+		} else if(text.equals("Log in")){
+			fragment = new SignInFragment();
+		} else if (text.equals("Sign up")){
+			fragment = new SignUpFragment();
+		} else if (text.equals("Invites")){
+			fragment = new InvitesFragment();
+		} else if (text.equals("Search")){
+			fragment = new SearchFragment();
+		} else if (text.equals("AllNotes")){
+			fragment = new AllNotesFragment();
+		} else if (text.equals("Local")){
+			fragment = new LocalFragment();
+		} else if (text.equals("Create group")){
+			fragment = new CreateGroupFragment();
+		} else if (text.equals("Feedback")){
+			fragment = new FeedbackFragment();
+		} else if (text.equals("Settings")){
+			fragment = new SettingsFragment();
+		} else 
+			fragment = new GroupFragment();
+		
+		try {
+			FragmentManager fragmentManager = getFragmentManager();
+			fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
 		// update selected item and title, then close the drawer
 		mDrawerList.setItemChecked(adapter.getPossition(text), true);

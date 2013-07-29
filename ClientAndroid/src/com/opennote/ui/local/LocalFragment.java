@@ -14,14 +14,20 @@ import android.view.MenuItem;
 import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
 import com.opennote.R;
-import com.opennote.model.provider.Contract.LocalNotes;
+import com.opennote.model.provider.LocalContract;
+import com.opennote.model.provider.LocalContract.LocalNotes;
 import com.opennote.ui.createnote.CreateNoteActivity;
+
+import de.timroes.swipetodismiss.SwipeDismissList;
+import de.timroes.swipetodismiss.SwipeDismissList.SwipeDirection;
+import de.timroes.swipetodismiss.SwipeDismissList.Undoable;
 
 public class LocalFragment extends Fragment {
 	public static final String ID_VALUE_MESSAGE = "id";
@@ -46,17 +52,6 @@ public class LocalFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View rootView = inflater.inflate(R.layout.note_fragment, container, false);
-		
-//		LocalItem item1 = new LocalItem("Lorem Ipsum is simply dummy text", "When an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the");
-//		LocalItem item2 = new LocalItem("There are many variations of passages", "College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum");
-//		List<LocalItem> list = new ArrayList<LocalItem>();
-//		list.add(item1);
-//		list.add(item2);
-//		
-//		LocalArrayAdapter accauntAdapter = new LocalArrayAdapter(getActivity(), R.layout.local_item, list);
-//
-//        ListView listView = (ListView)rootView;
-//        listView.setAdapter(accauntAdapter);
         
         adapter = new SimpleCursorAdapter(
         		getActivity(),
@@ -68,6 +63,18 @@ public class LocalFragment extends Fragment {
         ListView listView = (ListView)rootView;
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new LocalListClickListener());
+        
+        SwipeDismissList.OnDismissCallback callback = new SwipeDismissList.OnDismissCallback() {
+			@Override
+			public Undoable onDismiss(AbsListView listView, int position) {
+				getActivity().getContentResolver().delete(LocalContract.LocalNotes.CONTENT_URI, LocalNotes._ID + "=?", new String[]{String.valueOf(adapter.getItemId(position))});
+				getActivity().getContentResolver().notifyChange(LocalContract.LocalNotes.CONTENT_URI, null);
+				
+				return null;
+			}
+        };
+        SwipeDismissList swipeList = new SwipeDismissList(listView, callback, SwipeDismissList.UndoMode.SINGLE_UNDO);
+        swipeList.setSwipeDirection(SwipeDirection.START);
         
         getLoaderManager().initLoader(LOADER_ID, null, loaderCallbacks);
         
@@ -110,6 +117,7 @@ public class LocalFragment extends Fragment {
         @Override
         public void onLoadFinished(Loader<Cursor> arg0, Cursor cursor) {
             adapter.swapCursor(cursor);
+            adapter.notifyDataSetChanged();
         }
 
         @Override

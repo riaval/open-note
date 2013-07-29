@@ -10,9 +10,10 @@ import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.net.Uri;
 
-import com.opennote.model.provider.Contract.LocalNotes;
+import com.opennote.model.provider.LocalContract.LocalNotes;
 
 public class LocalProvider extends ContentProvider {
+	
 	final String TAG = getClass().getSimpleName();
 	
 	private static final String TABLE_LOCAL_NOTES = "local_notes";
@@ -27,7 +28,7 @@ public class LocalProvider extends ContentProvider {
 	
 	static {
 		sUriMatcher = new UriMatcher(PATH_ROOT);
-		sUriMatcher.addURI(Contract.AUTHORITY, Contract.LocalNotes.CONTENT_PATH, PATH_TWEETS); 
+		sUriMatcher.addURI(LocalContract.AUTHORITY, LocalContract.LocalNotes.CONTENT_PATH, PATH_TWEETS); 
 	}
 	
 	private DatabaseHeloper mDatabaseHelper;
@@ -68,7 +69,7 @@ public class LocalProvider extends ContentProvider {
 		switch (sUriMatcher.match(uri)) {
 		case PATH_TWEETS: {
 			Cursor cursor = mDatabaseHelper.getReadableDatabase().query(TABLE_LOCAL_NOTES, projection, selection, selectionArgs, null, null, sortOrder);
-			cursor.setNotificationUri(getContext().getContentResolver(), Contract.LocalNotes.CONTENT_URI);
+			cursor.setNotificationUri(getContext().getContentResolver(), LocalContract.LocalNotes.CONTENT_URI);
 			return cursor;
 		}
 		default:
@@ -80,7 +81,7 @@ public class LocalProvider extends ContentProvider {
 	public String getType(Uri uri) {
 		switch (sUriMatcher.match(uri)) {
 		case PATH_TWEETS:
-			return Contract.LocalNotes.CONTENT_TYPE;
+			return LocalContract.LocalNotes.CONTENT_TYPE;
 		default:
 			return null;
 		}
@@ -91,7 +92,7 @@ public class LocalProvider extends ContentProvider {
 		switch (sUriMatcher.match(uri)) {
 		case PATH_TWEETS: {
 			mDatabaseHelper.getWritableDatabase().insert(TABLE_LOCAL_NOTES, null, values);
-			getContext().getContentResolver().notifyChange(Contract.LocalNotes.CONTENT_URI, null);
+			getContext().getContentResolver().notifyChange(LocalContract.LocalNotes.CONTENT_URI, null);
 		}
 		default:
 			return null;

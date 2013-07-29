@@ -8,13 +8,13 @@
     </string-array>
     
     <string-array name="drawer_accaunt_text_in">
-        <item>--LOGIN--</item>
         <item>Invites</item>
         <item>Search</item>
     </string-array>
     
      <string-array name="drawer_accaunt_text_out">
-        <item>Authorization</item>
+        <item>Log in</item>
+        <item>Sign up</item>
     </string-array>
     
     <string-array name="drawer_group_text_in">
@@ -32,10 +32,15 @@
         <item>Settings</item>
     </string-array>
 
-    <string-array name="drawer_accaunt_icon">
+    <string-array name="drawer_accaunt_icon_in">
         <item>@drawable/user</item>
         <item>@drawable/invite</item>
         <item>@drawable/search</item>
+    </string-array>
+    
+    <string-array name="drawer_accaunt_icon_out">
+        <item>@drawable/user</item>
+        <item>@drawable/sign_up</item>
     </string-array>
 
     <string-array name="drawer_group_icon">

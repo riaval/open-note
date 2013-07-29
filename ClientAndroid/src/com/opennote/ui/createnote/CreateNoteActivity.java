@@ -13,8 +13,8 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
 import com.opennote.R;
-import com.opennote.model.provider.Contract;
-import com.opennote.model.provider.Contract.LocalNotes;
+import com.opennote.model.provider.LocalContract;
+import com.opennote.model.provider.LocalContract.LocalNotes;
 import com.opennote.ui.local.LocalFragment;
 
 public class CreateNoteActivity extends Activity {
@@ -64,11 +64,11 @@ public class CreateNoteActivity extends Activity {
 		note.put("date", date);
 		
 		if(mId == -1) {
-			this.getContentResolver().insert(Contract.LocalNotes.CONTENT_URI, note);
+			this.getContentResolver().insert(LocalContract.LocalNotes.CONTENT_URI, note);
 		}
 		else {
-			this.getContentResolver().update(Contract.LocalNotes.CONTENT_URI, note, LocalNotes._ID + " = ?", new String[]{String.valueOf(mId)});
-			this.getContentResolver().notifyChange(Contract.LocalNotes.CONTENT_URI, null);
+			this.getContentResolver().update(LocalContract.LocalNotes.CONTENT_URI, note, LocalNotes._ID + " = ?", new String[]{String.valueOf(mId)});
+			this.getContentResolver().notifyChange(LocalContract.LocalNotes.CONTENT_URI, null);
 		}
 		
 		super.onDestroy();

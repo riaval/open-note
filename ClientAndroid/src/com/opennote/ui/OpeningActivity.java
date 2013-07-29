@@ -164,7 +164,7 @@ public class OpeningActivity extends FragmentActivity implements
 	public static class LogIn extends Fragment {
 		@Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-			View rootView = inflater.inflate(R.layout.fragment_login_dummy, container, false);
+			View rootView = inflater.inflate(R.layout.fragment_signin, container, false);
 
 			return rootView;
 		}
@@ -173,7 +173,7 @@ public class OpeningActivity extends FragmentActivity implements
 	public static class SignUp extends Fragment {
 		@Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-			View rootView = inflater.inflate(R.layout.fragment_signup_dummy, container, false);
+			View rootView = inflater.inflate(R.layout.fragment_signup, container, false);
 
 			return rootView;
 		}
@@ -182,14 +182,18 @@ public class OpeningActivity extends FragmentActivity implements
 	private RestRequestManager requestManager;
 	
 	public void signInAction(View view){
-		EditText loginInEdit   = (EditText)findViewById(R.id.loginInEdit);
-		EditText passInEdit   = (EditText)findViewById(R.id.passInEdit);
+		Intent intent = new Intent(this, MainActivity.class);
+		startActivity(intent);
+		this.finish();
 		
-		String login = loginInEdit.getText().toString();
-		String password = passInEdit.getText().toString();
-		
-		Request request = RequestFactory.getSignInRequest(login, password);
-		requestManager.execute(request, requestListener);
+//		EditText loginInEdit   = (EditText)findViewById(R.id.loginInEdit);
+//		EditText passInEdit   = (EditText)findViewById(R.id.passInEdit);
+//		
+//		String login = loginInEdit.getText().toString();
+//		String password = passInEdit.getText().toString();
+//		
+//		Request request = RequestFactory.getSignInRequest(login, password);
+//		requestManager.execute(request, requestListener);
 	}
 	
 	public void signUpAction(View view){

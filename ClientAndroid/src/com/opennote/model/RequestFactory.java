@@ -17,7 +17,7 @@ public class RequestFactory {
 	public static Request getSignUpRequest(String login, String fullName, String password) {
 		Request request = new Request(SIGN_UP);
 		request.put("login", login);
-		request.put("fullName", fullName);
+		request.put("full_name", fullName);
 		request.put("password", password);
 		return request;
 	}

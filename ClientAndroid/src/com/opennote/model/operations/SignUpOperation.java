@@ -2,6 +2,7 @@ package com.opennote.model.operations;
 
 import java.util.HashMap;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -19,6 +20,7 @@ import com.foxykeep.datadroid.network.NetworkConnection.Method;
 import com.foxykeep.datadroid.requestmanager.Request;
 import com.foxykeep.datadroid.service.RequestService.Operation;
 import com.opennote.R;
+import com.opennote.model.provider.GroupContact;
 
 public final class SignUpOperation implements Operation {
 
@@ -30,7 +32,7 @@ public final class SignUpOperation implements Operation {
 
 		NetworkConnection connection = new NetworkConnection(context, address);
 		HashMap<String, String> params = new HashMap<String, String>();
-		params.put("session_hash", request.getString("session_hash"));
+		params.put("full_name", request.getString("full_name"));
 		params.put("password", request.getString("password"));
 		connection.setParameters(params);
 
@@ -38,16 +40,20 @@ public final class SignUpOperation implements Operation {
 		ConnectionResult result = connection.execute();
 		
         try {
-            JSONObject jsonBbject = new JSONObject(result.body);
-            SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = sharedPref.edit();
-            editor.putString("session_hash", jsonBbject.get("session_hash").toString());
-            editor.commit();
-        } catch (JSONException e) {
-            throw new DataException(e.getMessage());
-        }
+			JSONObject jsonBbject = new JSONObject(result.body);
+			SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+			SharedPreferences.Editor editor = sharedPref.edit();
+			
+			editor.putString(context.getString(R.string.session_hash), jsonBbject.get("session_hash").toString());
+			editor.putString(context.getString(R.string.user_login), login);
+			editor.commit();
+		} catch (JSONException e) {
+			throw new DataException(e.getMessage());
+		}
       
-		return null;
+        return null;
 	}
+	
+
 	
 }

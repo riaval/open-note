@@ -10,12 +10,12 @@
 		<h5>POST   /sessions/{userLogin} -- Get session number (authentication)</h5>
 		<form method="post" action="http://localhost:8080/api/sessions/riaval"><!-- ______________________ login -->
 			<label>password</label><br>
-			<input name="password" type="text" value="qqqqname2"/>
+			<input name="password" type="text" value="password"/>
 			<input class="button_text" type="submit" name="submit" value="Submit" />
 		</form>
 
 		<h5>POST   /users/{userLogin} -- Create a new user</h5>
-		<form method="post" action="http://localhost:8080/api/users/riaval"><!-- ____________________________ login -->
+		<form method="post" action="http://localhost:8080/api/users/fullName2"><!-- ____________________________ login -->
 			<label>full name</label><br>
 			<input name="full_name" type="text" value="fullName"/><br>
 			<label>password</label><br>
@@ -32,7 +32,7 @@
 			<input type="submit" name="submit" value="Submit" />
 		</form>
 
-		<h5>GET    /groups/groupSlug/users/</h5>
+		<h5>GET    /groups/</h5>
 		<form method="get" action="http://localhost:8080/api/groups/">
 			<label>session_hash</label><br>
 			<input name="session_hash" type="text" value="c7ae8f2a56d2627f1be46d3c69c232ad"/> 
