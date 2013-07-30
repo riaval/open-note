@@ -20,7 +20,7 @@ import com.foxykeep.datadroid.network.NetworkConnection.Method;
 import com.foxykeep.datadroid.requestmanager.Request;
 import com.foxykeep.datadroid.service.RequestService.Operation;
 import com.opennote.R;
-import com.opennote.model.provider.GroupContact;
+import com.opennote.model.provider.RestContact;
 
 public final class SignInOperation implements Operation {
 	
@@ -82,7 +82,7 @@ public final class SignInOperation implements Operation {
 		} catch (JSONException e) {
 			throw new DataException(e.getMessage());
 		}
-        context.getContentResolver().bulkInsert(GroupContact.Group.CONTENT_URI, groupsValues);
+        context.getContentResolver().bulkInsert(RestContact.Group.CONTENT_URI, groupsValues);
 	}
 	
 }

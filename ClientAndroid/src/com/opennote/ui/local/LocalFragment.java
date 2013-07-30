@@ -41,7 +41,7 @@ public class LocalFragment extends Fragment {
 			LocalNotes.BODY,
 			LocalNotes.DATE
 	    };
-	private SimpleCursorAdapter adapter;
+	private SimpleCursorAdapter mAdapter;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -51,23 +51,23 @@ public class LocalFragment extends Fragment {
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		View rootView = inflater.inflate(R.layout.note_fragment, container, false);
+		View rootView = inflater.inflate(R.layout.fragment_note_list, container, false);
         
-        adapter = new SimpleCursorAdapter(
+        mAdapter = new SimpleCursorAdapter(
         		getActivity(),
 	            R.layout.local_item, 
 	            null, 
 	            new String[]{ LocalNotes.TITLE, LocalNotes.BODY, LocalNotes.DATE },
 	            new int[]{ R.id.local_title, R.id.local_body , R.id.local_date}, 
 	            0);
-        ListView listView = (ListView)rootView;
-        listView.setAdapter(adapter);
+        ListView listView = (ListView) rootView;
+        listView.setAdapter(mAdapter);
         listView.setOnItemClickListener(new LocalListClickListener());
         
         SwipeDismissList.OnDismissCallback callback = new SwipeDismissList.OnDismissCallback() {
 			@Override
 			public Undoable onDismiss(AbsListView listView, int position) {
-				getActivity().getContentResolver().delete(LocalContract.LocalNotes.CONTENT_URI, LocalNotes._ID + "=?", new String[]{String.valueOf(adapter.getItemId(position))});
+				getActivity().getContentResolver().delete(LocalContract.LocalNotes.CONTENT_URI, LocalNotes._ID + "=?", new String[]{String.valueOf(mAdapter.getItemId(position))});
 				getActivity().getContentResolver().notifyChange(LocalContract.LocalNotes.CONTENT_URI, null);
 				
 				return null;
@@ -116,13 +116,13 @@ public class LocalFragment extends Fragment {
 
         @Override
         public void onLoadFinished(Loader<Cursor> arg0, Cursor cursor) {
-            adapter.swapCursor(cursor);
-            adapter.notifyDataSetChanged();
+            mAdapter.swapCursor(cursor);
+            mAdapter.notifyDataSetChanged();
         }
 
         @Override
         public void onLoaderReset(Loader<Cursor> arg0) {
-            adapter.swapCursor(null);
+            mAdapter.swapCursor(null);
         }
     };
     

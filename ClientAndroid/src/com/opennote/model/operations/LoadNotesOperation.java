@@ -4,11 +4,9 @@ import java.util.HashMap;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import com.foxykeep.datadroid.exception.ConnectionException;
@@ -21,39 +19,45 @@ import com.foxykeep.datadroid.requestmanager.Request;
 import com.foxykeep.datadroid.service.RequestService.Operation;
 import com.opennote.R;
 import com.opennote.model.provider.RestContact;
+import com.opennote.model.provider.RestContact.Note;
 
-public final class SignUpOperation implements Operation {
+public class LoadNotesOperation implements Operation{
 
 	@Override
 	public Bundle execute(Context context, Request request) throws ConnectionException, DataException, CustomRequestException {
 		String host = context.getString(R.string.host_name);
-		String login = request.getString("login");
-		String address = "http://" + host + "/api/users/" + login;
+		String slug = request.getString("slug");
+		String address = "http://" + host + "/api/groups/" + slug + "/snote/";
 
 		NetworkConnection connection = new NetworkConnection(context, address);
 		HashMap<String, String> params = new HashMap<String, String>();
-		params.put("full_name", request.getString("full_name"));
-		params.put("password", request.getString("password"));
+		params.put("session_hash", request.getString("session_hash"));
 		connection.setParameters(params);
 
-		connection.setMethod(Method.POST);
+		connection.setMethod(Method.GET);
 		ConnectionResult result = connection.execute();
 		
+		ContentValues[] notesValues;
         try {
-			JSONObject jsonBbject = new JSONObject(result.body);
-			SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-			SharedPreferences.Editor editor = sharedPref.edit();
-			
-			editor.putString(context.getString(R.string.session_hash), jsonBbject.get("session_hash").toString());
-			editor.putString(context.getString(R.string.user_login), login);
-			editor.commit();
+        	JSONArray groupsJson = new JSONArray(result.body);
+        	notesValues = new ContentValues[groupsJson.length()];
+
+			for (int i = 0; i < groupsJson.length(); i++) {
+				ContentValues note = new ContentValues();
+				note.put("title", groupsJson.getJSONObject(i).getString("title"));
+				note.put("body", groupsJson.getJSONObject(i).getString("body"));
+				note.put("date", groupsJson.getJSONObject(i).getString("date"));
+				note.put("user", groupsJson.getJSONObject(i).getString("user"));
+				note.put("f_group", slug);
+				notesValues[i] = note;
+			}
 		} catch (JSONException e) {
 			throw new DataException(e.getMessage());
 		}
-      
-        return null;
+        context.getContentResolver().delete(RestContact.Note.CONTENT_URI, Note.GROUP + " = ?", new String[]{slug});
+        context.getContentResolver().bulkInsert(RestContact.Note.CONTENT_URI, notesValues);
+        
+		return null;
 	}
-	
 
-	
 }

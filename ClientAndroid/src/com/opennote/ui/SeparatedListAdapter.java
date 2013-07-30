@@ -121,7 +121,6 @@ public class SeparatedListAdapter extends BaseAdapter {
 			for(int j=0; j < adapter.getCount(); j++){
 				Object itemText = ( (DrawerListItem) adapter.getItem(j) ).getText();
 				if(text.equals(itemText)){
-					System.out.println(position);
 					return position;
 				}
 				position++;

@@ -49,7 +49,6 @@ public class DrawerListItem {
 	static List<DrawerListItem> generateItems(String[] texts, TypedArray icons) {
 		List<DrawerListItem> list = new ArrayList<DrawerListItem>();
 		for (int i = 0; i < texts.length; i++) {
-//			System.out.println(icons.getResourceId(1, -1));
 			DrawerListItem item;
 			try {
 				item = new DrawerListItem(texts[i], icons.getResourceId(i, -1));

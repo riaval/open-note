@@ -2,7 +2,9 @@ package com.opennote.ui;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import android.app.Activity;
 import android.app.Fragment;
@@ -28,7 +30,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.opennote.R;
-import com.opennote.model.provider.GroupContact;
+import com.opennote.model.provider.RestContact;
 import com.opennote.ui.accaunt.InvitesFragment;
 import com.opennote.ui.accaunt.SearchFragment;
 import com.opennote.ui.accaunt.SignInFragment;
@@ -48,12 +50,12 @@ public class MainActivity extends Activity {
 
 	private CharSequence mDrawerTitle;
 	private CharSequence mTitle;
-	private String[] mFragmentTitles;
-//	private String selectedItem;
 	
 	private boolean authorized = false;
 	private String mUserLogin;
-
+	private Map<String, String> mGroups = new HashMap<String, String>();
+	private String mSessionHash;
+	
 	// Adapter for ListView Contents
 	private SeparatedListAdapter adapter;
 	
@@ -108,12 +110,9 @@ public class MainActivity extends Activity {
 	
 	private boolean isAuthorized(){
 		SharedPreferences sharedPref = getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-		String value = sharedPref.getString(getString(R.string.session_hash), null);
-//		SharedPreferences.Editor editor = sharedPref.edit();
-//		editor.clear();
-//		editor.commit();
+		mSessionHash = sharedPref.getString(getString(R.string.session_hash), null);
 		
-		if(value == null){
+		if(mSessionHash == null){
 			return false;
 		}
 		return true;
@@ -140,7 +139,7 @@ public class MainActivity extends Activity {
 			
 			// get groups from SQLite
 			Cursor cursor = this.getContentResolver().query(
-					  GroupContact.Group.CONTENT_URI
+					  RestContact.Group.CONTENT_URI
 					, null
 					, null
 					, null
@@ -148,7 +147,7 @@ public class MainActivity extends Activity {
 				);
 			List<String> groupList = new ArrayList<String>( Arrays.asList( getResources().getStringArray(R.array.drawer_group_text_in) ) );
 			while(cursor.moveToNext()) {
-				
+				mGroups.put(cursor.getString(1), cursor.getString(2));
 				groupList.add(cursor.getString(1));
 			}
 			
@@ -235,7 +234,8 @@ public class MainActivity extends Activity {
 
 	private void selectItem(String text) {
 		Fragment fragment = null;
-
+		boolean groupSelect = false;
+		
 		if(text.equals(mUserLogin)){
 			fragment = new UserFragment();
 		} else if(text.equals("Log in")){
@@ -256,8 +256,12 @@ public class MainActivity extends Activity {
 			fragment = new FeedbackFragment();
 		} else if (text.equals("Settings")){
 			fragment = new SettingsFragment();
-		} else 
-			fragment = new GroupFragment();
+		} else {
+			GroupFragment groupFragment = new GroupFragment();
+			groupFragment.setValues(mSessionHash, text);
+			fragment = groupFragment;
+			groupSelect = true;
+		}
 		
 		try {
 			FragmentManager fragmentManager = getFragmentManager();
@@ -268,7 +272,11 @@ public class MainActivity extends Activity {
 
 		// update selected item and title, then close the drawer
 		mDrawerList.setItemChecked(adapter.getPossition(text), true);
-		setTitle(text);
+		if(!groupSelect){
+			setTitle(text);
+		} else
+			setTitle(mGroups.get(text));
+
 		mDrawerLayout.closeDrawer(mDrawerList);
 	}
 	

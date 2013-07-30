@@ -12,17 +12,20 @@ public class SessionService {
 
 		User user = DAOFactory.getUserDAO().findByLogin(login);
 		if (user == null) {
+			HibernateUtil.commitTransaction(); // <----
 			throw new IllegalArgumentException("Wrong login.");
 		}
 
 		String passwordHash = ServiceUtil.getSaltMD5(password);
 		if (!user.getPasswordHash().equals(passwordHash)) {
+			HibernateUtil.commitTransaction(); // <----
 			throw new IllegalArgumentException("Wrong password.");
 		}
 
 		String clientHash = ServiceUtil.getSaltMD5(login + hostIp + hostAgent);
 		Session session = DAOFactory.getSessionDAO().findByHash(clientHash);
 		if (!(session == null)) {
+			HibernateUtil.commitTransaction(); // <----
 			return session;
 		}
 
