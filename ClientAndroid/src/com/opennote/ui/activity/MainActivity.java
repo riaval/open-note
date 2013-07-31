@@ -1,4 +1,4 @@
-package com.opennote.ui;
+package com.opennote.ui.activity;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -29,27 +29,37 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.foxykeep.datadroid.requestmanager.Request;
+import com.foxykeep.datadroid.requestmanager.RequestManager.RequestListener;
 import com.opennote.R;
+import com.opennote.model.DrawerListItem;
+import com.opennote.model.RequestFactory;
+import com.opennote.model.RestRequestManager;
+import com.opennote.model.adapter.DrawerArrayAdapter;
+import com.opennote.model.adapter.SeparatedListAdapter;
 import com.opennote.model.provider.RestContact;
-import com.opennote.ui.accaunt.InvitesFragment;
-import com.opennote.ui.accaunt.SearchFragment;
-import com.opennote.ui.accaunt.SignInFragment;
-import com.opennote.ui.accaunt.SignUpFragment;
-import com.opennote.ui.accaunt.UserFragment;
-import com.opennote.ui.additional.FeedbackFragment;
-import com.opennote.ui.additional.SettingsFragment;
-import com.opennote.ui.local.AllNotesFragment;
-import com.opennote.ui.local.CreateGroupFragment;
-import com.opennote.ui.local.GroupFragment;
-import com.opennote.ui.local.LocalFragment;
+import com.opennote.ui.fragment.AllNotesFragment;
+import com.opennote.ui.fragment.CreateGroupFragment;
+import com.opennote.ui.fragment.FeedbackFragment;
+import com.opennote.ui.fragment.GroupFragment;
+import com.opennote.ui.fragment.InvitesFragment;
+import com.opennote.ui.fragment.LocalFragment;
+import com.opennote.ui.fragment.SearchFragment;
+import com.opennote.ui.fragment.SettingsFragment;
+import com.opennote.ui.fragment.SignInFragment;
+import com.opennote.ui.fragment.SignUpFragment;
+import com.opennote.ui.fragment.UserFragment;
 
-public class MainActivity extends Activity {	
+public class MainActivity extends Activity {
+	public static MainActivity mainActivity;
+	
 	private DrawerLayout mDrawerLayout;
 	private ListView mDrawerList;
 	private ActionBarDrawerToggle mDrawerToggle;
 
 	private CharSequence mDrawerTitle;
 	private CharSequence mTitle;
+	private List<DrawerListItem> mGroupItems;
 	
 	private boolean authorized = false;
 	private String mUserLogin;
@@ -102,10 +112,10 @@ public class MainActivity extends Activity {
 		};
 		mDrawerLayout.setDrawerListener(mDrawerToggle);
 
-		if (savedInstanceState == null) {
-			selectItem("Local");
-		}
-		
+//		if (savedInstanceState == null) {
+//			selectItem("Local");
+//		}
+		mainActivity = this;
 	}
 	
 	private boolean isAuthorized(){
@@ -116,6 +126,10 @@ public class MainActivity extends Activity {
 			return false;
 		}
 		return true;
+	}
+	
+	public String getSessionHash(){
+		return mSessionHash;
 	}
 
 	private void configurateAdapter(boolean authorized){
@@ -137,23 +151,9 @@ public class MainActivity extends Activity {
 			List<String> accauntList = new ArrayList<String>( Arrays.asList( getResources().getStringArray(R.array.drawer_accaunt_text_in) ) );
 			accauntList.add(0, mUserLogin);
 			
-			// get groups from SQLite
-			Cursor cursor = this.getContentResolver().query(
-					  RestContact.Group.CONTENT_URI
-					, null
-					, null
-					, null
-					, null
-				);
-			List<String> groupList = new ArrayList<String>( Arrays.asList( getResources().getStringArray(R.array.drawer_group_text_in) ) );
-			while(cursor.moveToNext()) {
-				mGroups.put(cursor.getString(1), cursor.getString(2));
-				groupList.add(cursor.getString(1));
-			}
-			
 			accauntText = accauntList.toArray(new String[accauntList.size()]) ;
 			accauntIcon = getResources().obtainTypedArray(R.array.drawer_accaunt_icon_in);
-			groupText = groupList.toArray(new String[groupList.size()]);
+			groupText = getResources().getStringArray(R.array.drawer_group_text_in);
 			groupIcon = getResources().obtainTypedArray(R.array.drawer_group_icon);
 		}
 		else {
@@ -167,12 +167,19 @@ public class MainActivity extends Activity {
 
 		// Generate Drawer lists
 		List<DrawerListItem> accauntItems = DrawerListItem.generateItems(accauntText, accauntIcon);
-		List<DrawerListItem> groupItems = DrawerListItem.generateItems(groupText, groupIcon);
+		mGroupItems = DrawerListItem.generateItems(groupText, groupIcon);
 		List<DrawerListItem> additionalItems = DrawerListItem.generateItems(additionalText, additionalIcon);
 
+		if (authorized) {
+			// DataDroid-lib. Loading groups.
+			RestRequestManager requestManager = RestRequestManager.from(this);
+			Request request = RequestFactory.getLoadGroupsRequest(mSessionHash);
+			requestManager.execute(request, mRequestListener);
+		}
+		
 		// Create Sections adapters
 		DrawerArrayAdapter accauntAdapter = new DrawerArrayAdapter(this, R.layout.drawer_list_item, accauntItems);
-		DrawerArrayAdapter groupAdapter = new DrawerArrayAdapter(this, R.layout.drawer_list_item, groupItems);
+		DrawerArrayAdapter groupAdapter = new DrawerArrayAdapter(this, R.layout.drawer_list_item, mGroupItems);
 		DrawerArrayAdapter additionalAdapter = new DrawerArrayAdapter(this, R.layout.drawer_list_item, additionalItems);
 
 		// Add Sections
@@ -246,7 +253,7 @@ public class MainActivity extends Activity {
 			fragment = new InvitesFragment();
 		} else if (text.equals("Search")){
 			fragment = new SearchFragment();
-		} else if (text.equals("AllNotes")){
+		} else if (text.equals("All notes")){
 			fragment = new AllNotesFragment();
 		} else if (text.equals("Local")){
 			fragment = new LocalFragment();
@@ -286,11 +293,6 @@ public class MainActivity extends Activity {
 		getActionBar().setTitle(mTitle);
 	}
 
-	/**
-	 * When using the ActionBarDrawerToggle, you must call it during
-	 * onPostCreate() and onConfigurationChanged()...
-	 */
-
 	@Override
 	protected void onPostCreate(Bundle savedInstanceState) {
 		super.onPostCreate(savedInstanceState);
@@ -304,5 +306,50 @@ public class MainActivity extends Activity {
 		// Pass any configuration change to the drawer toggls
 		mDrawerToggle.onConfigurationChanged(newConfig);
 	}
+	
+	public void addGroup(String groupSlug, String groupName){
+		mGroups.put(groupSlug, groupName);
+		mGroupItems.add( new DrawerListItem(groupSlug) );
+	}
+	
+	public void updateGroups(String item){
+		mDrawerList.setAdapter(adapter);
+		selectItem(item);
+	}
+	
+	private RequestListener mRequestListener = new RequestListener(){
+		@Override
+		public void onRequestFinished(Request request, Bundle resultData) {
+			Toast.makeText(MainActivity.this.getApplicationContext(), "onRequestFinished", 5).show();
+			// get groups from SQLite
+			Cursor cursor = MainActivity.this.getApplicationContext().getContentResolver().query(
+					  RestContact.Group.CONTENT_URI
+					, null
+					, null
+					, null
+					, null
+				);
+			while(cursor.moveToNext()) {
+				addGroup(
+						  cursor.getString(1)
+						, cursor.getString(2)
+					);
+			}
+			updateGroups("Local");
+		}
+
+		@Override
+		public void onRequestConnectionError(Request request, int statusCode) {
+		}
+
+		@Override
+		public void onRequestDataError(Request request) {
+		}
+
+		@Override
+		public void onRequestCustomError(Request request, Bundle resultData) {
+		}
+		
+	};
 	
 }

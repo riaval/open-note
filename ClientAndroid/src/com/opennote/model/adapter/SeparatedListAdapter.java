@@ -1,4 +1,4 @@
-package com.opennote.ui;
+package com.opennote.model.adapter;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 
 import com.opennote.R;
+import com.opennote.model.DrawerListItem;
 
 public class SeparatedListAdapter extends BaseAdapter {
 	public final Map<String, Adapter> sections = new LinkedHashMap<String, Adapter>();

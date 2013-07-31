@@ -75,13 +75,13 @@ public final class R {
         public static final int action_new=0x7f0b0025;
         public static final int action_refresh=0x7f0b0026;
         public static final int action_settings=0x7f0b0027;
-        public static final int button1=0x7f0b000c;
         public static final int content_frame=0x7f0b0001;
+        public static final int createGroupBt=0x7f0b000c;
         public static final int drawer_layout=0x7f0b0000;
-        public static final int editText1=0x7f0b0009;
-        public static final int editText2=0x7f0b000b;
         public static final int fullNameUpEdit=0x7f0b0017;
         public static final int fullNameUpView=0x7f0b0016;
+        public static final int groupName=0x7f0b000b;
+        public static final int groupSlug=0x7f0b0009;
         public static final int left_drawer=0x7f0b0002;
         public static final int list_header_title=0x7f0b001c;
         public static final int list_item_icon=0x7f0b0006;

@@ -1,12 +1,10 @@
-package com.opennote.ui.createnote;
+package com.opennote.ui.activity;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
 import android.app.Activity;
-import android.app.Fragment;
-import android.app.FragmentManager;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -22,8 +20,8 @@ import com.opennote.model.RequestFactory;
 import com.opennote.model.RestRequestManager;
 import com.opennote.model.provider.LocalContract;
 import com.opennote.model.provider.LocalContract.LocalNotes;
-import com.opennote.ui.local.GroupFragment;
-import com.opennote.ui.local.LocalFragment;
+import com.opennote.ui.fragment.GroupFragment;
+import com.opennote.ui.fragment.LocalFragment;
 
 public class CreateNoteActivity extends Activity {
 	private long mId;
@@ -113,9 +111,8 @@ public class CreateNoteActivity extends Activity {
 	private RequestListener mRequestListener = new RequestListener() {
 		@Override
 		public void onRequestFinished(Request request, Bundle resultData) {
-			FragmentManager fragmentManager = getFragmentManager();
-			GroupFragment groupFragment = (GroupFragment) fragmentManager.findFragmentById(R.layout.fragment_note_list);
-			groupFragment.loadNotes();
+			MainActivity mainActivity = MainActivity.mainActivity;
+			mainActivity.updateGroups(mGroupSlug);
 		}
 
 		@Override

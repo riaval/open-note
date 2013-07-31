@@ -1,4 +1,4 @@
-package com.opennote.ui.local;
+package com.opennote.ui.fragment;
 
 import android.app.Fragment;
 import android.app.LoaderManager.LoaderCallbacks;
@@ -23,7 +23,7 @@ import android.widget.TextView;
 import com.opennote.R;
 import com.opennote.model.provider.LocalContract;
 import com.opennote.model.provider.LocalContract.LocalNotes;
-import com.opennote.ui.createnote.CreateNoteActivity;
+import com.opennote.ui.activity.CreateNoteActivity;
 
 import de.timroes.swipetodismiss.SwipeDismissList;
 import de.timroes.swipetodismiss.SwipeDismissList.SwipeDirection;

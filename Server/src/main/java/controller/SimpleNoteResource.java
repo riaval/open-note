@@ -59,12 +59,10 @@ public class SimpleNoteResource extends ServerResource {
 			return new JacksonRepresentation<Set<SimpleNote>>(simpleNotes);
 		} catch (IllegalArgumentException e) {
 			e.printStackTrace();
-			return new StringRepresentation("Item created",
-					MediaType.TEXT_PLAIN);
+			return new StringRepresentation("Item created", MediaType.TEXT_PLAIN);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new StringRepresentation("Item created",
-					MediaType.TEXT_PLAIN);
+			return new StringRepresentation("Item created", MediaType.TEXT_PLAIN);
 		}
 	}
 

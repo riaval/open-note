@@ -1,4 +1,4 @@
-package com.opennote.ui.local;
+package com.opennote.ui.fragment;
 
 import android.app.ListFragment;
 import android.app.LoaderManager.LoaderCallbacks;
@@ -24,7 +24,7 @@ import com.opennote.R;
 import com.opennote.model.RequestFactory;
 import com.opennote.model.RestRequestManager;
 import com.opennote.model.provider.RestContact.Note;
-import com.opennote.ui.createnote.CreateNoteActivity;
+import com.opennote.ui.activity.CreateNoteActivity;
 
 public class GroupFragment extends ListFragment {
 	private SimpleCursorAdapter mAdapter;

@@ -1,4 +1,4 @@
-package com.opennote.ui.local;
+package com.opennote.model.adapter;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -14,6 +14,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.opennote.R;
+import com.opennote.model.LocalItem;
 
 public class LocalArrayAdapter extends ArrayAdapter<LocalItem> {
 	private static final String tag = "LocalArrayAdapter";

@@ -1,4 +1,4 @@
-package com.opennote.ui.local;
+package com.opennote.ui.fragment;
 
 import android.app.Fragment;
 

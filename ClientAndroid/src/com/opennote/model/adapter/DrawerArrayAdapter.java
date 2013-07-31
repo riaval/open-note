@@ -1,4 +1,4 @@
-package com.opennote.ui;
+package com.opennote.model.adapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.opennote.R;
+import com.opennote.model.DrawerListItem;
 
 public class DrawerArrayAdapter extends ArrayAdapter<DrawerListItem> {
 	private static final String tag = "DrawerArrayAdapter";

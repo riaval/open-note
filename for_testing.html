@@ -23,8 +23,8 @@
 			<input type="submit" name="submit" value="Submit" />
 		</form>
 
-		<h5>POST   /groups/{groupSlug}</h5>
-		<form method="post" action="http://localhost:8080/api/groups/userGroup"><!-- ____________________________ slug -->
+		<h5>POST   /groups/{groupSlug} -- Create a new group </h5>
+		<form method="post" action="http://localhost:8080/api/groups/newSimpleGroup"><!-- ____________________________ slug -->
 			<label>name</label><br>
 			<input name="name" type="text" value="groupName"/><br>
 			<label>session_hash</label><br>
@@ -32,7 +32,7 @@
 			<input type="submit" name="submit" value="Submit" />
 		</form>
 
-		<h5>GET    /groups/</h5>
+		<h5>GET    /groups/ -- Get list of groups </h5>
 		<form method="get" action="http://localhost:8080/api/groups/">
 			<label>session_hash</label><br>
 			<input name="session_hash" type="text" value="c7ae8f2a56d2627f1be46d3c69c232ad"/> 

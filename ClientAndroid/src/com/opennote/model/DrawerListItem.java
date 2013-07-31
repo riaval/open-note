@@ -1,4 +1,4 @@
-package com.opennote.ui;
+package com.opennote.model;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,7 +7,7 @@ import android.content.res.TypedArray;
 
 public class DrawerListItem {
 	private String text;
-	private int icon;
+	private int icon = -1;
 	private int value;
 
 	public final static int ICON_ITEM = 1;
@@ -20,6 +20,10 @@ public class DrawerListItem {
 	public DrawerListItem(String text, int icon) {
 		this.text = text;
 		this.icon = icon;
+	}
+	
+	public DrawerListItem(String text) {
+		this.text = text;
 	}
 
 	public String getText() {
@@ -46,7 +50,7 @@ public class DrawerListItem {
 		this.value = value;
 	}
 
-	static List<DrawerListItem> generateItems(String[] texts, TypedArray icons) {
+	public static List<DrawerListItem> generateItems(String[] texts, TypedArray icons) {
 		List<DrawerListItem> list = new ArrayList<DrawerListItem>();
 		for (int i = 0; i < texts.length; i++) {
 			DrawerListItem item;

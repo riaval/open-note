@@ -2,10 +2,12 @@ package com.opennote.model.service;
 
 import com.foxykeep.datadroid.service.RequestService;
 import com.opennote.model.RequestFactory;
-import com.opennote.model.operations.AddNoteOperation;
-import com.opennote.model.operations.LoadNotesOperation;
-import com.opennote.model.operations.SignInOperation;
-import com.opennote.model.operations.SignUpOperation;
+import com.opennote.model.operation.AddNoteOperation;
+import com.opennote.model.operation.CreateGroupOperation;
+import com.opennote.model.operation.LoadGroupsOperation;
+import com.opennote.model.operation.LoadNotesOperation;
+import com.opennote.model.operation.SignInOperation;
+import com.opennote.model.operation.SignUpOperation;
 
 public class RestService extends RequestService{
 
@@ -20,6 +22,10 @@ public class RestService extends RequestService{
 			return new LoadNotesOperation();
 		case RequestFactory.ADD_NOTE:
 			return new AddNoteOperation();
+		case RequestFactory.CREATE_GROUP:
+			return new CreateGroupOperation();
+		case RequestFactory.LOAD_GROUPS:
+			return new LoadGroupsOperation();
 		default:
 			return null;
 		}

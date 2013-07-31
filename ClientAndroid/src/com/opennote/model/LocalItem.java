@@ -1,4 +1,4 @@
-package com.opennote.ui.local;
+package com.opennote.model;
 
 import java.util.Calendar;
 import java.util.Date;

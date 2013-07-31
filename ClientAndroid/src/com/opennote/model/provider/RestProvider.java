@@ -113,10 +113,14 @@ public class RestProvider extends ContentProvider {
 		case PATH_GROUPS: {
 			mDatabaseHelper.getWritableDatabase().insert(TABLE_GROUPS, null, values);
 			getContext().getContentResolver().notifyChange(RestContact.Group.CONTENT_URI, null);
+			return null;
 		}
 		case PATH_NOTES: {
+			System.out.println(PATH_NOTES);
+			System.out.println(sUriMatcher.match(uri));
 			mDatabaseHelper.getWritableDatabase().insert(TABLE_NOTES, null, values);
 			getContext().getContentResolver().notifyChange(RestContact.Note.CONTENT_URI, null);
+			return null;
 		}
 		default:
 			return null;

@@ -16,7 +16,7 @@ public class SimpleNoteService {
 	public void createSimpleNote(String title, String body, String slug, String sessionHash) throws Exception {
 		UserGroup userGroup = checkData(slug, sessionHash);
 		
-		HibernateUtil.beginTransaction(); // ---->
+//		HibernateUtil.beginTransaction(); // ---->
 		SimpleNote simpleNote = new SimpleNote(title, body);
 		simpleNote.setUserGroup(userGroup);
 		DAOFactory.getSimpleNoteDAO().save(simpleNote);
@@ -26,7 +26,7 @@ public class SimpleNoteService {
 	public Set<SimpleNote> getSimpleNotes(String slug, String sessionHash) throws Exception {
 		UserGroup userGroup = checkData(slug, sessionHash);		
 		
-		HibernateUtil.beginTransaction(); // ---->
+//		HibernateUtil.beginTransaction(); // ---->
 		Set<SimpleNote> simpleNotes = userGroup.getSimpleNotes();
 		HibernateUtil.commitTransaction(); // <----
 		
@@ -39,10 +39,12 @@ public class SimpleNoteService {
 		User user = session.getUser();
 		Group group = DAOFactory.getGroupDAO().findBySlug(slug);
 		Set<UserGroup> userGroups = user.getUserGroups();
-		HibernateUtil.commitTransaction(); // <----
+//		HibernateUtil.commitTransaction(); // <----
 		
-		if(user == null || group == null)
+		if(user == null || group == null){
+			HibernateUtil.commitTransaction(); // <----
 			throw new IllegalArgumentException("user or group is null");
+		}
 		
 		UserGroup userGroup = null;
 		for (UserGroup each : userGroups) {
@@ -51,8 +53,11 @@ public class SimpleNoteService {
 	        	break;
 	        }
 	    }
-		if(userGroup == null)
+		if(userGroup == null){
+			HibernateUtil.commitTransaction(); // <----
 			throw new BadAuthenticationException("Bad Authentication data");
+		}
+			
 		
 		return userGroup;
 	}
