@@ -10,6 +10,7 @@ public class RequestFactory {
 	public static final int ADD_NOTE = 4;
 	public static final int CREATE_GROUP = 5;
 	public static final int LOAD_GROUPS = 6;
+	public static final int FIND_USERS = 7;
 	
 	public static Request getSignInRequest(String login, String password) {
 		Request request = new Request(SIGN_IN);
@@ -53,6 +54,14 @@ public class RequestFactory {
 	public static Request getLoadGroupsRequest(String sessionHash){
 		Request request = new Request(LOAD_GROUPS);
 		request.put("session_hash", sessionHash);
+		return request;
+	}
+	
+	public static Request getFindUsersRequest(String sessionHash, String login, String fullName){
+		Request request = new Request(FIND_USERS);
+		request.put("session_hash", sessionHash);
+		request.put("login", login);
+		request.put("full_name", fullName);
 		return request;
 	}
 	

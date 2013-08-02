@@ -20,6 +20,11 @@ public class RestContact {
 		public static final String USER = "user";
 		public static final String GROUP = "f_group";
 	}
+	public interface UsersCoulmns {
+		public static final String LOGIN = "login";
+		public static final String FULL_NAME = "fullName";
+		public static final String DATE = "date";
+	}
 	
 	public static final class Group implements BaseColumns, GroupCoulmns {
 		public static final String CONTENT_PATH = "group";
@@ -28,6 +33,11 @@ public class RestContact {
 	}
 	public static final class Note implements BaseColumns, NotesCoulmns {
 		public static final String CONTENT_PATH = "note";
+		public static final Uri CONTENT_URI = Uri.withAppendedPath(AUTHORITY_URI, CONTENT_PATH);
+		public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd." + AUTHORITY + "." + CONTENT_PATH;
+	}
+	public static final class User implements BaseColumns, UsersCoulmns {
+		public static final String CONTENT_PATH = "user";
 		public static final Uri CONTENT_URI = Uri.withAppendedPath(AUTHORITY_URI, CONTENT_PATH);
 		public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd." + AUTHORITY + "." + CONTENT_PATH;
 	}

@@ -1,7 +1,9 @@
 package domain;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,15 +12,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-import org.codehaus.jackson.annotate.JsonAnyGetter;
-import org.codehaus.jackson.annotate.JsonGetter;
 import org.codehaus.jackson.annotate.JsonIgnore;
-import org.codehaus.jackson.annotate.JsonManagedReference;
 import org.codehaus.jackson.annotate.JsonProperty;
-import org.codehaus.jackson.annotate.JsonRawValue;
-import org.codehaus.jackson.annotate.JsonSubTypes;
-import org.codehaus.jackson.annotate.JsonValue;
-import org.codehaus.jackson.map.annotate.JsonFilter;
 
 @Entity
 public class SimpleNote {
@@ -56,6 +51,7 @@ public class SimpleNote {
 	}
 
 //	date
+	@JsonIgnore
 	@Column(unique=false, nullable = false)
 	public Date getDate() {
 		return date;
@@ -87,8 +83,14 @@ public class SimpleNote {
 
 //	JSON
 	@JsonProperty("user")
-	public String setUser() {
+	public String jsonUser() {
 		return this.userGroup.getUser().getLogin();
+	}
+	
+	@JsonProperty("date")
+	public String jsonDate() {
+		SimpleDateFormat sdf = new SimpleDateFormat("dd MMM. HH:mm", Locale.US);
+		return sdf.format(date);
 	}
 	
 }

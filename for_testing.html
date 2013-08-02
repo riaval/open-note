@@ -15,7 +15,7 @@
 		</form>
 
 		<h5>POST   /users/{userLogin} -- Create a new user</h5>
-		<form method="post" action="http://localhost:8080/api/users/fullName2"><!-- ____________________________ login -->
+		<form method="post" action="http://localhost:8080/api/users/fullName3"><!-- ____________________________ login -->
 			<label>full name</label><br>
 			<input name="full_name" type="text" value="fullName"/><br>
 			<label>password</label><br>
@@ -54,6 +54,17 @@
 		<form method="get" action="http://localhost:8080/api/groups/newUserGroup/snote/">
 			<label>session_hash</label><br>
 			<input name="session_hash" type="text" value="c7ae8f2a56d2627f1be46d3c69c232ad"/> 
+			<input type="submit" name="submit" value="Submit" />
+		</form>
+
+		<h5>GET    /users/ -- Find users data</h5>
+		<form method="get" action="http://localhost:8080/api/users/">
+			<label>session_hash</label><br>
+			<input name="session_hash" type="text" value="c7ae8f2a56d2627f1be46d3c69c232ad"/><br>
+			<label>login</label><br>
+			<input name="login" type="text" value="riaval"/><br>
+			<label>full name</label><br>
+			<input name="full_name" type="text" value=""/>
 			<input type="submit" name="submit" value="Submit" />
 		</form>
 

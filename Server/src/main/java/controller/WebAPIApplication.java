@@ -17,6 +17,7 @@ public class WebAPIApplication extends Application {
 
 		router.attach("/sessions/{login}", SessionResource.class);
 		router.attach("/users/{login}", UserResource.class);
+		router.attach("/users/", UserResource.class);
 
 		router.attach("/groups/{slug}", GroupResource.class);
 		router.attach("/groups/", GroupResource.class);

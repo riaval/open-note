@@ -1,8 +1,10 @@
 package domain;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -13,6 +15,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
+import org.codehaus.jackson.annotate.JsonProperty;
 
 @Entity
 public class User {
@@ -123,6 +126,12 @@ public class User {
 	}
 	protected void setId(long id){
 		this.id = id;
+	}
+	
+	@JsonProperty("date")
+	public String jsonDate() {
+		SimpleDateFormat sdf = new SimpleDateFormat("dd MMM", Locale.US);
+		return sdf.format(date);
 	}
 
 }

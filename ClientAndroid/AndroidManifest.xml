@@ -35,6 +35,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.opennote.ui.activity.MainActivity" />
         </activity>
+        <activity
+            android:name="com.opennote.ui.activity.SearchResultActivity"
+            android:label="@string/find_users"
+            android:parentActivityName="com.opennote.ui.activity.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.opennote.ui.activity.MainActivity" />
+        </activity>
 
         <provider
             android:name="com.opennote.model.provider.LocalProvider"

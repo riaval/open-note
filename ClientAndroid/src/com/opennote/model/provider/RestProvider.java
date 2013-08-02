@@ -12,6 +12,7 @@ import android.net.Uri;
 
 import com.opennote.model.provider.RestContact.Group;
 import com.opennote.model.provider.RestContact.Note;
+import com.opennote.model.provider.RestContact.User;
 
 public class RestProvider extends ContentProvider {
 
@@ -19,6 +20,7 @@ public class RestProvider extends ContentProvider {
 	
 	private static final String TABLE_GROUPS = "groups";
 	private static final String TABLE_NOTES = "notes";
+	private static final String TABLE_USERS = "users";
 	
 	private static final String DB_NAME = TABLE_GROUPS + ".db";
 	private static final int DB_VERSION = 1;
@@ -28,11 +30,13 @@ public class RestProvider extends ContentProvider {
 	private static final int PATH_ROOT = 0;
 	private static final int PATH_GROUPS = 1;
 	private static final int PATH_NOTES = 2;
+	private static final int PATH_USERS = 3;
 	
 	static {
 		sUriMatcher = new UriMatcher(PATH_ROOT);
 		sUriMatcher.addURI(RestContact.AUTHORITY, RestContact.Group.CONTENT_PATH, PATH_GROUPS);
 		sUriMatcher.addURI(RestContact.AUTHORITY, RestContact.Note.CONTENT_PATH, PATH_NOTES);
+		sUriMatcher.addURI(RestContact.AUTHORITY, RestContact.User.CONTENT_PATH, PATH_USERS);
 	}
 	
 	private DatabaseHeloper mDatabaseHelper;
@@ -62,6 +66,14 @@ public class RestProvider extends ContentProvider {
 						Note.GROUP + " text " +
 				")";
 			db.execSQL(sql);
+			sql = 
+					"create table " + TABLE_USERS + " (" + 
+							User._ID + " integer primary key autoincrement, " +
+							User.LOGIN + " text, " +
+							User.FULL_NAME + " text, " +
+							User.DATE + " text " +
+					")";
+			db.execSQL(sql);
 		}
 
 		@Override
@@ -90,6 +102,11 @@ public class RestProvider extends ContentProvider {
 			cursor.setNotificationUri(getContext().getContentResolver(), RestContact.Note.CONTENT_URI);
 			return cursor;
 		}
+		case PATH_USERS: {
+			Cursor cursor = mDatabaseHelper.getReadableDatabase().query(TABLE_USERS, projection, selection, selectionArgs, null, null, sortOrder);
+			cursor.setNotificationUri(getContext().getContentResolver(), RestContact.Note.CONTENT_URI);
+			return cursor;
+		}
 		default:
 			return null;
 		}
@@ -102,6 +119,8 @@ public class RestProvider extends ContentProvider {
 			return RestContact.Group.CONTENT_TYPE;
 		case PATH_NOTES: 
 			return RestContact.Note.CONTENT_TYPE;
+		case PATH_USERS: 
+			return RestContact.User.CONTENT_TYPE;
 		default:
 			return null;
 		}
@@ -116,10 +135,14 @@ public class RestProvider extends ContentProvider {
 			return null;
 		}
 		case PATH_NOTES: {
-			System.out.println(PATH_NOTES);
-			System.out.println(sUriMatcher.match(uri));
 			mDatabaseHelper.getWritableDatabase().insert(TABLE_NOTES, null, values);
 			getContext().getContentResolver().notifyChange(RestContact.Note.CONTENT_URI, null);
+			return null;
+		}
+		case PATH_USERS: {
+			System.out.println("PATH_USERS");
+			mDatabaseHelper.getWritableDatabase().insert(TABLE_USERS, null, values);
+			getContext().getContentResolver().notifyChange(RestContact.User.CONTENT_URI, null);
 			return null;
 		}
 		default:
@@ -134,6 +157,8 @@ public class RestProvider extends ContentProvider {
 			return mDatabaseHelper.getWritableDatabase().delete(TABLE_GROUPS, selection, selectionArgs);
 		case PATH_NOTES: 
 			return mDatabaseHelper.getWritableDatabase().delete(TABLE_NOTES, selection, selectionArgs);
+		case PATH_USERS: 
+			return mDatabaseHelper.getWritableDatabase().delete(TABLE_USERS, selection, selectionArgs);
 		default:
 			return 0;
 		}
@@ -146,6 +171,8 @@ public class RestProvider extends ContentProvider {
 			return mDatabaseHelper.getWritableDatabase().update(TABLE_GROUPS, values, selection, selectionArgs);
 		case PATH_NOTES:
 			return mDatabaseHelper.getWritableDatabase().update(TABLE_NOTES, values, selection, selectionArgs);
+		case PATH_USERS:
+			return mDatabaseHelper.getWritableDatabase().update(TABLE_USERS, values, selection, selectionArgs);
 		default:
 			return 0;
 		}

@@ -4,6 +4,7 @@ import com.foxykeep.datadroid.service.RequestService;
 import com.opennote.model.RequestFactory;
 import com.opennote.model.operation.AddNoteOperation;
 import com.opennote.model.operation.CreateGroupOperation;
+import com.opennote.model.operation.FindUsersOperation;
 import com.opennote.model.operation.LoadGroupsOperation;
 import com.opennote.model.operation.LoadNotesOperation;
 import com.opennote.model.operation.SignInOperation;
@@ -26,6 +27,8 @@ public class RestService extends RequestService{
 			return new CreateGroupOperation();
 		case RequestFactory.LOAD_GROUPS:
 			return new LoadGroupsOperation();
+		case RequestFactory.FIND_USERS:
+			return new FindUsersOperation();
 		default:
 			return null;
 		}
