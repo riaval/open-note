@@ -49,10 +49,10 @@ public class InviteService {
 		Session session = DAOFactory.getSessionDAO().findByHash(sessionHash);
 		User user = session.getUser();
 		Set<Invite> invites = user.getInvites();
-		
-		for (Invite each : invites) {
-			System.out.println(each.getUser().getLogin());
-	    }
+//		
+//		for (Invite each : invites) {
+//			System.out.println(each.getUser().getLogin());
+//	    }
 		
 		HibernateUtil.commitTransaction(); // <----
 		

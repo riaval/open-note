@@ -25,6 +25,12 @@ public class RestContact {
 		public static final String FULL_NAME = "fullName";
 		public static final String DATE = "date";
 	}
+	public interface InvitationCoulmns {
+		public static final String USER_LOGIN = "user_login";
+		public static final String USER_NAME = "user_name";
+		public static final String GROUP_SLUG = "group_slug";
+		public static final String GROUP_NAME = "group_name";
+	}
 	
 	public static final class Group implements BaseColumns, GroupCoulmns {
 		public static final String CONTENT_PATH = "group";
@@ -38,6 +44,11 @@ public class RestContact {
 	}
 	public static final class User implements BaseColumns, UsersCoulmns {
 		public static final String CONTENT_PATH = "user";
+		public static final Uri CONTENT_URI = Uri.withAppendedPath(AUTHORITY_URI, CONTENT_PATH);
+		public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd." + AUTHORITY + "." + CONTENT_PATH;
+	}
+	public static final class Invitation implements BaseColumns, InvitationCoulmns {
+		public static final String CONTENT_PATH = "invitation";
 		public static final Uri CONTENT_URI = Uri.withAppendedPath(AUTHORITY_URI, CONTENT_PATH);
 		public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd." + AUTHORITY + "." + CONTENT_PATH;
 	}

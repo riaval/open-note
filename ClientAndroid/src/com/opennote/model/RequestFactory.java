@@ -11,6 +11,7 @@ public class RequestFactory {
 	public static final int CREATE_GROUP = 5;
 	public static final int LOAD_GROUPS = 6;
 	public static final int FIND_USERS = 7;
+	public static final int LOAD_INVITATIONS = 8;
 	
 	public static Request getSignInRequest(String login, String password) {
 		Request request = new Request(SIGN_IN);
@@ -62,6 +63,12 @@ public class RequestFactory {
 		request.put("session_hash", sessionHash);
 		request.put("login", login);
 		request.put("full_name", fullName);
+		return request;
+	}
+	
+	public static Request getLoadInvitationsRequest(String sessionHash){
+		Request request = new Request(LOAD_INVITATIONS);
+		request.put("session_hash", sessionHash);
 		return request;
 	}
 	

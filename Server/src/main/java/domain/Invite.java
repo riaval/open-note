@@ -7,6 +7,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+import org.codehaus.jackson.annotate.JsonProperty;
+
 @Entity
 public class Invite {
 	private long id;
@@ -34,6 +37,7 @@ public class Invite {
 	}
 	
 //	userGroup
+	@JsonIgnore
 	@ManyToOne
     @JoinColumn(name = "[userGroup]")
 	public UserGroup getUserGroup() {
@@ -44,6 +48,7 @@ public class Invite {
 	}
 	
 //	groupRole
+	@JsonIgnore
 	@ManyToOne
     @JoinColumn(name = "[groupRole]")
 	public GroupRole getGroupRole() {
@@ -61,5 +66,11 @@ public class Invite {
     }
 	protected void setId(long id){
 		this.id = id;
+	}
+	
+	//Json
+	@JsonProperty("group")
+	public Group grouproup() {
+		return userGroup.getGroup();
 	}
 }

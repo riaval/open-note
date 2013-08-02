@@ -6,6 +6,7 @@ import com.opennote.model.operation.AddNoteOperation;
 import com.opennote.model.operation.CreateGroupOperation;
 import com.opennote.model.operation.FindUsersOperation;
 import com.opennote.model.operation.LoadGroupsOperation;
+import com.opennote.model.operation.LoadInvitationsOperation;
 import com.opennote.model.operation.LoadNotesOperation;
 import com.opennote.model.operation.SignInOperation;
 import com.opennote.model.operation.SignUpOperation;
@@ -29,6 +30,8 @@ public class RestService extends RequestService{
 			return new LoadGroupsOperation();
 		case RequestFactory.FIND_USERS:
 			return new FindUsersOperation();
+		case RequestFactory.LOAD_INVITATIONS:
+			return new LoadInvitationsOperation();
 		default:
 			return null;
 		}

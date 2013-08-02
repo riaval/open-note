@@ -11,6 +11,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.net.Uri;
 
 import com.opennote.model.provider.RestContact.Group;
+import com.opennote.model.provider.RestContact.Invitation;
 import com.opennote.model.provider.RestContact.Note;
 import com.opennote.model.provider.RestContact.User;
 
@@ -21,6 +22,7 @@ public class RestProvider extends ContentProvider {
 	private static final String TABLE_GROUPS = "groups";
 	private static final String TABLE_NOTES = "notes";
 	private static final String TABLE_USERS = "users";
+	private static final String TABLE_INVITATIONS = "invitations";
 	
 	private static final String DB_NAME = TABLE_GROUPS + ".db";
 	private static final int DB_VERSION = 1;
@@ -31,12 +33,14 @@ public class RestProvider extends ContentProvider {
 	private static final int PATH_GROUPS = 1;
 	private static final int PATH_NOTES = 2;
 	private static final int PATH_USERS = 3;
+	private static final int PATH_INVITATION = 4;
 	
 	static {
 		sUriMatcher = new UriMatcher(PATH_ROOT);
 		sUriMatcher.addURI(RestContact.AUTHORITY, RestContact.Group.CONTENT_PATH, PATH_GROUPS);
 		sUriMatcher.addURI(RestContact.AUTHORITY, RestContact.Note.CONTENT_PATH, PATH_NOTES);
 		sUriMatcher.addURI(RestContact.AUTHORITY, RestContact.User.CONTENT_PATH, PATH_USERS);
+		sUriMatcher.addURI(RestContact.AUTHORITY, RestContact.Invitation.CONTENT_PATH, PATH_INVITATION);
 	}
 	
 	private DatabaseHeloper mDatabaseHelper;
@@ -74,6 +78,15 @@ public class RestProvider extends ContentProvider {
 							User.DATE + " text " +
 					")";
 			db.execSQL(sql);
+			sql = 
+					"create table " + TABLE_INVITATIONS + " (" + 
+							Invitation._ID + " integer primary key autoincrement, " +
+							Invitation.USER_LOGIN + " text, " +
+							Invitation.USER_NAME + " text, " +
+							Invitation.GROUP_SLUG + " text, " +
+							Invitation.GROUP_NAME + " text " +
+					")";
+			db.execSQL(sql);
 		}
 
 		@Override
@@ -104,7 +117,12 @@ public class RestProvider extends ContentProvider {
 		}
 		case PATH_USERS: {
 			Cursor cursor = mDatabaseHelper.getReadableDatabase().query(TABLE_USERS, projection, selection, selectionArgs, null, null, sortOrder);
-			cursor.setNotificationUri(getContext().getContentResolver(), RestContact.Note.CONTENT_URI);
+			cursor.setNotificationUri(getContext().getContentResolver(), RestContact.User.CONTENT_URI);
+			return cursor;
+		}
+		case PATH_INVITATION: {
+			Cursor cursor = mDatabaseHelper.getReadableDatabase().query(TABLE_INVITATIONS, projection, selection, selectionArgs, null, null, sortOrder);
+			cursor.setNotificationUri(getContext().getContentResolver(), RestContact.Invitation.CONTENT_URI);
 			return cursor;
 		}
 		default:
@@ -121,6 +139,8 @@ public class RestProvider extends ContentProvider {
 			return RestContact.Note.CONTENT_TYPE;
 		case PATH_USERS: 
 			return RestContact.User.CONTENT_TYPE;
+		case PATH_INVITATION: 
+			return RestContact.Invitation.CONTENT_TYPE;
 		default:
 			return null;
 		}
@@ -140,9 +160,13 @@ public class RestProvider extends ContentProvider {
 			return null;
 		}
 		case PATH_USERS: {
-			System.out.println("PATH_USERS");
 			mDatabaseHelper.getWritableDatabase().insert(TABLE_USERS, null, values);
 			getContext().getContentResolver().notifyChange(RestContact.User.CONTENT_URI, null);
+			return null;
+		}
+		case PATH_INVITATION: {
+			mDatabaseHelper.getWritableDatabase().insert(TABLE_INVITATIONS, null, values);
+			getContext().getContentResolver().notifyChange(RestContact.Invitation.CONTENT_URI, null);
 			return null;
 		}
 		default:
@@ -159,6 +183,8 @@ public class RestProvider extends ContentProvider {
 			return mDatabaseHelper.getWritableDatabase().delete(TABLE_NOTES, selection, selectionArgs);
 		case PATH_USERS: 
 			return mDatabaseHelper.getWritableDatabase().delete(TABLE_USERS, selection, selectionArgs);
+		case PATH_INVITATION: 
+			return mDatabaseHelper.getWritableDatabase().delete(TABLE_INVITATIONS, selection, selectionArgs);
 		default:
 			return 0;
 		}
@@ -173,6 +199,8 @@ public class RestProvider extends ContentProvider {
 			return mDatabaseHelper.getWritableDatabase().update(TABLE_NOTES, values, selection, selectionArgs);
 		case PATH_USERS:
 			return mDatabaseHelper.getWritableDatabase().update(TABLE_USERS, values, selection, selectionArgs);
+		case PATH_INVITATION:
+			return mDatabaseHelper.getWritableDatabase().update(TABLE_INVITATIONS, values, selection, selectionArgs);
 		default:
 			return 0;
 		}
