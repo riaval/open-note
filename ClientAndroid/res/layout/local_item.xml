@@ -5,19 +5,19 @@
     android:layout_height="match_parent"
     android:background="#fff"
     android:orientation="vertical"
-    android:padding="8dp" >
+    android:padding="10dp" >
 
     <TextView
         android:id="@+id/local_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
         android:textColor="#636363"
         android:textSize="18sp"
         android:textStyle="bold" />
 
     <TextView
         android:id="@+id/local_body"
+        android:layout_marginTop="8dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="#636363"
@@ -27,7 +27,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="5dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="10dp"
         android:src="@drawable/dotted" />
 
     <LinearLayout

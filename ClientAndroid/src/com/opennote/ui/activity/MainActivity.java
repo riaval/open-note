@@ -112,9 +112,9 @@ public class MainActivity extends Activity {
 		};
 		mDrawerLayout.setDrawerListener(mDrawerToggle);
 
-//		if (savedInstanceState == null) {
-//			selectItem("Local");
-//		}
+		if (!authorized) {
+			selectItem("Local");
+		}
 		mainActivity = this;
 	}
 	

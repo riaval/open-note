@@ -67,17 +67,18 @@ public class CreateNoteActivity extends Activity {
 		String body = editTextBody.getText().toString();
 		String date = dateFormat.format(Calendar.getInstance().getTime());
 		
-		ContentValues note = new ContentValues();
-		
-		note.put("title", title);
-		note.put("body", body);
-		note.put("date", date);
-		
-		// Check where should save
-		if (mNotLocal)
-			cloudAction(title, body);
-		else
-			localAction(note);
+		if(!title.isEmpty()){
+			ContentValues note = new ContentValues();
+			note.put("title", title);
+			note.put("body", body);
+			note.put("date", date);
+			
+			// Check where should save
+			if (mNotLocal)
+				cloudAction(title, body);
+			else
+				localAction(note);
+		}
 		
 		super.onDestroy();
 	}

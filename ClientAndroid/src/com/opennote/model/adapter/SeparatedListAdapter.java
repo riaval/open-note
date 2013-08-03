@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.Adapter;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
+import android.widget.SimpleAdapter;
 
 import com.opennote.R;
 import com.opennote.model.DrawerListItem;
@@ -19,7 +20,7 @@ public class SeparatedListAdapter extends BaseAdapter {
 	public final static int TYPE_SECTION_HEADER = 0;
 
 	public SeparatedListAdapter(Context context) {
-		headers = new ArrayAdapter<String>(context, R.layout.list_header);
+		headers = new ArrayAdapter<String>(context, R.layout.list_header, R.id.list_header_title);
 	}
 
 	public void addSection(String section, Adapter adapter) {

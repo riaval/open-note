@@ -3,13 +3,13 @@
     
 	<item android:state_pressed="true">
 		<shape  >
-			<solid android:color="#d9ddde" />
+			<solid android:color="#4d4d4d" />
 		</shape>
 	</item>
 
 	<item android:state_activated="true">
 		<shape>
-			<solid android:color="#d9ddde" />
+			<solid android:color="#4d4d4d" />
 		</shape>
 	</item>
 

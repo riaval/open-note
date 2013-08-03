@@ -46,7 +46,7 @@
     <string-array name="drawer_group_icon">
         <item>@drawable/all_notes</item>
         <item>@drawable/local</item>
-        <item>@drawable/create_group</item>
+        <item>@drawable/action_new</item>
     </string-array>
     
     <string-array name="drawer_additional_icon">

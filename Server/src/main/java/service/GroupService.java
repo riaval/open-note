@@ -41,7 +41,8 @@ public class GroupService {
 		for (UserGroup each : userGroups) {
 			groups.add(each.getGroup());
 		}		
-		HibernateUtil.commitTransaction(); // <----
+		HibernateUtil.commitTransaction(); // <---
+		HibernateUtil.closeSession();
 
 		return groups;
 	}

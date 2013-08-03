@@ -17,10 +17,10 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
 import com.opennote.R;
+import com.opennote.model.adapter.NoteItemAdapter;
 import com.opennote.model.provider.LocalContract;
 import com.opennote.model.provider.LocalContract.LocalNotes;
 import com.opennote.ui.activity.CreateNoteActivity;
@@ -41,7 +41,8 @@ public class LocalFragment extends Fragment {
 			LocalNotes.BODY,
 			LocalNotes.DATE
 	    };
-	private SimpleCursorAdapter mAdapter;
+//	private SimpleCursorAdapter mAdapter;
+	private NoteItemAdapter mAdapter;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -53,26 +54,59 @@ public class LocalFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View rootView = inflater.inflate(R.layout.fragment_note_list, container, false);
         
-        mAdapter = new SimpleCursorAdapter(
-        		getActivity(),
-	            R.layout.local_item, 
-	            null, 
-	            new String[]{ LocalNotes.TITLE, LocalNotes.BODY, LocalNotes.DATE },
-	            new int[]{ R.id.local_title, R.id.local_body , R.id.local_date}, 
-	            0);
+//        mAdapter = new SimpleCursorAdapter(
+//        		getActivity(),
+//	            R.layout.local_item, 
+//	            null, 
+//	            new String[]{ LocalNotes.TITLE, LocalNotes.BODY, LocalNotes.DATE },
+//	            new int[]{ R.id.local_title, R.id.local_body , R.id.local_date}, 
+//	            0);
+		
+		mAdapter = new NoteItemAdapter(getActivity(), null, 0);
         ListView listView = (ListView) rootView;
         listView.setAdapter(mAdapter);
         listView.setOnItemClickListener(new LocalListClickListener());
+        
+//        SwipeDismissList.OnDismissCallback callback = new SwipeDismissList.OnDismissCallback() {
+//            // Gets called whenever the user deletes an item.
+//            public SwipeDismissList.Undoable onDismiss(AbsListView listView, final int position) {
+//                // Get your item from the adapter (mAdapter being an adapter for MyItem objects)
+//                final Object deletedItem = mAdapter.getItem(position);
+//                // Delete item from adapter
+//                mAdapter.remove(deletedItem);
+//                // Return an Undoable implementing every method
+//                return new SwipeDismissList.Undoable() {
+//
+//                    // Method is called when user undoes this deletion
+//                    public void undo() {
+//                        // Reinsert item to list
+//                        mAdapter.insert(deletedItem, position);
+//                    }
+//
+//                    // Return an undo message for that item
+//                    public String getTitle() {
+//                        return deletedItem.toString() + " deleted";
+//                    }
+//
+//                    // Called when user cannot undo the action anymore
+//                    public void discard() {
+//                        // Use this place to e.g. delete the item from database
+//                        finallyDeleteFromSomeStorage(deletedItem);
+//                    }
+//                };
+//            }
+//        };
+
         
         SwipeDismissList.OnDismissCallback callback = new SwipeDismissList.OnDismissCallback() {
 			@Override
 			public Undoable onDismiss(AbsListView listView, int position) {
 				getActivity().getContentResolver().delete(LocalContract.LocalNotes.CONTENT_URI, LocalNotes._ID + "=?", new String[]{String.valueOf(mAdapter.getItemId(position))});
 				getActivity().getContentResolver().notifyChange(LocalContract.LocalNotes.CONTENT_URI, null);
-				
 				return null;
 			}
         };
+        
         SwipeDismissList swipeList = new SwipeDismissList(listView, callback, SwipeDismissList.UndoMode.SINGLE_UNDO);
         swipeList.setSwipeDirection(SwipeDirection.START);
         
@@ -116,7 +150,8 @@ public class LocalFragment extends Fragment {
 
         @Override
         public void onLoadFinished(Loader<Cursor> arg0, Cursor cursor) {
-            mAdapter.swapCursor(cursor);
+        	mAdapter.changeCursor(cursor);
+//            mAdapter.swapCursor(cursor);
             mAdapter.notifyDataSetChanged();
         }
 
