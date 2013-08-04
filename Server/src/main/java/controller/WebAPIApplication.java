@@ -27,7 +27,7 @@ public class WebAPIApplication extends Application {
 		router.attach("/invitations/{invitationId}", InviteResource.class);
 		router.attach("/invitations", InviteResource.class);
 		
-		router.attach("/groups/{groupSlug}/users/{userLogin}", UserGroupResource.class);
+		router.attach("/groups/{groupSlug}/users", UserGroupResource.class);
 
 		return router;
 	}

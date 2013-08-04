@@ -1,5 +1,6 @@
 package service;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import service.exception.BadAuthenticationException;
@@ -23,12 +24,22 @@ public class SimpleNoteService {
 	}
 
 	public Set<SimpleNote> getSimpleNotes(String slug, String sessionHash) throws Exception {
-		UserGroup userGroup = checkData(slug, sessionHash);		
+//		UserGroup userGroup = checkData(slug, sessionHash);		
+		HibernateUtil.beginTransaction(); // ---->
+		Session session = DAOFactory.getSessionDAO().findByHash(sessionHash);
+		User user = session.getUser();
+		Group group = DAOFactory.getGroupDAO().findBySlug(slug);
+		Set<UserGroup> userGroups = group.getUserGroup();
+		Set<SimpleNote> allSimpleNotes = new HashSet();
+		for (UserGroup each : userGroups) {
+			Set<SimpleNote> simpleNotes = each.getSimpleNotes();
+			allSimpleNotes.addAll(simpleNotes);
+	    }
 		
-		Set<SimpleNote> simpleNotes = userGroup.getSimpleNotes();
+//		Set<SimpleNote> simpleNotes = userGroup.getSimpleNotes();
 		HibernateUtil.commitTransaction(); // <----
 		
-		return simpleNotes;
+		return allSimpleNotes;
 	}
 	
 	private UserGroup checkData(String slug, String sessionHash) throws Exception{
