@@ -1,5 +1,23 @@
 package com.opennote.ui.fragment;
 
+import android.app.AlertDialog;
+import android.app.Fragment;
+import android.app.LoaderManager.LoaderCallbacks;
+import android.content.CursorLoader;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
+import android.content.Loader;
+import android.database.Cursor;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ListView;
+import android.widget.SimpleCursorAdapter;
+import android.widget.TextView;
+import android.widget.Toast;
+
 import com.foxykeep.datadroid.requestmanager.Request;
 import com.foxykeep.datadroid.requestmanager.RequestManager.RequestListener;
 import com.opennote.R;
@@ -7,19 +25,6 @@ import com.opennote.model.RequestFactory;
 import com.opennote.model.RestRequestManager;
 import com.opennote.model.provider.RestContact.Invitation;
 import com.opennote.ui.activity.MainActivity;
-
-import android.app.Fragment;
-import android.app.LoaderManager.LoaderCallbacks;
-import android.content.CursorLoader;
-import android.content.Loader;
-import android.database.Cursor;
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ListView;
-import android.widget.SimpleCursorAdapter;
-import android.widget.Toast;
 
 public class InvitesFragment extends Fragment {
 	private View mRootView;
@@ -46,7 +51,7 @@ public class InvitesFragment extends Fragment {
 		// DataDroid-lib RequestManager
 		RestRequestManager requestManager = RestRequestManager.from(getActivity());
 		// Integrate session hash and group slug into request
-		Request request = RequestFactory.getLoadInvitationsRequest(MainActivity.mainActivity.getSessionHash());
+		Request request = RequestFactory.getLoadInvitationsRequest(MainActivity.instance.getSessionHash());
 		// Add RequestListener
 		requestManager.execute(request, mRequestListener);
 		
@@ -64,8 +69,9 @@ public class InvitesFragment extends Fragment {
 		            new int[]{ R.id.invitationLogin, R.id.invitationFullName , R.id.invitationSlug, R.id.invitationGroupName}, 
 		            0);
 			ListView listView = (ListView) mRootView;
+//			System.out.println();
 	        listView.setAdapter(mAdapter);
-//	        listView.setOnItemClickListener(new LocalListClickListener());
+	        listView.setOnItemClickListener(new InvitationClickListener());
 	        getLoaderManager().initLoader(LOADER_ID, null, loaderCallbacks);
 			Toast.makeText(getActivity(), "onRequestFinished", 5).show();
 		}
@@ -112,5 +118,41 @@ public class InvitesFragment extends Fragment {
             mAdapter.swapCursor(null);
         }
     };
+    
+    private class InvitationClickListener implements ListView.OnItemClickListener {
+		@Override
+		public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
+			Cursor cursor = mAdapter.getCursor();
+			cursor.moveToPosition(position);
+			final String inviteId = cursor.getString(0);
+			
+			AlertDialog.Builder alertDialog;
+			alertDialog = new AlertDialog.Builder(getActivity());
+			String groupName = ((TextView) view.findViewById(R.id.invitationGroupName)).getText().toString();
+			String invitationAuthor = ((TextView) view.findViewById(R.id.invitationFullName)).getText().toString();
+			alertDialog.setTitle("Accept invitation");
+			alertDialog.setMessage("Group: " + groupName + "\n" + "From: " + invitationAuthor);
+			
+			String joinToGroup = "Join to group";
+			String deleteInvitation = "Delete invitation";
+			alertDialog.setPositiveButton(joinToGroup, new OnClickListener() {
+				public void onClick(DialogInterface dialog, int arg1) {
+					Toast.makeText(getActivity(), "joinToGroup", Toast.LENGTH_LONG).show();
+				}
+			});
+			alertDialog.setNegativeButton(deleteInvitation, new OnClickListener() {
+				public void onClick(DialogInterface dialog, int arg1) {
+					// DataDroid-lib RequestManager
+					RestRequestManager requestManager = RestRequestManager.from(getActivity());
+					// Integrate session hash and group slug into request
+					Request request = RequestFactory.getDeleteInvitationsRequest(MainActivity.instance.getSessionHash(), inviteId);
+					// Add RequestListener
+					requestManager.execute(request, mRequestListener);
+					Toast.makeText(getActivity(), "deleteInvitation", Toast.LENGTH_LONG).show();
+				}
+			});
+			alertDialog.show();
+		}
+	}
 
 }

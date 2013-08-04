@@ -20,6 +20,7 @@ import com.foxykeep.datadroid.requestmanager.Request;
 import com.foxykeep.datadroid.service.RequestService.Operation;
 import com.opennote.R;
 import com.opennote.model.provider.RestContact;
+import com.opennote.model.provider.RestContact.Invitation;
 
 public class LoadInvitationsOperation implements Operation {
 
@@ -45,13 +46,12 @@ public class LoadInvitationsOperation implements Operation {
 				JSONObject user = groupsJson.getJSONObject(i).getJSONObject("user");
 				JSONObject group = groupsJson.getJSONObject(i).getJSONObject("group");
 				
-				invitation.put("user_login", user.getString("login"));
-				invitation.put("user_name", user.getString("fullName"));
-				invitation.put("group_slug", group.getString("slug"));
-				invitation.put("group_name", group.getString("name"));
+				invitation.put(Invitation._ID, groupsJson.getJSONObject(i).getString("id"));
+				invitation.put(Invitation.USER_LOGIN, user.getString("login"));
+				invitation.put(Invitation.USER_NAME, user.getString("fullName"));
+				invitation.put(Invitation.GROUP_SLUG, group.getString("slug"));
+				invitation.put(Invitation.GROUP_NAME, group.getString("name"));
 				groupsValues[i] = invitation;
-				System.out.println("##################");
-				System.out.println(user.getString("login"));
 			}
 			
 		} catch (JSONException e) {

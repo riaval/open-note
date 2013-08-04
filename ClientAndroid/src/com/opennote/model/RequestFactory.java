@@ -12,6 +12,7 @@ public class RequestFactory {
 	public static final int LOAD_GROUPS = 6;
 	public static final int FIND_USERS = 7;
 	public static final int LOAD_INVITATIONS = 8;
+	public static final int DELETE_INVITATION = 9;
 	
 	public static Request getSignInRequest(String login, String password) {
 		Request request = new Request(SIGN_IN);
@@ -69,6 +70,13 @@ public class RequestFactory {
 	public static Request getLoadInvitationsRequest(String sessionHash){
 		Request request = new Request(LOAD_INVITATIONS);
 		request.put("session_hash", sessionHash);
+		return request;
+	}
+	
+	public static Request getDeleteInvitationsRequest(String sessionHash, String invitationId){
+		Request request = new Request(DELETE_INVITATION);
+		request.put("session_hash", sessionHash);
+		request.put("invitation_id", invitationId);
 		return request;
 	}
 	

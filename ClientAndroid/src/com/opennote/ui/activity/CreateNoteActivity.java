@@ -155,7 +155,7 @@ public class CreateNoteActivity extends Activity implements ActionBar.OnNavigati
 	private RequestListener mRequestListener = new RequestListener() {
 		@Override
 		public void onRequestFinished(Request request, Bundle resultData) {
-			MainActivity mainActivity = MainActivity.mainActivity;
+			MainActivity mainActivity = MainActivity.instance;
 			mainActivity.updateGroups(mGroupSlug);
 		}
 

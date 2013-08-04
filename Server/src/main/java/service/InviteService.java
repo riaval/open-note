@@ -49,16 +49,24 @@ public class InviteService {
 		Session session = DAOFactory.getSessionDAO().findByHash(sessionHash);
 		User user = session.getUser();
 		Set<Invite> invites = user.getInvites();
-//		
-//		for (Invite each : invites) {
-//			System.out.println(each.getUser().getLogin());
-//	    }
-		
 		HibernateUtil.commitTransaction(); // <----
 		
-		
-		
 		return invites;
+	}
+	
+	public void deleteInvites(String sessionHash, long id){
+		HibernateUtil.beginTransaction(); // ---->
+		Session session = DAOFactory.getSessionDAO().findByHash(sessionHash);
+		User sessionUser = session.getUser();
+		
+		Invite invite = DAOFactory.getInviteDAO().findByID(Invite.class, id);
+		User inviteUser = invite.getUser();
+		
+		if( sessionUser.getLogin().equals(inviteUser.getLogin()) ){
+			DAOFactory.getInviteDAO().delete(invite);
+		}
+		
+		HibernateUtil.commitTransaction(); // <----
 	}
 	
 }

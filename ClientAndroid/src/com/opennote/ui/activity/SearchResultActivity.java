@@ -16,7 +16,6 @@ import com.foxykeep.datadroid.requestmanager.RequestManager.RequestListener;
 import com.opennote.R;
 import com.opennote.model.RequestFactory;
 import com.opennote.model.RestRequestManager;
-import com.opennote.model.provider.LocalContract.LocalNotes;
 import com.opennote.model.provider.RestContact.User;
 import com.opennote.ui.fragment.FindUserFragment;
 
@@ -49,7 +48,7 @@ public class SearchResultActivity extends Activity {
 		// DataDroid-lib RequestManager
 		RestRequestManager requestManager = RestRequestManager.from(this);
 		// Integrate session hash and group slug into request
-		Request request = RequestFactory.getFindUsersRequest(MainActivity.mainActivity.getSessionHash(), mLogin, mFullName);
+		Request request = RequestFactory.getFindUsersRequest(MainActivity.instance.getSessionHash(), mLogin, mFullName);
 		// Add RequestListener
 		requestManager.execute(request, mRequestListener);
 
@@ -67,7 +66,6 @@ public class SearchResultActivity extends Activity {
 		            new int[]{ R.id.searchLoginTextView, R.id.searchFullNameTextView , R.id.searchDateTextView}, 
 		            0);
 	        ListView listView = (ListView) findViewById(R.id.searchListView);
-	        System.out.println(mAdapter);
 	        listView.setAdapter(mAdapter);
 	        getLoaderManager().initLoader(LOADER_ID, null, loaderCallbacks);
 	        

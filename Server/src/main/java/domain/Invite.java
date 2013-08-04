@@ -73,4 +73,8 @@ public class Invite {
 	public Group grouproup() {
 		return userGroup.getGroup();
 	}
+	@JsonProperty("id")
+	public long id() {
+		return id;
+	}
 }

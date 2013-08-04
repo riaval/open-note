@@ -69,7 +69,7 @@
 		</form>
 
 		<h5>POST   /invitations/users/{userLogin}/groups/{groupSlug} -- Create invitation</h5>
-		<form method="post" action="http://localhost:8080/api/invitations/users/riaval/groups/newgroup">
+		<form method="post" action="http://localhost:8080/api/invitations/users/riaval/groups/newUserGroup">
 			<label>session_hash</label><br>
 			<input name="session_hash" type="text" value="c7ae8f2a56d2627f1be46d3c69c232ad"/> 
 			<input type="submit" name="submit" value="Submit" />
@@ -79,6 +79,15 @@
 		<form method="get" action="http://localhost:8080/api/invitations">
 			<label>session_hash</label><br>
 			<input name="session_hash" type="text" value="c7ae8f2a56d2627f1be46d3c69c232ad"/> 
+			<input type="submit" name="submit" value="Submit" />
+		</form>
+
+		<h5>DELETE    /invitations/{invitationID} -- delete invitation</h5>
+		<form method="post" action="http://localhost:8080/api/invitations/2">
+			<label>session_hash</label><br>
+			<input name="session_hash" type="text" value="c7ae8f2a56d2627f1be46d3c69c232ad"/> 
+<!-- 			<label>invitation_id</label><br>
+			<input name="invitation_id" type="text" value="5"/>  -->
 			<input type="submit" name="submit" value="Submit" />
 		</form>
 

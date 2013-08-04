@@ -127,7 +127,7 @@ public class User {
 	protected void setId(long id){
 		this.id = id;
 	}
-	
+
 	@JsonProperty("date")
 	public String jsonDate() {
 		SimpleDateFormat sdf = new SimpleDateFormat("dd MMM", Locale.US);

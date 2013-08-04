@@ -3,12 +3,20 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
+    <Button
+        android:id="@+id/logOutBt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_x="92dp"
+        android:layout_y="55dp"
+        android:text="Logout" />
+
     <TextView
         android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_x="108dp"
-        android:layout_y="158dp"
+        android:layout_x="74dp"
+        android:layout_y="178dp"
         android:text="User --LOGIN--"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 

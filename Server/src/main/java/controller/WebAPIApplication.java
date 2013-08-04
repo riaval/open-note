@@ -11,8 +11,6 @@ public class WebAPIApplication extends Application {
 	 */
 	@Override
 	public synchronized Restlet createInboundRoot() {
-		// Create a router Restlet that routes each call to a
-		// new instance of HelloWorldResource.
 		Router router = new Router(getContext());
 
 		router.attach("/sessions/{login}", SessionResource.class);
@@ -26,7 +24,10 @@ public class WebAPIApplication extends Application {
 		router.attach("/groups/{groupSlug}/snote/", SimpleNoteResource.class);
 		
 		router.attach("/invitations/users/{login}/groups/{slug}", InviteResource.class);
+		router.attach("/invitations/{invitationId}", InviteResource.class);
 		router.attach("/invitations", InviteResource.class);
+		
+		router.attach("/groups/{groupSlug}/users/{userLogin}", UserGroupResource.class);
 
 		return router;
 	}

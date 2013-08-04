@@ -51,7 +51,7 @@ import com.opennote.ui.fragment.SignUpFragment;
 import com.opennote.ui.fragment.UserFragment;
 
 public class MainActivity extends Activity {
-	public static MainActivity mainActivity;
+	public static MainActivity instance;
 	
 	private DrawerLayout mDrawerLayout;
 	private ListView mDrawerList;
@@ -115,7 +115,7 @@ public class MainActivity extends Activity {
 		if (!authorized) {
 			selectItem("Local");
 		}
-		mainActivity = this;
+		instance = this;
 	}
 	
 	private boolean isAuthorized(){

@@ -20,7 +20,6 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.opennote.R;
 import com.opennote.model.adapter.NoteAdapter;
@@ -30,7 +29,6 @@ import com.opennote.ui.activity.CreateNoteActivity;
 
 import de.timroes.swipetodismiss.SwipeDismissList;
 import de.timroes.swipetodismiss.SwipeDismissList.SwipeDirection;
-import de.timroes.swipetodismiss.SwipeDismissList.Undoable;
 
 public class LocalFragment extends Fragment {
 	private SwipeDismissList mSwipeLis;
@@ -88,7 +86,6 @@ public class LocalFragment extends Fragment {
 					String body = cursor.getString(2);
 					String date = cursor.getString(3);
 					String color = cursor.getString(4);
-					System.out.println(title);
 					mMatrixCursor.addRow(new String[]{id, title, body, date, color});
 				}
 				mAdapter.swapCursor(mMatrixCursor);
@@ -160,10 +157,6 @@ public class LocalFragment extends Fragment {
         @Override
         public void onLoadFinished(Loader<Cursor> arg0, Cursor cursor) {
         	mAdapter.swapCursor(cursor);
-
-        	Toast.makeText(getActivity(), "hello", 5).show();
-        		
-//            mAdapter.notifyDataSetChanged();
         }
 
         @Override

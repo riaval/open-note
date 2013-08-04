@@ -80,7 +80,7 @@ public class RestProvider extends ContentProvider {
 			db.execSQL(sql);
 			sql = 
 					"create table " + TABLE_INVITATIONS + " (" + 
-							Invitation._ID + " integer primary key autoincrement, " +
+							Invitation._ID + " integer primary key, " +
 							Invitation.USER_LOGIN + " text, " +
 							Invitation.USER_NAME + " text, " +
 							Invitation.GROUP_SLUG + " text, " +
