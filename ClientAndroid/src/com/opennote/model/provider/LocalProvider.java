@@ -46,7 +46,8 @@ public class LocalProvider extends ContentProvider {
 					LocalNotes._ID + " integer primary key autoincrement, " +
 					LocalNotes.TITLE + " text, " +
 					LocalNotes.BODY + " text, " +
-					LocalNotes.DATE + " text" +
+					LocalNotes.DATE + " text, " +
+					LocalNotes.COLOR + " text " +
 				")";
 			db.execSQL(sql);
 		}

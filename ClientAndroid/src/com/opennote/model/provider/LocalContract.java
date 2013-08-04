@@ -13,6 +13,7 @@ public final class LocalContract {
 		public static final String TITLE = "title";
 		public static final String BODY = "body";
 		public static final String DATE = "date";
+		public static final String COLOR = "color";
 	}
 	
 	public static final class LocalNotes implements BaseColumns, LocalNotesCoulmns {

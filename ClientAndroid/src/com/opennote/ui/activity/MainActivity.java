@@ -331,8 +331,8 @@ public class MainActivity extends Activity {
 				);
 			while(cursor.moveToNext()) {
 				addGroup(
-						  cursor.getString(1)
-						, cursor.getString(2)
+					  cursor.getString(1)
+					, cursor.getString(2)
 					);
 			}
 			updateGroups("Local");

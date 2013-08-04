@@ -7,14 +7,14 @@
 
     <EditText
         android:id="@+id/note_title"
-        android:gravity="top|left"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="20dp"
         android:background="@android:color/transparent"
         android:ems="10"
+        android:gravity="top|left"
         android:hint="Heading"
         android:inputType="textCapSentences"
+        android:paddingBottom="20dp"
         android:textColor="#636363"
         android:textStyle="bold" >
 
@@ -23,13 +23,13 @@
 
     <EditText
         android:id="@+id/note_body"
-        android:gravity="top|left"
         android:layout_width="match_parent"
-        android:textColor="#636363"
         android:layout_height="match_parent"
         android:background="@android:color/transparent"
         android:ems="10"
+        android:gravity="top|left"
         android:hint="Text"
-        android:inputType="textMultiLine|textCapSentences" />
+        android:inputType="textMultiLine|textCapSentences"
+        android:textColor="#636363" />
 
 </LinearLayout>

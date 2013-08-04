@@ -6,6 +6,8 @@ import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
+import android.database.MatrixCursor;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -18,9 +20,10 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.opennote.R;
-import com.opennote.model.adapter.NoteItemAdapter;
+import com.opennote.model.adapter.NoteAdapter;
 import com.opennote.model.provider.LocalContract;
 import com.opennote.model.provider.LocalContract.LocalNotes;
 import com.opennote.ui.activity.CreateNoteActivity;
@@ -30,19 +33,23 @@ import de.timroes.swipetodismiss.SwipeDismissList.SwipeDirection;
 import de.timroes.swipetodismiss.SwipeDismissList.Undoable;
 
 public class LocalFragment extends Fragment {
+	private SwipeDismissList mSwipeLis;
+	
 	public static final String ID_VALUE_MESSAGE = "id";
 	public static final String TITLE_VALUE_MESSAGE = "title";
 	public static final String BODY_VALUE_MESSAGE = "body";
+	public static final String COLOR_VALUE_MESSAGE = "color";
 	
 	private static final int LOADER_ID = 1;
 	private final String[] PROJECTION = { 
 			LocalNotes._ID,
 			LocalNotes.TITLE,
 			LocalNotes.BODY,
-			LocalNotes.DATE
+			LocalNotes.DATE,
+			LocalNotes.COLOR
 	    };
-//	private SimpleCursorAdapter mAdapter;
-	private NoteItemAdapter mAdapter;
+	private NoteAdapter mAdapter;
+	private MatrixCursor mMatrixCursor;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -54,61 +61,62 @@ public class LocalFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View rootView = inflater.inflate(R.layout.fragment_note_list, container, false);
         
-//        mAdapter = new SimpleCursorAdapter(
-//        		getActivity(),
-//	            R.layout.local_item, 
-//	            null, 
-//	            new String[]{ LocalNotes.TITLE, LocalNotes.BODY, LocalNotes.DATE },
-//	            new int[]{ R.id.local_title, R.id.local_body , R.id.local_date}, 
-//	            0);
-		
-		mAdapter = new NoteItemAdapter(getActivity(), null, 0);
+        mAdapter = new NoteAdapter(
+        		getActivity(),
+	            R.layout.local_item, 
+	            null, 
+	            new String[]{ LocalNotes.TITLE, LocalNotes.BODY, LocalNotes.DATE, LocalNotes.COLOR },
+	            new int[]{ R.id.local_title, R.id.local_body , R.id.local_date}, 
+	            0);
         ListView listView = (ListView) rootView;
         listView.setAdapter(mAdapter);
         listView.setOnItemClickListener(new LocalListClickListener());
         
-//        SwipeDismissList.OnDismissCallback callback = new SwipeDismissList.OnDismissCallback() {
-//            // Gets called whenever the user deletes an item.
-//            public SwipeDismissList.Undoable onDismiss(AbsListView listView, final int position) {
-//                // Get your item from the adapter (mAdapter being an adapter for MyItem objects)
-//                final Object deletedItem = mAdapter.getItem(position);
-//                // Delete item from adapter
-//                mAdapter.remove(deletedItem);
-//                // Return an Undoable implementing every method
-//                return new SwipeDismissList.Undoable() {
-//
-//                    // Method is called when user undoes this deletion
-//                    public void undo() {
-//                        // Reinsert item to list
-//                        mAdapter.insert(deletedItem, position);
-//                    }
-//
-//                    // Return an undo message for that item
-//                    public String getTitle() {
-//                        return deletedItem.toString() + " deleted";
-//                    }
-//
-//                    // Called when user cannot undo the action anymore
-//                    public void discard() {
-//                        // Use this place to e.g. delete the item from database
-//                        finallyDeleteFromSomeStorage(deletedItem);
-//                    }
-//                };
-//            }
-//        };
-
-        
         SwipeDismissList.OnDismissCallback callback = new SwipeDismissList.OnDismissCallback() {
-			@Override
-			public Undoable onDismiss(AbsListView listView, int position) {
-				getActivity().getContentResolver().delete(LocalContract.LocalNotes.CONTENT_URI, LocalNotes._ID + "=?", new String[]{String.valueOf(mAdapter.getItemId(position))});
-				getActivity().getContentResolver().notifyChange(LocalContract.LocalNotes.CONTENT_URI, null);
-				return null;
-			}
+            // Gets called whenever the user deletes an item.
+            public SwipeDismissList.Undoable onDismiss(AbsListView listView, final int position) {
+            	if(mMatrixCursor != null)
+            		mMatrixCursor.close();
+            	mMatrixCursor = new MatrixCursor(PROJECTION);
+				final Cursor cursor = mAdapter.getCursor();
+				final long deletedId = mAdapter.getItemId(position);;
+				for(cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
+					if(cursor.getPosition() == position)
+						continue;
+					String id = cursor.getString(0);
+					String title = cursor.getString(1);
+					String body = cursor.getString(2);
+					String date = cursor.getString(3);
+					String color = cursor.getString(4);
+					System.out.println(title);
+					mMatrixCursor.addRow(new String[]{id, title, body, date, color});
+				}
+				mAdapter.swapCursor(mMatrixCursor);
+                return new SwipeDismissList.Undoable() {
+
+                    // Method is called when user undoes this deletion
+                    public void undo() {
+                        // Reinsert item to list
+                    	mAdapter.changeCursor(cursor);
+                    }
+
+                    // Return an undo message for that item
+                    public String getTitle() {
+                        return "Item deleted";
+                    }
+
+                    // Called when user cannot undo the action anymore
+                    public void discard() {
+                    	getActivity().getContentResolver().delete(LocalContract.LocalNotes.CONTENT_URI, LocalNotes._ID + "=?", new String[]{String.valueOf(deletedId)});
+                    	getActivity().getContentResolver().notifyChange(LocalContract.LocalNotes.CONTENT_URI, null);
+                    }
+                };
+            }
         };
         
-        SwipeDismissList swipeList = new SwipeDismissList(listView, callback, SwipeDismissList.UndoMode.SINGLE_UNDO);
-        swipeList.setSwipeDirection(SwipeDirection.START);
+        mSwipeLis = new SwipeDismissList(listView, callback, SwipeDismissList.UndoMode.SINGLE_UNDO);
+        mSwipeLis.setSwipeDirection(SwipeDirection.START);
+        mSwipeLis.setAutoHideDelay(1);
         
         getLoaderManager().initLoader(LOADER_ID, null, loaderCallbacks);
         
@@ -127,6 +135,7 @@ public class LocalFragment extends Fragment {
 		item.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 			@Override
 			public boolean onMenuItemClick(MenuItem item) {
+				mSwipeLis.discardUndo();
 				Intent intent = new Intent(getActivity(), CreateNoteActivity.class);
 				startActivity(intent);
 				return true;
@@ -150,9 +159,11 @@ public class LocalFragment extends Fragment {
 
         @Override
         public void onLoadFinished(Loader<Cursor> arg0, Cursor cursor) {
-        	mAdapter.changeCursor(cursor);
-//            mAdapter.swapCursor(cursor);
-            mAdapter.notifyDataSetChanged();
+        	mAdapter.swapCursor(cursor);
+
+        	Toast.makeText(getActivity(), "hello", 5).show();
+        		
+//            mAdapter.notifyDataSetChanged();
         }
 
         @Override
@@ -166,12 +177,14 @@ public class LocalFragment extends Fragment {
 		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 			String title = ((TextView) view.findViewById(R.id.local_title)).getText().toString();
 			String body = ((TextView) view.findViewById(R.id.local_body)).getText().toString();
+			int backgroundColor = ((ColorDrawable) view.getBackground()).getColor();
 			
 			// Starting update activity
 			Intent intent = new Intent(getActivity(), CreateNoteActivity.class);
 			intent.putExtra(ID_VALUE_MESSAGE, id);
 			intent.putExtra(TITLE_VALUE_MESSAGE, title);
 			intent.putExtra(BODY_VALUE_MESSAGE, body);
+			intent.putExtra(COLOR_VALUE_MESSAGE, "#" + Integer.toHexString(backgroundColor));
 			startActivity(intent);
 		}
 	}
