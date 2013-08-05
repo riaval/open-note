@@ -1,10 +1,12 @@
 package domain;
 
+import java.awt.Color;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Locale;
+import java.util.Random;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -25,6 +27,7 @@ public class User {
 	private String passwordHash;
 	private String email;
 	private Date date;
+	private int color;
 	private Set<Session> sessions = new HashSet<Session>();
 	private Set<UserGroup> userGroups = new HashSet<UserGroup>();
 	private Set<Invite> invites = new HashSet<Invite>();
@@ -38,6 +41,7 @@ public class User {
 		this.passwordHash = passwordHash;
 //		this.email = ""; null or ""
 		this.date = Calendar.getInstance().getTime();
+		this.color = generateRandomColor(new Color(255, 255, 255)).getRGB();
 	}
 	
 //	login
@@ -118,6 +122,14 @@ public class User {
 		this.invites = invites;
 	}
 	
+	@Column(unique=false, nullable = true)
+	public int getColor() {
+		return color;
+	}
+	public void setColor(int color) {
+		this.color = color;
+	}
+	
 	@Id
 	@GeneratedValue
 	@Column(unique = true, nullable = false)
@@ -132,6 +144,23 @@ public class User {
 	public String jsonDate() {
 		SimpleDateFormat sdf = new SimpleDateFormat("dd MMM", Locale.US);
 		return sdf.format(date);
+	}
+	
+	private Color generateRandomColor(Color mix) {
+	    Random random = new Random();
+	    int red = random.nextInt(256);
+	    int green = random.nextInt(256);
+	    int blue = random.nextInt(256);
+
+	    // mix the color
+	    if (mix != null) {
+	        red = (red + mix.getRed()) / 2;
+	        green = (green + mix.getGreen()) / 2;
+	        blue = (blue + mix.getBlue()) / 2;
+	    }
+
+	    Color color = new Color(red, green, blue);
+	    return color;
 	}
 
 }

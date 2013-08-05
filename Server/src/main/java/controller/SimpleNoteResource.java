@@ -1,5 +1,7 @@
 package controller;
 
+import java.awt.Color;
+import java.util.Random;
 import java.util.Set;
 
 import org.restlet.data.Form;
@@ -48,13 +50,15 @@ public class SimpleNoteResource extends ServerResource {
 		}
 	}
 	
+	
+	
+	
 	@Get("json")
 	public Representation getGroups() {
 		SimpleNoteService simpleNoteService = new SimpleNoteService();
 		try {
 			String sessionHash = getQuery().getValues("session_hash");
 			Set<SimpleNote> simpleNotes = simpleNoteService.getSimpleNotes(groupSlug, sessionHash);
-			System.out.println(simpleNotes.isEmpty());
 
 			return new JacksonRepresentation<Set<SimpleNote>>(simpleNotes);
 		} catch (IllegalArgumentException e) {

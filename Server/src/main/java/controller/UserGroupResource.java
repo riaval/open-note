@@ -6,7 +6,6 @@ import org.restlet.resource.Post;
 import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
 
-import service.InviteService;
 import service.UserGroupService;
 
 public class UserGroupResource extends ServerResource{
@@ -26,7 +25,7 @@ public class UserGroupResource extends ServerResource{
 			String sessionHash = form.getFirstValue("session_hash");
 			userGroupService.addUserToGroup(sessionHash, groupSlug);
 			
-			return "OK";
+			return ErrorFactory.Json.successOK();
 		} catch (IllegalArgumentException e) {
 			e.printStackTrace();
 			return HttpStatusFactory.Json.clientBadRequest();

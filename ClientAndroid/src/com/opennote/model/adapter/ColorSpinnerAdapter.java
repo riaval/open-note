@@ -1,8 +1,5 @@
 package com.opennote.model.adapter;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import android.content.Context;
 import android.graphics.Color;
 import android.view.View;

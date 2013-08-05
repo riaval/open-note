@@ -22,7 +22,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.opennote.R;
-import com.opennote.model.adapter.NoteAdapter;
+import com.opennote.model.adapter.NoteLocalAdapter;
 import com.opennote.model.provider.LocalContract;
 import com.opennote.model.provider.LocalContract.LocalNotes;
 import com.opennote.ui.activity.CreateNoteActivity;
@@ -46,7 +46,7 @@ public class LocalFragment extends Fragment {
 			LocalNotes.DATE,
 			LocalNotes.COLOR
 	    };
-	private NoteAdapter mAdapter;
+	private NoteLocalAdapter mAdapter;
 	private MatrixCursor mMatrixCursor;
 	
 	@Override
@@ -59,11 +59,11 @@ public class LocalFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View rootView = inflater.inflate(R.layout.fragment_note_list, container, false);
         
-        mAdapter = new NoteAdapter(
+        mAdapter = new NoteLocalAdapter(
         		getActivity(),
 	            R.layout.local_item, 
 	            null, 
-	            new String[]{ LocalNotes.TITLE, LocalNotes.BODY, LocalNotes.DATE, LocalNotes.COLOR },
+	            new String[]{ LocalNotes.TITLE, LocalNotes.BODY, LocalNotes.DATE},
 	            new int[]{ R.id.local_title, R.id.local_body , R.id.local_date}, 
 	            0);
         ListView listView = (ListView) rootView;

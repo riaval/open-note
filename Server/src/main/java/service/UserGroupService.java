@@ -20,7 +20,6 @@ public class UserGroupService {
 		Set<Invite> invites = user.getInvites();
 		for(Invite each : invites){
 			UserGroup usergroup = each.getUserGroup();
-			System.out.println(usergroup.getUser().getLogin());
 			String inviteUserLogin = each.getUser().getLogin();
 			if (inviteUserLogin.equals(user.getLogin())){
 				Group group = DAOFactory.getGroupDAO().findBySlug(groupSlug);

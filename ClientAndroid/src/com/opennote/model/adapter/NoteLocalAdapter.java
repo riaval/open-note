@@ -10,9 +10,9 @@ import android.widget.TextView;
 
 import com.opennote.R;
 
-public class NoteAdapter extends SimpleCursorAdapter{
+public class NoteLocalAdapter extends SimpleCursorAdapter {
 
-	public NoteAdapter(Context context, int layout, Cursor c, String[] from, int[] to, int flags) {
+	public NoteLocalAdapter(Context context, int layout, Cursor c, String[] from, int[] to, int flags) {
 		super(context, layout, c, from, to, flags);
 	}
 
@@ -20,11 +20,13 @@ public class NoteAdapter extends SimpleCursorAdapter{
 	public View getView(int position, View convertView, ViewGroup parent) {
 		convertView = null;
 		View view = super.getView(position, convertView, parent);
+		
 		// If body is empty set GONE visibility
 		TextView bodyTextView = (TextView) view.findViewById(R.id.local_body);
 		if(bodyTextView.getText().toString().isEmpty()){
 			bodyTextView.setVisibility(View.GONE);
 		}
+		
 		// set item color
 		Cursor cursor = getCursor();
 		int lastIndex = cursor.getColumnCount() - 1;

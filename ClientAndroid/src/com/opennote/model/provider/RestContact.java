@@ -18,12 +18,14 @@ public class RestContact {
 		public static final String BODY = "body";
 		public static final String DATE = "date";
 		public static final String USER = "user";
-		public static final String GROUP = "f_group";
+		public static final String GROUP = "group_slug";
+		public static final String COLOR = "color";
 	}
 	public interface UsersCoulmns {
 		public static final String LOGIN = "login";
 		public static final String FULL_NAME = "fullName";
 		public static final String DATE = "date";
+//		public static final String COLOR = "color";
 	}
 	public interface InvitationCoulmns {
 		public static final String USER_LOGIN = "user_login";

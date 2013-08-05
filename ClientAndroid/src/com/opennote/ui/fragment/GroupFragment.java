@@ -6,6 +6,7 @@ import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -14,8 +15,8 @@ import android.view.MenuItem;
 import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
 
 import com.foxykeep.datadroid.requestmanager.Request;
@@ -23,18 +24,20 @@ import com.foxykeep.datadroid.requestmanager.RequestManager.RequestListener;
 import com.opennote.R;
 import com.opennote.model.RequestFactory;
 import com.opennote.model.RestRequestManager;
+import com.opennote.model.adapter.NoteGroupAdapter;
 import com.opennote.model.provider.RestContact.Note;
 import com.opennote.ui.activity.CreateNoteActivity;
 
 public class GroupFragment extends ListFragment {
-	private SimpleCursorAdapter mAdapter;
+	private NoteGroupAdapter mAdapter;
 	private static final int LOADER_ID = 1;
 	private final String[] PROJECTION = { 
 			Note._ID,
 			Note.TITLE,
 			Note.BODY,
 			Note.DATE,
-			Note.USER
+			Note.USER,
+			Note.COLOR
 	    };
 	
 	private View mRootView;
@@ -51,7 +54,7 @@ public class GroupFragment extends ListFragment {
 	}
 	
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {		
 		mRootView = inflater.inflate(R.layout.fragment_note_list, container, false);
 		
 		loadNotes();
@@ -97,16 +100,16 @@ public class GroupFragment extends ListFragment {
 	private RequestListener mRequestListener = new RequestListener() {
 		@Override
 		public void onRequestFinished(Request request, Bundle resultData) {
-			mAdapter = new SimpleCursorAdapter(
+			mAdapter = new NoteGroupAdapter(
 	        		getActivity(),
 		            R.layout.local_item, 
 		            null, 
-		            new String[]{ Note.TITLE, Note.BODY, Note.DATE, Note.USER },
+		            new String[]{ Note.TITLE, Note.BODY, Note.DATE, Note.USER, Note.COLOR },
 		            new int[]{ R.id.local_title, R.id.local_body , R.id.local_date, R.id.local_author}, 
 		            0);
 			ListView listView = (ListView) mRootView;
 	        listView.setAdapter(mAdapter);
-//	        listView.setOnItemClickListener(new LocalListClickListener());
+	        listView.setOnItemClickListener(new GroupListClickListener());
 	        getLoaderManager().initLoader(LOADER_ID, null, loaderCallbacks);
 			Toast.makeText(getActivity(), "onRequestFinished", 5).show();
 		}
@@ -154,19 +157,11 @@ public class GroupFragment extends ListFragment {
         }
     };
 	
-//	private class LocalListClickListener implements ListView.OnItemClickListener {
-//		@Override
-//		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//			String title = ((TextView) view.findViewById(R.id.local_title)).getText().toString();
-//			String body = ((TextView) view.findViewById(R.id.local_body)).getText().toString();
-//			
-//			// Starting update activity
-//			Intent intent = new Intent(getActivity(), CreateNoteActivity.class);
-//			intent.putExtra(ID_VALUE_MESSAGE, id);
-//			intent.putExtra(TITLE_VALUE_MESSAGE, title);
-//			intent.putExtra(BODY_VALUE_MESSAGE, body);
-//			startActivity(intent);
-//		}
-//	}
+	private class GroupListClickListener implements ListView.OnItemClickListener {
+		@Override
+		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+			System.out.println( ((ColorDrawable) view.getBackground()).getColor() );
+		}
+	}
 
 }                                                                                                                                                                           

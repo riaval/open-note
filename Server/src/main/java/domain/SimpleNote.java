@@ -83,8 +83,8 @@ public class SimpleNote {
 
 //	JSON
 	@JsonProperty("user")
-	public String jsonUser() {
-		return this.userGroup.getUser().getLogin();
+	public User jsonUser() {
+		return this.userGroup.getUser();
 	}
 	
 	@JsonProperty("date")

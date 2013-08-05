@@ -2,11 +2,9 @@ package com.opennote.model.operation;
 
 import java.util.HashMap;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -20,7 +18,6 @@ import com.foxykeep.datadroid.network.NetworkConnection.Method;
 import com.foxykeep.datadroid.requestmanager.Request;
 import com.foxykeep.datadroid.service.RequestService.Operation;
 import com.opennote.R;
-import com.opennote.model.provider.RestContact;
 
 public final class SignUpOperation implements Operation {
 

@@ -67,24 +67,27 @@ public class RestProvider extends ContentProvider {
 						Note.BODY + " text, " +
 						Note.DATE + " text, " +
 						Note.USER + " text, " +
-						Note.GROUP + " text " +
+						Note.GROUP + " text, " +
+						Note.COLOR + " integer " +
 				")";
+			System.out.println(sql);
 			db.execSQL(sql);
 			sql = 
 					"create table " + TABLE_USERS + " (" + 
-							User._ID + " integer primary key autoincrement, " +
-							User.LOGIN + " text, " +
-							User.FULL_NAME + " text, " +
-							User.DATE + " text " +
+						User._ID + " integer primary key autoincrement, " +
+						User.LOGIN + " text, " +
+						User.FULL_NAME + " text, " +
+						User.DATE + " text " +
+//						User.COLOR + " integer " +
 					")";
 			db.execSQL(sql);
 			sql = 
 					"create table " + TABLE_INVITATIONS + " (" + 
-							Invitation._ID + " integer primary key, " +
-							Invitation.USER_LOGIN + " text, " +
-							Invitation.USER_NAME + " text, " +
-							Invitation.GROUP_SLUG + " text, " +
-							Invitation.GROUP_NAME + " text " +
+						Invitation._ID + " integer primary key, " +
+						Invitation.USER_LOGIN + " text, " +
+						Invitation.USER_NAME + " text, " +
+						Invitation.GROUP_SLUG + " text, " +
+						Invitation.GROUP_NAME + " text " +
 					")";
 			db.execSQL(sql);
 		}

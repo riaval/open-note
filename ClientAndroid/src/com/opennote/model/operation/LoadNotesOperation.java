@@ -4,6 +4,7 @@ import java.util.HashMap;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -47,8 +48,13 @@ public class LoadNotesOperation implements Operation{
 				note.put("title", groupsJson.getJSONObject(i).getString("title"));
 				note.put("body", groupsJson.getJSONObject(i).getString("body"));
 				note.put("date", groupsJson.getJSONObject(i).getString("date"));
-				note.put("user", groupsJson.getJSONObject(i).getString("user"));
-				note.put("f_group", slug);
+				JSONObject user = groupsJson.getJSONObject(i).getJSONObject("user");
+
+				note.put("user", user.getString("fullName"));
+				
+//				note.put("user", groupsJson.getJSONObject(i).getString("user"));
+				note.put("group_slug", slug);
+				note.put("color", user.getInt("color"));
 				notesValues[i] = note;
 			}
 		} catch (JSONException e) {

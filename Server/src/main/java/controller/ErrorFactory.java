@@ -7,6 +7,17 @@ public class ErrorFactory {
 	
 	static public class Json {
 		
+		static public String successOK(){
+			JsonObject inside = new JsonObject();
+			inside.add("message", new JsonPrimitive("OK"));
+			inside.add("code", new JsonPrimitive(200));
+			
+	        JsonObject outside = new JsonObject();
+	        outside.add("Success", inside);
+
+	        return outside.toString();
+		}
+		
 		static public String clientBadRequest(){
 			return generate("Bad Request", 400);
 		}
