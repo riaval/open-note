@@ -14,6 +14,9 @@ import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
 
 import service.InviteService;
+import service.exception.BadAuthenticationException;
+import controller.representation.Status;
+import controller.representation.StatusFactory;
 import domain.Invite;
 
 public class InviteResource extends ServerResource {
@@ -33,53 +36,61 @@ public class InviteResource extends ServerResource {
 	}
 	
 	@Post
-	public String createInvite(Representation entity) {
+	public Representation createInvite(Representation entity) {
 		Form form = new Form(entity);
 		try {
 			InviteService inviteService = new InviteService();
 			String sessionHash = form.getFirstValue("session_hash");
-			inviteService.createInvite(slug, login, sessionHash);
-			return "OK";
+			inviteService.createInvitation(slug, login, sessionHash);
+			
+			return new JacksonRepresentation<Status>( StatusFactory.created() );
+		} catch (BadAuthenticationException e) {
+			e.printStackTrace();
+			return new JacksonRepresentation<Status>( StatusFactory.clientUnauthorized() );
 		} catch (IllegalArgumentException e) {
 			e.printStackTrace();
-			return HttpStatusFactory.Json.clientBadRequest();
+			return new JacksonRepresentation<Status>( StatusFactory.clientBadRequest() );
 		} catch (Exception e) {
 			e.printStackTrace();
-			return HttpStatusFactory.Json.serverInternalError();
+			return new JacksonRepresentation<Status>( StatusFactory.serverInternalError() );
 		}
 	}
 	
-	@Get("json")
+	@Get
 	public Representation getInvites() {
 		try {
 			InviteService inviteService = new InviteService();
 			String sessionHash = getQuery().getValues("session_hash");
-			Set<Invite> invites = inviteService.getInvites(sessionHash);
+			Set<Invite> invites = inviteService.getInvitations(sessionHash);
 
 			return new JacksonRepresentation<Set<Invite>>(invites);
-		} catch (IllegalArgumentException e) {
+		} catch (BadAuthenticationException e) {
 			e.printStackTrace();
-			return new StringRepresentation("Item created",
-					MediaType.TEXT_PLAIN);
+			return new JacksonRepresentation<Status>( StatusFactory.clientUnauthorized() );
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new StringRepresentation("Item created",
-					MediaType.TEXT_PLAIN);
+			return new JacksonRepresentation<Status>( StatusFactory.serverInternalError() );
 		}
 	}
 	
 	@Delete
-	public String deleteInvite(Representation entity) {
+	public Representation deleteInvite() {
 		try {
 			InviteService inviteService = new InviteService();
 			String sessionHash = getQuery().getValues("session_hash");
-			inviteService.deleteInvites(sessionHash, invitationId);
+			inviteService.deleteInvitation(sessionHash, invitationId);
 
-			return "OK";
+			return new JacksonRepresentation<Status>( StatusFactory.ok() );
+		} catch (BadAuthenticationException e) {
+			e.printStackTrace();
+			return new JacksonRepresentation<Status>( StatusFactory.clientUnauthorized() );
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+			return new JacksonRepresentation<Status>( StatusFactory.clientBadRequest() );
 		} catch (Exception e) {
 			e.printStackTrace();
+			return new JacksonRepresentation<Status>( StatusFactory.serverInternalError() );
 		}
-		return "Error";
 	}
 	
 }

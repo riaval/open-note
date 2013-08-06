@@ -14,39 +14,55 @@ import domain.UserGroup;
 
 public class InviteService {
 	
-	public void createInvite(String slug, String login, String sessionHash) throws Exception{
+	public void createInvitation(String slug, String login, String sessionHash) throws Exception{
 		HibernateUtil.beginTransaction(); // ---->
 		Session session = DAOFactory.getSessionDAO().findByHash(sessionHash);
+		if(session == null){
+			HibernateUtil.commitTransaction(); // <----
+			throw new BadAuthenticationException("Session is empty");
+		}
 		User userFrom = session.getUser();
 		User userTo = DAOFactory.getUserDAO().findByLogin(login);
+		if(userFrom.equals(userTo)){
+			HibernateUtil.commitTransaction(); // <----
+			throw new IllegalArgumentException("Invitation to oneself");
+		}
 		Group group = DAOFactory.getGroupDAO().findBySlug(slug);
-		Set<UserGroup> userGroups = userFrom.getUserGroups();
-		HibernateUtil.commitTransaction(); // <----
-		
-		if(userFrom == null || group == null || userTo == null)
+		if(group == null || userTo == null){
+			HibernateUtil.commitTransaction(); // <----
 			throw new IllegalArgumentException("users or group is null");
+		}
 		
-		UserGroup userGroup = null;
+		Set<UserGroup> userGroups = userFrom.getUserGroups();
 		for (UserGroup each : userGroups) {
 			if (each.getGroup().equals(group)){
-	        	userGroup = each;
-	        	break;
+				GroupRole groupRole = DAOFactory.getGroupRoleDAO().findByRole("member");
+				Invite invite = new Invite(userTo, each, groupRole);
+				
+				Set<Invite> invitations = userTo.getInvites();
+				for(Invite eachInvitation : invitations){
+					if (eachInvitation.getGroupRole().equals(groupRole)){
+						HibernateUtil.commitTransaction(); // <----
+						throw new IllegalArgumentException("Invitation is already created");
+					}
+				}
+				
+				DAOFactory.getInviteDAO().save(invite);
+				HibernateUtil.commitTransaction(); // <----
+				return;
 	        }
 	    }
-		if(userGroup == null)
-			throw new BadAuthenticationException("Bad Authentication data");
-		
-		HibernateUtil.beginTransaction(); // ---->
-		GroupRole groupRole = DAOFactory.getGroupRoleDAO().findByRole("member");
-		Invite invite = new Invite(userTo, userGroup, groupRole);
-		invite.setUserGroup(userGroup);
-		DAOFactory.getInviteDAO().save(invite);
 		HibernateUtil.commitTransaction(); // <----
+		throw new IllegalArgumentException("No rules");
 	}
 	
-	public Set<Invite> getInvites(String sessionHash){
+	public Set<Invite> getInvitations(String sessionHash) throws Exception {
 		HibernateUtil.beginTransaction(); // ---->
 		Session session = DAOFactory.getSessionDAO().findByHash(sessionHash);
+		if(session == null){
+			HibernateUtil.commitTransaction(); // <----
+			throw new BadAuthenticationException("Session is empty");
+		}
 		User user = session.getUser();
 		Set<Invite> invites = user.getInvites();
 		HibernateUtil.commitTransaction(); // <----
@@ -54,19 +70,28 @@ public class InviteService {
 		return invites;
 	}
 	
-	public void deleteInvites(String sessionHash, long id){
+	public void deleteInvitation(String sessionHash, long id) throws Exception {
 		HibernateUtil.beginTransaction(); // ---->
 		Session session = DAOFactory.getSessionDAO().findByHash(sessionHash);
-		User sessionUser = session.getUser();
-		
-		Invite invite = DAOFactory.getInviteDAO().findByID(Invite.class, id);
-		User inviteUser = invite.getUser();
-		
-		if( sessionUser.getLogin().equals(inviteUser.getLogin()) ){
-			DAOFactory.getInviteDAO().delete(invite);
+		if(session == null){
+			HibernateUtil.commitTransaction(); // <----
+			throw new BadAuthenticationException("Session is empty");
 		}
-		
+		User sessionUser = session.getUser();
+		Invite invite = DAOFactory.getInviteDAO().findByID(Invite.class, id);
+		if(invite == null){
+			HibernateUtil.commitTransaction(); // <----
+			throw new IllegalArgumentException("No invitation found");
+		}
+		User inviteUser = invite.getUser();
+		User inviteAuthor = invite.getUserGroup().getUser();
+		if( sessionUser.equals(inviteUser) || sessionUser.equals(inviteAuthor)){
+			DAOFactory.getInviteDAO().delete(invite);
+			HibernateUtil.commitTransaction(); // <----
+			return;
+		}
 		HibernateUtil.commitTransaction(); // <----
+		throw new IllegalArgumentException("No rules");
 	}
 	
 }

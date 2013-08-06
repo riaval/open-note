@@ -9,6 +9,7 @@ import java.util.Locale;
 import java.util.Random;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -94,7 +95,7 @@ public class User {
 	
 //	sessions
 	@JsonIgnore
-	@OneToMany(mappedBy="user", fetch=FetchType.EAGER)
+	@OneToMany(mappedBy="user", fetch=FetchType.EAGER, cascade=CascadeType.ALL)
 	public Set<Session> getSession(){
 		return sessions;
 	}
@@ -104,7 +105,7 @@ public class User {
 	
 //	UserGroup
 	@JsonIgnore
-	@OneToMany(mappedBy="user", fetch=FetchType.EAGER)
+	@OneToMany(mappedBy="user", fetch=FetchType.EAGER, cascade=CascadeType.REFRESH)
 	public Set<UserGroup> getUserGroups() {
 		return this.userGroups;
 	}
@@ -114,7 +115,7 @@ public class User {
 	
 //	Invite
 	@JsonIgnore
-	@OneToMany(mappedBy="user", fetch=FetchType.EAGER)
+	@OneToMany(mappedBy="user", fetch=FetchType.EAGER, cascade=CascadeType.REFRESH)
 	public Set<Invite> getInvites() {
 		return invites;
 	}
@@ -161,6 +162,28 @@ public class User {
 
 	    Color color = new Color(red, green, blue);
 	    return color;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + (int) (id ^ (id >>> 32));
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		User other = (User) obj;
+		if (id != other.id)
+			return false;
+		return true;
 	}
 
 }

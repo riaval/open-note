@@ -1,20 +1,19 @@
 package controller;
 
-import java.awt.Color;
-import java.util.Random;
 import java.util.Set;
 
 import org.restlet.data.Form;
-import org.restlet.data.MediaType;
 import org.restlet.ext.jackson.JacksonRepresentation;
 import org.restlet.representation.Representation;
-import org.restlet.representation.StringRepresentation;
 import org.restlet.resource.Get;
 import org.restlet.resource.Post;
 import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
 
 import service.SimpleNoteService;
+import service.exception.BadAuthenticationException;
+import controller.representation.Status;
+import controller.representation.StatusFactory;
 import domain.SimpleNote;
 
 public class SimpleNoteResource extends ServerResource {
@@ -29,7 +28,7 @@ public class SimpleNoteResource extends ServerResource {
 	}
 
 	@Post
-	public String createSimpleNote(Representation entity) {
+	public Representation createSimpleNote(Representation entity) {
 		Form form = new Form(entity);
 		try {
 			SimpleNoteService simpleNoteService = new SimpleNoteService();
@@ -40,33 +39,36 @@ public class SimpleNoteResource extends ServerResource {
 
 			simpleNoteService.createSimpleNote(title, body, groupSlug, sessionHash);
 
-			return "createSimpleNote";
+			return new JacksonRepresentation<Status>( StatusFactory.created() );
+		} catch (BadAuthenticationException e) {
+			e.printStackTrace();
+			return new JacksonRepresentation<Status>( StatusFactory.clientUnauthorized() );
 		} catch (IllegalArgumentException e) {
 			e.printStackTrace();
-			return null;
+			return new JacksonRepresentation<Status>( StatusFactory.clientBadRequest() );
 		} catch (Exception e) {
 			e.printStackTrace();
-			return null;
+			return new JacksonRepresentation<Status>( StatusFactory.serverInternalError() );
 		}
 	}
-	
-	
-	
-	
+
 	@Get("json")
-	public Representation getGroups() {
+	public Representation getSimpleNotes() {
 		SimpleNoteService simpleNoteService = new SimpleNoteService();
 		try {
 			String sessionHash = getQuery().getValues("session_hash");
 			Set<SimpleNote> simpleNotes = simpleNoteService.getSimpleNotes(groupSlug, sessionHash);
 
 			return new JacksonRepresentation<Set<SimpleNote>>(simpleNotes);
+		} catch (BadAuthenticationException e) {
+			e.printStackTrace();
+			return new JacksonRepresentation<Status>( StatusFactory.clientUnauthorized() );
 		} catch (IllegalArgumentException e) {
 			e.printStackTrace();
-			return new StringRepresentation("Item created", MediaType.TEXT_PLAIN);
+			return new JacksonRepresentation<Status>( StatusFactory.clientBadRequest() );
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new StringRepresentation("Item created", MediaType.TEXT_PLAIN);
+			return new JacksonRepresentation<Status>( StatusFactory.serverInternalError() );
 		}
 	}
 

@@ -68,7 +68,7 @@ public class UserGroup {
 	
 //	simpleNotes
 	@JsonIgnore
-	@OneToMany(mappedBy="userGroup", fetch=FetchType.EAGER)
+	@OneToMany(mappedBy="userGroup", fetch=FetchType.EAGER, cascade=CascadeType.ALL)
 	public Set<SimpleNote> getSimpleNotes(){
 		return simpleNotes;
 	}
@@ -78,7 +78,7 @@ public class UserGroup {
 	
 //	invites
 	@JsonIgnore
-	@OneToMany(mappedBy="userGroup", fetch=FetchType.EAGER)
+	@OneToMany(mappedBy="userGroup", fetch=FetchType.EAGER, cascade=CascadeType.REFRESH)
 	public Set<Invite> getInvites(){
 		return invites;
 	}
@@ -95,4 +95,27 @@ public class UserGroup {
 	protected void setId(long id){
 		this.id = id;
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + (int) (id ^ (id >>> 32));
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		UserGroup other = (UserGroup) obj;
+		if (id != other.id)
+			return false;
+		return true;
+	}
+	
 }

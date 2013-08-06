@@ -27,7 +27,7 @@ public class UserService {
 		HibernateUtil.beginTransaction(); // ---->
 		DAOFactory.getUserDAO().save(user);
 		DAOFactory.getSessionDAO().save(session);
-		HibernateUtil.commitTransaction(); // ---->
+		HibernateUtil.commitTransaction(); // <----
 
 		return session;
 	}
@@ -35,13 +35,12 @@ public class UserService {
 	public List<User> getUsers(String sessionHash, String login, String fullName) throws Exception{
 		HibernateUtil.beginTransaction(); // ---->
 		Session session = DAOFactory.getSessionDAO().findByHash(sessionHash);
-		User user = session.getUser();
-		if(user == null){
-			HibernateUtil.commitTransaction(); // ---->
-			throw new BadAuthenticationException();
+		if(session == null){
+			HibernateUtil.commitTransaction(); // <----
+			throw new BadAuthenticationException("Session is empty");
 		}
 		List<User> users = DAOFactory.getUserDAO().findUsers(login, fullName);
-		HibernateUtil.commitTransaction(); // ---->
+		HibernateUtil.commitTransaction(); // <----
 		return users;
 	}
 

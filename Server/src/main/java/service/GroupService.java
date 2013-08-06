@@ -3,6 +3,7 @@ package service;
 import java.util.HashSet;
 import java.util.Set;
 
+import service.exception.BadAuthenticationException;
 import dao.DAOFactory;
 import dao.HibernateUtil;
 import domain.Group;
@@ -47,4 +48,25 @@ public class GroupService {
 		return groups;
 	}
 
+	public void deleteGroup(String slug, String sessionHash) throws Exception{
+		HibernateUtil.beginTransaction(); // ---->
+		Session session = DAOFactory.getSessionDAO().findByHash(sessionHash);
+		User user = session.getUser();
+		Group group = DAOFactory.getGroupDAO().findBySlug(slug);
+		if(user == null || group == null){
+			HibernateUtil.commitTransaction(); // <---
+			throw new BadAuthenticationException();
+		}
+		GroupRole groupRole = DAOFactory.getGroupRoleDAO().findByRole("creator");
+		Set<UserGroup> useGroup = group.getUserGroup();
+		for(UserGroup each : useGroup){
+			if (each.getUser().getLogin().equals(user.getLogin()) && each.getGroupRole().equals(groupRole)){
+				DAOFactory.getGroupDAO().delete(group);
+				HibernateUtil.commitTransaction(); // <---
+				return;
+			}
+		}
+		throw new BadAuthenticationException("no rights");
+	}
+	
 }

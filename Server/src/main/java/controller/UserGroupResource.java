@@ -1,12 +1,16 @@
 package controller;
 
 import org.restlet.data.Form;
+import org.restlet.ext.jackson.JacksonRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.resource.Post;
 import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
 
 import service.UserGroupService;
+import service.exception.BadAuthenticationException;
+import controller.representation.Status;
+import controller.representation.StatusFactory;
 
 public class UserGroupResource extends ServerResource{
 
@@ -18,20 +22,23 @@ public class UserGroupResource extends ServerResource{
 	}
 	
 	@Post
-	public String addUserToGroup(Representation entity) {
+	public Representation addUserToGroup(Representation entity) {
 		Form form = new Form(entity);
 		try {
 			UserGroupService userGroupService = new UserGroupService();
 			String sessionHash = form.getFirstValue("session_hash");
 			userGroupService.addUserToGroup(sessionHash, groupSlug);
 			
-			return ErrorFactory.Json.successOK();
+			return new JacksonRepresentation<Status>( StatusFactory.created() );
+		} catch (BadAuthenticationException e) {
+			e.printStackTrace();
+			return new JacksonRepresentation<Status>( StatusFactory.clientUnauthorized() );
 		} catch (IllegalArgumentException e) {
 			e.printStackTrace();
-			return HttpStatusFactory.Json.clientBadRequest();
+			return new JacksonRepresentation<Status>( StatusFactory.clientBadRequest() );
 		} catch (Exception e) {
 			e.printStackTrace();
-			return HttpStatusFactory.Json.serverInternalError();
+			return new JacksonRepresentation<Status>( StatusFactory.serverInternalError() );
 		}
 	}
 	

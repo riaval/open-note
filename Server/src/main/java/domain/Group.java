@@ -3,6 +3,7 @@ package domain;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -52,32 +53,13 @@ public class Group{
 	
 //	User_Role
 	@JsonIgnore
-	@OneToMany(mappedBy="group")
+	@OneToMany(mappedBy="group", cascade=CascadeType.ALL)
 	public Set<UserGroup> getUserGroup() {
 		return this.userGroups;
 	}
 	public void setUserGroup(Set<UserGroup> userGroups) {
 		this.userGroups = userGroups;
 	}
-	
-//	@JsonIgnore
-//	@OneToMany(fetch=FetchType.EAGER, cascade = CascadeType.ALL)
-//	@JoinTable(name = "UserGroup", catalog = "opennote",
-//		joinColumns = @JoinColumn(name = "[group]", nullable = false, unique = false), 
-//		inverseJoinColumns = @JoinColumn(name = "groupRole",	nullable = false, unique = false) )
-//	@MapKeyJoinColumn(name = "user")
-//	@ElementCollection	
-	
-//	@ManyToMany(fetch=FetchType.EAGER)
-//    @JoinTable(name="SimpleNote",
-//    joinColumns={@JoinColumn(name="[group]")},
-//    inverseJoinColumns={@JoinColumn(name="[id]")} )
-//	public Set<SimpleNote> getSimpleNotes() {
-//		return simpleNotes;
-//	}
-//	public void setSimpleNotes(Set<SimpleNote> simpleNotes) {
-//		this.simpleNotes = simpleNotes;
-//	}
 	
 	@Id
 	@GeneratedValue
@@ -95,16 +77,12 @@ public class Group{
 		json.put("name", this.name);
 		return json.toString();
 	}
-	
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + (int) (id ^ (id >>> 32));
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		result = prime * result + ((slug == null) ? 0 : slug.hashCode());
-		result = prime * result
-				+ ((userGroups == null) ? 0 : userGroups.hashCode());
 		return result;
 	}
 
@@ -118,21 +96,6 @@ public class Group{
 			return false;
 		Group other = (Group) obj;
 		if (id != other.id)
-			return false;
-		if (name == null) {
-			if (other.name != null)
-				return false;
-		} else if (!name.equals(other.name))
-			return false;
-		if (slug == null) {
-			if (other.slug != null)
-				return false;
-		} else if (!slug.equals(other.slug))
-			return false;
-		if (userGroups == null) {
-			if (other.userGroups != null)
-				return false;
-		} else if (!userGroups.equals(other.userGroups))
 			return false;
 		return true;
 	}

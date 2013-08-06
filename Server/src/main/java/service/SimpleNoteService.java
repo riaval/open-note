@@ -15,58 +15,62 @@ import domain.UserGroup;
 public class SimpleNoteService {
 
 	public void createSimpleNote(String title, String body, String slug, String sessionHash) throws Exception {
-		UserGroup userGroup = checkData(slug, sessionHash);
+		HibernateUtil.beginTransaction(); // ---->
+		Session session = DAOFactory.getSessionDAO().findByHash(sessionHash);
+		if(session == null){
+			HibernateUtil.commitTransaction(); // <----
+			throw new BadAuthenticationException("Session is empty");
+		}
+		Group group = DAOFactory.getGroupDAO().findBySlug(slug);
+		if(group == null){
+			HibernateUtil.commitTransaction(); // <----
+			throw new IllegalArgumentException("Group does not exist");
+		}
+		User user = session.getUser();
+		Set<UserGroup> userUserGroups = user.getUserGroups();
 		
-		SimpleNote simpleNote = new SimpleNote(title, body);
-		simpleNote.setUserGroup(userGroup);
-		DAOFactory.getSimpleNoteDAO().save(simpleNote);
+		for (UserGroup each : userUserGroups) {
+			if (each.getGroup().equals(group)){
+				SimpleNote simpleNote = new SimpleNote(title, body);
+				simpleNote.setUserGroup(each);
+				DAOFactory.getSimpleNoteDAO().save(simpleNote);
+				HibernateUtil.commitTransaction(); // <----
+				return;
+			}
+	    }
 		HibernateUtil.commitTransaction(); // <----
+		throw new IllegalArgumentException("No rules");
 	}
 
-	public Set<SimpleNote> getSimpleNotes(String slug, String sessionHash) throws Exception {
-//		UserGroup userGroup = checkData(slug, sessionHash);		
+	public Set<SimpleNote> getSimpleNotes(String slug, String sessionHash) throws Exception {	
 		HibernateUtil.beginTransaction(); // ---->
 		Session session = DAOFactory.getSessionDAO().findByHash(sessionHash);
-		User user = session.getUser();
+		if(session == null){
+			HibernateUtil.commitTransaction(); // <----
+			throw new BadAuthenticationException("Session is empty");
+		}
 		Group group = DAOFactory.getGroupDAO().findBySlug(slug);
-		Set<UserGroup> userGroups = group.getUserGroup();
-		Set<SimpleNote> allSimpleNotes = new HashSet();
-		for (UserGroup each : userGroups) {
-			Set<SimpleNote> simpleNotes = each.getSimpleNotes();
-			allSimpleNotes.addAll(simpleNotes);
-	    }
+		if(group == null){
+			HibernateUtil.commitTransaction(); // <----
+			throw new IllegalArgumentException("Group does not exist");
+		}
+		User user = session.getUser();
+		Set<UserGroup> userUserGroups = user.getUserGroups();
 		
-//		Set<SimpleNote> simpleNotes = userGroup.getSimpleNotes();
+		for (UserGroup eachOut : userUserGroups) {
+			if (eachOut.getGroup().equals(group)){
+				Set<SimpleNote> allSimpleNotes = new HashSet<SimpleNote>();
+				Set<UserGroup> groupUserGroups = group.getUserGroup();
+				for (UserGroup eachIn : groupUserGroups) {
+					Set<SimpleNote> simpleNotes = eachIn.getSimpleNotes();
+					allSimpleNotes.addAll(simpleNotes);
+			    }
+				HibernateUtil.commitTransaction(); // <----
+				return allSimpleNotes;
+			}
+	    }
 		HibernateUtil.commitTransaction(); // <----
-		
-		return allSimpleNotes;
-	}
-	
-	private UserGroup checkData(String slug, String sessionHash) throws Exception{
-		HibernateUtil.beginTransaction(); // ---->
-		Session session = DAOFactory.getSessionDAO().findByHash(sessionHash);
-		User user = session.getUser();
-		Group group = DAOFactory.getGroupDAO().findBySlug(slug);
-		Set<UserGroup> userGroups = user.getUserGroups();
-		
-		if(user == null || group == null){
-			HibernateUtil.commitTransaction(); // <----
-			throw new IllegalArgumentException("user or group is null");
-		}
-		
-		UserGroup userGroup = null;
-		for (UserGroup each : userGroups) {
-			if (each.getGroup().equals(group)){
-	        	userGroup = each;
-	        	break;
-	        }
-	    }
-		if(userGroup == null){
-			HibernateUtil.commitTransaction(); // <----
-			throw new BadAuthenticationException("Bad Authentication data");
-		}
-			
-		return userGroup;
+		throw new IllegalArgumentException("No rules");
 	}
 	
 }

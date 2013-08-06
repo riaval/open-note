@@ -1,9 +1,9 @@
 package domain;
 
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -36,7 +36,7 @@ public class GroupRole {
 	
 //	UserGroup
 	@JsonIgnore
-	@OneToMany(mappedBy="groupRole")
+	@OneToMany(mappedBy="groupRole", cascade=CascadeType.REFRESH)
 	public Set<UserGroup> getUserGroup() {
 		return this.userGroups;
 	}
@@ -53,4 +53,27 @@ public class GroupRole {
 	protected void setId(long id){
 		this.id = id;
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + (int) (id ^ (id >>> 32));
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		GroupRole other = (GroupRole) obj;
+		if (id != other.id)
+			return false;
+		return true;
+	}
+	
 }

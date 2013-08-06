@@ -5,8 +5,7 @@ import java.security.NoSuchAlgorithmException;
 
 public class ServiceUtil {
 
-	static public String getSaltMD5(String password)
-			throws NoSuchAlgorithmException {
+	static public String getSaltMD5(String password) throws NoSuchAlgorithmException {
 		final String SALT = "sflprt49fhi2";
 		String hash1 = null;
 		String hash2 = null;

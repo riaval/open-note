@@ -8,7 +8,10 @@ import org.restlet.resource.Post;
 import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
 
+import controller.representation.Status;
+import controller.representation.StatusFactory;
 import service.SessionService;
+import service.exception.BadAuthenticationException;
 import domain.Session;
 
 public class SessionResource extends ServerResource {
@@ -30,22 +33,16 @@ public class SessionResource extends ServerResource {
 			String hostIp = getClientInfo().getAddress();
 			String hostAgent = getClientInfo().getAgent();
 
-			Session session = sessionService.openSession(login, password,
-					hostIp, hostAgent);
+			Session session = sessionService.openSession(login, password, hostIp, hostAgent);
 
-			return openSessionJson(session);
+			return new JacksonRepresentation<Session>(session);
 		} catch (IllegalArgumentException e) {
 			e.printStackTrace();
-			return null;
+			return new JacksonRepresentation<Status>( StatusFactory.clientBadRequest() );
 		} catch (Exception e) {
 			e.printStackTrace();
-			return null;
+			return new JacksonRepresentation<Status>( StatusFactory.serverInternalError() );
 		}
-	}
-
-	@Get("json")
-	private Representation openSessionJson(Session session) {
-		return new JacksonRepresentation<Session>(session);
 	}
 
 }
