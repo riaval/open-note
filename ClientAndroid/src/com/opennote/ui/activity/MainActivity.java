@@ -44,7 +44,7 @@ import com.opennote.ui.fragment.FeedbackFragment;
 import com.opennote.ui.fragment.GroupFragment;
 import com.opennote.ui.fragment.InvitesFragment;
 import com.opennote.ui.fragment.LocalFragment;
-import com.opennote.ui.fragment.FindUserFragment;
+import com.opennote.ui.fragment.InviteUserFragment;
 import com.opennote.ui.fragment.SettingsFragment;
 import com.opennote.ui.fragment.SignInFragment;
 import com.opennote.ui.fragment.SignUpFragment;
@@ -251,8 +251,8 @@ public class MainActivity extends Activity {
 			fragment = new SignUpFragment();
 		} else if (text.equals("Invites")){
 			fragment = new InvitesFragment();
-		} else if (text.equals("Find user")){
-			fragment = new FindUserFragment();
+		} else if (text.equals("Invite user")){
+			fragment = new InviteUserFragment();
 		} else if (text.equals("All notes")){
 			fragment = new AllNotesFragment();
 		} else if (text.equals("Local")){

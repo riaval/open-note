@@ -30,11 +30,11 @@ public class FindUsersOperation implements Operation {
 		
 		HashMap<String, String> params = new HashMap<String, String>();
 		String sessionHash = request.getString("session_hash");
-		String login = request.getString("login");
-		String fullName = request.getString("full_name");
+		String searchValue = request.getString("search");
+
 		params.put("session_hash", sessionHash);
-		params.put("login", login);
-		params.put("full_name", fullName);
+		params.put("search", searchValue);
+
 		connection.setParameters(params);
 		connection.setMethod(Method.GET);
 		ConnectionResult result = connection.execute();

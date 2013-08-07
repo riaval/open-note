@@ -10,7 +10,7 @@ public class RequestFactory {
 	public static final int ADD_NOTE = 4;
 	public static final int CREATE_GROUP = 5;
 	public static final int LOAD_GROUPS = 6;
-	public static final int FIND_USERS = 7;
+	public static final int INVITE_USER = 7;
 	public static final int LOAD_INVITATIONS = 8;
 	public static final int DELETE_INVITATION = 9;
 	
@@ -59,11 +59,10 @@ public class RequestFactory {
 		return request;
 	}
 	
-	public static Request getFindUsersRequest(String sessionHash, String login, String fullName){
-		Request request = new Request(FIND_USERS);
+	public static Request getInviteUserRequest(String sessionHash, String searchValue){
+		Request request = new Request(INVITE_USER);
 		request.put("session_hash", sessionHash);
-		request.put("login", login);
-		request.put("full_name", fullName);
+		request.put("search", searchValue);
 		return request;
 	}
 	

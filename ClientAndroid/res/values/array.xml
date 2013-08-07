@@ -9,7 +9,7 @@
     
     <string-array name="drawer_accaunt_text_in">
         <item>Invites</item>
-        <item>Find user</item>
+        <item>Invite user</item>
     </string-array>
     
      <string-array name="drawer_accaunt_text_out">

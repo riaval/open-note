@@ -60,10 +60,9 @@ public class UserResource extends ServerResource {
 		try {
 			UserService userService = new UserService();
 			String sessionHash = getQuery().getValues("session_hash");
-			String login = getQuery().getValues("login");
-			String fullName = getQuery().getValues("full_name");
+			String search = getQuery().getValues("search");
 			
-			List<User> users = userService.getUsers(sessionHash, login, fullName);
+			List<User> users = userService.getUsers(sessionHash, search);
 
 			return new JacksonRepresentation<List<User>>(users);
 		} catch (BadAuthenticationException e) {

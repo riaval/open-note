@@ -29,7 +29,7 @@ public class RestService extends RequestService{
 			return new CreateGroupOperation();
 		case RequestFactory.LOAD_GROUPS:
 			return new LoadGroupsOperation();
-		case RequestFactory.FIND_USERS:
+		case RequestFactory.INVITE_USER:
 			return new FindUsersOperation();
 		case RequestFactory.LOAD_INVITATIONS:
 			return new LoadInvitationsOperation();

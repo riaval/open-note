@@ -22,13 +22,13 @@ public final class R {
 	public static final class drawable {
 		public static final int ic_action_undo = 0x7f020006;
 		public static final int popup_bg = 0x7f02000b;
-		public static final int undo_btn_bg = 0x7f020012;
-		public static final int undo_btn_bg_focused = 0x7f020013;
-		public static final int undo_btn_bg_pressed = 0x7f020014;
+		public static final int undo_btn_bg = 0x7f020013;
+		public static final int undo_btn_bg_focused = 0x7f020014;
+		public static final int undo_btn_bg_pressed = 0x7f020015;
 	}
 	public static final class id {
-		public static final int text = 0x7f0b002f;
-		public static final int undo = 0x7f0b0030;
+		public static final int text = 0x7f0b002e;
+		public static final int undo = 0x7f0b002f;
 	}
 	public static final class layout {
 		public static final int undo_popup = 0x7f030011;
