@@ -4,6 +4,7 @@ import com.foxykeep.datadroid.service.RequestService;
 import com.opennote.model.RequestFactory;
 import com.opennote.model.operation.AddNoteOperation;
 import com.opennote.model.operation.CreateGroupOperation;
+import com.opennote.model.operation.CreateInvitationOperation;
 import com.opennote.model.operation.DeleteInvitationOperation;
 import com.opennote.model.operation.FindUsersOperation;
 import com.opennote.model.operation.LoadGroupsOperation;
@@ -35,6 +36,8 @@ public class RestService extends RequestService{
 			return new LoadInvitationsOperation();
 		case RequestFactory.DELETE_INVITATION:
 			return new DeleteInvitationOperation();
+		case RequestFactory.CREATE_INVITATION:
+			return new CreateInvitationOperation();
 		default:
 			return null;
 		}

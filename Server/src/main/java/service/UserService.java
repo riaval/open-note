@@ -39,7 +39,13 @@ public class UserService {
 			HibernateUtil.commitTransaction(); // <----
 			throw new BadAuthenticationException("Session is empty");
 		}
+		User user = session.getUser();
 		List<User> users = DAOFactory.getUserDAO().findUsers(search);
+		for (int i=0; i<users.size(); i++){
+			if (users.get(i).equals(user)){
+				users.remove(i);
+			}
+		}
 		HibernateUtil.commitTransaction(); // <----
 		return users;
 	}

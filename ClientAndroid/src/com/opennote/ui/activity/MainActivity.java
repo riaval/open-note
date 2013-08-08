@@ -38,6 +38,7 @@ import com.opennote.model.RestRequestManager;
 import com.opennote.model.adapter.DrawerArrayAdapter;
 import com.opennote.model.adapter.SeparatedListAdapter;
 import com.opennote.model.provider.RestContact;
+import com.opennote.model.provider.RestContact.Group;
 import com.opennote.ui.fragment.AllNotesFragment;
 import com.opennote.ui.fragment.CreateGroupFragment;
 import com.opennote.ui.fragment.FeedbackFragment;
@@ -327,7 +328,7 @@ public class MainActivity extends Activity {
 					, null
 					, null
 					, null
-					, null
+					, Group.SLUG
 				);
 			while(cursor.moveToNext()) {
 				addGroup(
@@ -335,6 +336,7 @@ public class MainActivity extends Activity {
 					, cursor.getString(2)
 					);
 			}
+			cursor.close();
 			updateGroups("Local");
 		}
 

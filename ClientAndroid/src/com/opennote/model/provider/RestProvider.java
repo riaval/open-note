@@ -57,7 +57,8 @@ public class RestProvider extends ContentProvider {
 				"create table " + TABLE_GROUPS + " (" + 
 						Group._ID + " integer primary key autoincrement, " +
 						Group.SLUG + " text, " +
-						Group.NAME + " text " +
+						Group.NAME + " text, " +
+						Group.ROLE + " text " +
 				")";
 			db.execSQL(sql);
 			sql = 

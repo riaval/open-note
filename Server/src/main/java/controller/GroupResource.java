@@ -3,10 +3,8 @@ package controller;
 import java.util.Set;
 
 import org.restlet.data.Form;
-import org.restlet.data.MediaType;
 import org.restlet.ext.jackson.JacksonRepresentation;
 import org.restlet.representation.Representation;
-import org.restlet.representation.StringRepresentation;
 import org.restlet.resource.Delete;
 import org.restlet.resource.Get;
 import org.restlet.resource.Post;
@@ -14,7 +12,10 @@ import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
 
 import service.GroupService;
-import domain.Group;
+import service.exception.BadAuthenticationException;
+import controller.representation.Status;
+import controller.representation.StatusFactory;
+import domain.UserGroup;
 
 public class GroupResource extends ServerResource {
 
@@ -26,23 +27,25 @@ public class GroupResource extends ServerResource {
 	}
 
 	@Post
-	public String createGroup(Representation entity) {
+	public Representation createGroup(Representation entity) {
 		Form form = new Form(entity);
 		try {
 			GroupService groupService = new GroupService();
 
 			String name = form.getFirstValue("name");
 			String sessionHash = form.getFirstValue("session_hash");
-
 			groupService.createGroup(slug, name, sessionHash);
 
-			return "hello world";
+			return new JacksonRepresentation<Status>( StatusFactory.created() );
+		} catch (BadAuthenticationException e) {
+			e.printStackTrace();
+			return new JacksonRepresentation<Status>( StatusFactory.clientUnauthorized() );
 		} catch (IllegalArgumentException e) {
 			e.printStackTrace();
-			return HttpStatusFactory.Json.clientBadRequest();
+			return new JacksonRepresentation<Status>( StatusFactory.clientBadRequest() );
 		} catch (Exception e) {
 			e.printStackTrace();
-			return HttpStatusFactory.Json.serverInternalError();
+			return new JacksonRepresentation<Status>( StatusFactory.serverInternalError() );
 		}
 	}
 
@@ -51,34 +54,35 @@ public class GroupResource extends ServerResource {
 		try {
 			GroupService groupService = new GroupService();
 			String sessionHash = getQuery().getValues("session_hash");
-			Set<Group> groups = groupService.getGroups(sessionHash);
+			Set<UserGroup> userGroups = groupService.getGroups(sessionHash);
 
-			return new JacksonRepresentation<Set<Group>>(groups);
-		} catch (IllegalArgumentException e) {
+			return new JacksonRepresentation<Set<UserGroup>>(userGroups);
+		} catch (BadAuthenticationException e) {
 			e.printStackTrace();
-			return new StringRepresentation("Item created",
-					MediaType.TEXT_PLAIN);
+			return new JacksonRepresentation<Status>( StatusFactory.clientUnauthorized() );
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new StringRepresentation("Item created",
-					MediaType.TEXT_PLAIN);
+			return new JacksonRepresentation<Status>( StatusFactory.serverInternalError() );
 		}
 	}
 	
 	@Delete
-	public String deleteGroup(){
+	public Representation deleteGroup(){
 		try {
 			GroupService groupService = new GroupService();
 			String sessionHash = getQuery().getValues("session_hash");
 			groupService.deleteGroup(slug, sessionHash);
 
-			return "OK";
+			return new JacksonRepresentation<Status>( StatusFactory.ok() );
+		} catch (BadAuthenticationException e) {
+			e.printStackTrace();
+			return new JacksonRepresentation<Status>( StatusFactory.clientUnauthorized() );
 		} catch (IllegalArgumentException e) {
 			e.printStackTrace();
-			return "Exception";
+			return new JacksonRepresentation<Status>( StatusFactory.clientBadRequest() );
 		} catch (Exception e) {
 			e.printStackTrace();
-			return "Exception";
+			return new JacksonRepresentation<Status>( StatusFactory.serverInternalError() );
 		}
 	}
 

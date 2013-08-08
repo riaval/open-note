@@ -26,6 +26,7 @@ public class GroupRole {
 	}
 	
 	//	role
+	@JsonIgnore
 	@Column(unique=true, nullable = false, length = 20)
 	public String getRole() {
         return role;

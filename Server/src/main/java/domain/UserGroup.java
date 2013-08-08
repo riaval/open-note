@@ -14,6 +14,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
+import org.codehaus.jackson.annotate.JsonProperty;
 
 @Entity
 public class UserGroup {
@@ -45,7 +46,6 @@ public class UserGroup {
 	}
 	
 //	group
-	@JsonIgnore
 	@ManyToOne(fetch=FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "[group]")
 	public Group getGroup() {
@@ -116,6 +116,11 @@ public class UserGroup {
 		if (id != other.id)
 			return false;
 		return true;
+	}
+	
+	@JsonProperty("group_role")
+	public String groupRole() {
+		return groupRole.getRole();
 	}
 	
 }

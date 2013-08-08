@@ -4,6 +4,7 @@ import java.util.HashMap;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -36,13 +37,19 @@ public class LoadGroupsOperation implements Operation {
 		ConnectionResult result = connection.execute();
 		ContentValues[] groupsValues;
 		try {
-			JSONArray groupsJson = new JSONArray(result.body);
-			groupsValues = new ContentValues[groupsJson.length()];
-
-			for (int i = 0; i < groupsJson.length(); i++) {
+			JSONArray userGroupsJson = new JSONArray(result.body);
+			groupsValues = new ContentValues[userGroupsJson.length()];
+			for (int i = 0; i < userGroupsJson.length(); i++) {
+				JSONObject groupsJson = userGroupsJson.getJSONObject(i).getJSONObject("group");
+				String groupSlug = groupsJson.getString("slug");
+				String groupName = groupsJson.getString("name");
+				String groupRole = userGroupsJson.getJSONObject(i).getString("group_role");
+				
 				ContentValues group = new ContentValues();
-				group.put("slug", groupsJson.getJSONObject(i).getString("slug"));
-				group.put("name", groupsJson.getJSONObject(i).getString("name"));
+				group.put("slug", groupSlug);
+				group.put("name", groupName);
+				group.put("role", groupRole);
+
 				groupsValues[i] = group;
 			}
 			
