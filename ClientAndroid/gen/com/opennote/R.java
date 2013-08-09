@@ -48,27 +48,28 @@ public final class R {
         public static final int action_new=0x7f020000;
         public static final int action_search=0x7f020001;
         public static final int all_notes=0x7f020002;
-        public static final int dotted=0x7f020003;
-        public static final int drawer_shadow=0x7f020004;
-        public static final int feedback=0x7f020005;
-        public static final int ic_action_undo=0x7f020006;
-        public static final int ic_drawer=0x7f020007;
-        public static final int ic_launcher=0x7f020008;
-        public static final int invite=0x7f020009;
-        public static final int local=0x7f02000a;
-        public static final int popup_bg=0x7f02000b;
-        public static final int search=0x7f02000c;
-        public static final int search_dark=0x7f02000d;
-        public static final int selected_item=0x7f02000e;
-        public static final int selected_item_view=0x7f02000f;
-        public static final int settings=0x7f020010;
-        public static final int sign_up=0x7f020011;
-        public static final int textlines=0x7f020012;
-        public static final int undo_btn_bg=0x7f020013;
-        public static final int undo_btn_bg_focused=0x7f020014;
-        public static final int undo_btn_bg_pressed=0x7f020015;
-        public static final int user=0x7f020016;
-        public static final int user_foto_default=0x7f020017;
+        public static final int discard=0x7f020003;
+        public static final int dotted=0x7f020004;
+        public static final int drawer_shadow=0x7f020005;
+        public static final int feedback=0x7f020006;
+        public static final int ic_action_undo=0x7f020007;
+        public static final int ic_drawer=0x7f020008;
+        public static final int ic_launcher=0x7f020009;
+        public static final int invite=0x7f02000a;
+        public static final int local=0x7f02000b;
+        public static final int popup_bg=0x7f02000c;
+        public static final int search=0x7f02000d;
+        public static final int search_dark=0x7f02000e;
+        public static final int selected_item=0x7f02000f;
+        public static final int selected_item_view=0x7f020010;
+        public static final int settings=0x7f020011;
+        public static final int sign_up=0x7f020012;
+        public static final int textlines=0x7f020013;
+        public static final int undo_btn_bg=0x7f020014;
+        public static final int undo_btn_bg_focused=0x7f020015;
+        public static final int undo_btn_bg_pressed=0x7f020016;
+        public static final int user=0x7f020017;
+        public static final int user_foto_default=0x7f020018;
     }
     public static final class id {
         public static final int action_new=0x7f0b0030;
@@ -141,7 +142,8 @@ public final class R {
         public static final int item_search=0x7f03000e;
         public static final int list_header=0x7f03000f;
         public static final int local_item=0x7f030010;
-        public static final int undo_popup=0x7f030011;
+        public static final int nothing=0x7f030011;
+        public static final int undo_popup=0x7f030012;
     }
     public static final class menu {
         public static final int main=0x7f0a0000;
@@ -159,8 +161,8 @@ public final class R {
         public static final int drawer_close=0x7f060010;
         public static final int drawer_open=0x7f06000f;
         public static final int find_users=0x7f060004;
-        public static final int hello_world=0x7f06000a;
         public static final int host_name=0x7f06000b;
+        public static final int nothing=0x7f06000a;
         public static final int preference_file_key=0x7f06000c;
         public static final int session_hash=0x7f06000d;
         public static final int title_activity_main=0x7f060009;

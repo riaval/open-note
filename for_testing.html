@@ -26,7 +26,7 @@
 		<h5>POST   /groups/{groupSlug} -- Create a new group </h5>
 		<form method="post" action="http://localhost:8080/api/groups/newSimpleGroup"><!-- ____________________________ slug -->
 			<label>name</label><br>
-			<input name="name" type="text" value="Имя группы"/><br>
+			<input name="name" type="text" value="Group name"/><br>
 			<label>session_hash</label><br>
 			<input name="session_hash" type="text" value="c7ae8f2a56d2627f1be46d3c69c232ad"/> 
 			<input type="submit" name="submit" value="Submit" />
@@ -96,7 +96,7 @@
 			<input type="submit" name="submit" value="Submit" />
 		</form>
 
-		<h5>POST   /groups/{groupSlug}/users/{userLogin} -- Add user into group</h5>
+		<h5>POST   /groups/{groupSlug}/users/ -- Add user into group</h5>
 		<form method="post" action="http://localhost:8080/api/groups/mygroup/users">
 			<label>session_hash</label><br>
 			<input name="session_hash" type="text" value="c7ae8f2a56d2627f1be46d3c69c232ad"/> 

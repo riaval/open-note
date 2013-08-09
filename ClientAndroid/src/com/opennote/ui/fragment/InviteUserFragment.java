@@ -164,25 +164,39 @@ public class InviteUserFragment extends Fragment {
 							dialog.dismiss();
 						}
 					});
-			final Object[] groupSlugs = groupSlugsList.toArray();
-			builder.setItems(groupNamesList.toArray(new String[groupNamesList.size() - 1]),
-					new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface dialog, int index) {
-							RestRequestManager requestManager = RestRequestManager.from(getActivity());
-							String sessionHash = MainActivity.instance.getSessionHash();
-							String groupSlug = groupSlugs[index].toString();
-							Request request = RequestFactory.getCreateInvitationsRequest(sessionHash, userLogin, groupSlug);
-							requestManager.execute(request, createInvitationRequestListener);
-						}
-					});
-			AlertDialog alert = builder.create();
-			alert.show();
+			try {
+				final Object[] groupSlugs = groupSlugsList.toArray();
+				builder.setItems(groupNamesList.toArray(new String[groupNamesList.size() - 1]),
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int index) {
+								RestRequestManager requestManager = RestRequestManager.from(getActivity());
+								String sessionHash = MainActivity.instance.getSessionHash();
+								String groupSlug = groupSlugs[index].toString();
+								Request request = RequestFactory.getCreateInvitationsRequest(sessionHash, userLogin, groupSlug);
+								requestManager.execute(request, createInvitationRequestListener);
+							}
+						});
+				AlertDialog alert = builder.create();
+				alert.show();
+			} catch (Exception e) {
+				AlertDialog.Builder builderInner = new AlertDialog.Builder(getActivity());
+                builderInner.setTitle("Attention");
+                builderInner.setMessage("No groups available for select.\nCreate new group.");
+                builderInner.setPositiveButton("OK",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int index) {
+                                dialog.dismiss();
+                            }
+                        });
+                builderInner.show();
+                return;
+			}
 		}
 		
 		private RequestListener createInvitationRequestListener = new RequestListener() {
 			@Override
 			public void onRequestFinished(Request request, Bundle resultData) {
-//				String strName = arrayAdapter.getItem(which);
                 AlertDialog.Builder builderInner = new AlertDialog.Builder(getActivity());
                 builderInner.setTitle("Success");
                 builderInner.setMessage("Invitation created");

@@ -14,6 +14,8 @@ import com.foxykeep.datadroid.network.NetworkConnection.Method;
 import com.foxykeep.datadroid.requestmanager.Request;
 import com.foxykeep.datadroid.service.RequestService.Operation;
 import com.opennote.R;
+import com.opennote.model.provider.RestContact;
+import com.opennote.model.provider.RestContact.Invitation;
 
 public class DeleteInvitationOperation implements Operation {
 
@@ -31,6 +33,12 @@ public class DeleteInvitationOperation implements Operation {
 
 		connection.setMethod(Method.DELETE);
 		ConnectionResult result = connection.execute();
+		
+		context.getContentResolver().delete(
+				RestContact.Invitation.CONTENT_URI
+				, Invitation._ID+"=?"
+				, new String[]{inviteId}
+		);
 		
 		return null;
 	}

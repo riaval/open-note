@@ -43,7 +43,7 @@ import com.opennote.ui.fragment.AllNotesFragment;
 import com.opennote.ui.fragment.CreateGroupFragment;
 import com.opennote.ui.fragment.FeedbackFragment;
 import com.opennote.ui.fragment.GroupFragment;
-import com.opennote.ui.fragment.InvitesFragment;
+import com.opennote.ui.fragment.InvitationsFragment;
 import com.opennote.ui.fragment.LocalFragment;
 import com.opennote.ui.fragment.InviteUserFragment;
 import com.opennote.ui.fragment.SettingsFragment;
@@ -194,41 +194,6 @@ public class MainActivity extends Activity {
 		// Listen for Click events
 		mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 	}
-	
-	/* Called whenever we call invalidateOptionsMenu() */
-	@Override
-	public boolean onPrepareOptionsMenu(Menu menu) {
-		// If the nav drawer is open, hide action items related to the content view
-		boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
-		menu.setGroupVisible(0, !drawerOpen);
-		return super.onPrepareOptionsMenu(menu);
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		// The action bar home/up action should open or close the drawer.
-		// ActionBarDrawerToggle will take care of this.
-		if (mDrawerToggle.onOptionsItemSelected(item)) {
-			return true;
-		}
-		// Handle action buttons
-		switch (item.getItemId()) {
-		case R.id.action_new:
-			// create intent to perform web search for this planet
-			Intent intent = new Intent(Intent.ACTION_WEB_SEARCH);
-			intent.putExtra(SearchManager.QUERY, getActionBar().getTitle());
-			
-			// catch event that there's no activity to handle intent
-			if (intent.resolveActivity(getPackageManager()) != null) {
-				startActivity(intent);
-			} else {
-				Toast.makeText(this, R.string.app_not_available, Toast.LENGTH_LONG).show();
-			}
-			return true;
-		default:
-			return super.onOptionsItemSelected(item);
-		}
-	}
 
 	/* The click listner for ListView in the navigation drawer */
 	private class DrawerItemClickListener implements ListView.OnItemClickListener {
@@ -250,8 +215,8 @@ public class MainActivity extends Activity {
 			fragment = new SignInFragment();
 		} else if (text.equals("Sign up")){
 			fragment = new SignUpFragment();
-		} else if (text.equals("Invites")){
-			fragment = new InvitesFragment();
+		} else if (text.equals("Invitations")){
+			fragment = new InvitationsFragment();
 		} else if (text.equals("Invite user")){
 			fragment = new InviteUserFragment();
 		} else if (text.equals("All notes")){
@@ -316,6 +281,9 @@ public class MainActivity extends Activity {
 	public void updateGroups(String item){
 		mDrawerList.setAdapter(adapter);
 		selectItem(item);
+	}
+	public void updateGroups(){
+		mDrawerList.setAdapter(adapter);
 	}
 	
 	private RequestListener mRequestListener = new RequestListener(){

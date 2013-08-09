@@ -7,7 +7,7 @@ import org.restlet.resource.Post;
 import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
 
-import service.UserGroupService;
+import service.InviteService;
 import service.exception.BadAuthenticationException;
 import controller.representation.Status;
 import controller.representation.StatusFactory;
@@ -25,9 +25,9 @@ public class UserGroupResource extends ServerResource{
 	public Representation addUserToGroup(Representation entity) {
 		Form form = new Form(entity);
 		try {
-			UserGroupService userGroupService = new UserGroupService();
+			InviteService inviteService = new InviteService();
 			String sessionHash = form.getFirstValue("session_hash");
-			userGroupService.addUserToGroup(sessionHash, groupSlug);
+			inviteService.acceptInvitation(sessionHash, groupSlug);
 			
 			return new JacksonRepresentation<Status>( StatusFactory.created() );
 		} catch (BadAuthenticationException e) {

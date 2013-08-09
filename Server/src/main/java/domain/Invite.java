@@ -27,6 +27,7 @@ public class Invite {
 	}
 	
 //	user
+	@JsonIgnore
 	@ManyToOne
     @JoinColumn(name = "[user]")
 	public User getUser() {
@@ -69,8 +70,12 @@ public class Invite {
 	}
 	
 	//Json
+	@JsonProperty("user")
+	public User user() {
+		return userGroup.getUser();
+	}
 	@JsonProperty("group")
-	public Group grouproup() {
+	public Group group() {
 		return userGroup.getGroup();
 	}
 	@JsonProperty("id")

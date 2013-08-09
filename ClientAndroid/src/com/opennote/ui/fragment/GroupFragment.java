@@ -79,12 +79,14 @@ public class GroupFragment extends ListFragment {
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		inflater.inflate(R.menu.main, menu);
+		menu.add(0, Menu.FIRST, Menu.NONE, "Discard").setIcon(R.drawable.discard);
+		menu.add(0,0,0,"Update Information");
 		super.onCreateOptionsMenu(menu, inflater);
 	}
 
 	@Override
 	public void onPrepareOptionsMenu(Menu menu) {
-		MenuItem item = menu.findItem(R.id.action_new);
+		MenuItem item = menu.findItem(R.id.action_new);	
 		item.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 			@Override
 			public boolean onMenuItemClick(MenuItem item) {
