@@ -36,7 +36,7 @@ public class UserGroup {
 	
 //	user
 	@JsonIgnore
-	@ManyToOne(fetch=FetchType.EAGER, cascade = CascadeType.ALL)
+	@ManyToOne(fetch=FetchType.EAGER, cascade=CascadeType.REFRESH)
     @JoinColumn(name = "[user]")
 	public User getUser() {
 		return user;
@@ -46,7 +46,7 @@ public class UserGroup {
 	}
 	
 //	group
-	@ManyToOne(fetch=FetchType.EAGER, cascade = CascadeType.ALL)
+	@ManyToOne(fetch=FetchType.EAGER, cascade=CascadeType.REFRESH)
     @JoinColumn(name = "[group]")
 	public Group getGroup() {
 		return group;
@@ -57,7 +57,7 @@ public class UserGroup {
 	
 //	groupRole
 	@JsonIgnore
-	@ManyToOne(fetch=FetchType.EAGER, cascade = CascadeType.ALL)
+	@ManyToOne(fetch=FetchType.EAGER, cascade=CascadeType.REFRESH)
     @JoinColumn(name = "[groupRole]")
 	public GroupRole getGroupRole() {
 		return groupRole;
@@ -68,7 +68,7 @@ public class UserGroup {
 	
 //	simpleNotes
 	@JsonIgnore
-	@OneToMany(mappedBy="userGroup", fetch=FetchType.EAGER, cascade=CascadeType.ALL)
+	@OneToMany(mappedBy="userGroup", fetch=FetchType.EAGER, cascade=CascadeType.REFRESH)
 	public Set<SimpleNote> getSimpleNotes(){
 		return simpleNotes;
 	}

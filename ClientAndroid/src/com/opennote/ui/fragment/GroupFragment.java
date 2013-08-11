@@ -1,8 +1,10 @@
 package com.opennote.ui.fragment;
 
+import android.app.AlertDialog;
 import android.app.ListFragment;
 import android.app.LoaderManager.LoaderCallbacks;
 import android.content.CursorLoader;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
@@ -23,13 +25,16 @@ import com.foxykeep.datadroid.requestmanager.Request;
 import com.foxykeep.datadroid.requestmanager.RequestManager.RequestListener;
 import com.opennote.R;
 import com.opennote.model.RequestFactory;
+import com.opennote.model.RestGroup;
 import com.opennote.model.RestRequestManager;
 import com.opennote.model.adapter.NoteGroupAdapter;
 import com.opennote.model.provider.RestContact.Note;
-import com.opennote.ui.activity.CreateNoteActivity;
+import com.opennote.ui.activity.CreateGroupNoteActivity;
+import com.opennote.ui.activity.MainActivity;
 
 public class GroupFragment extends ListFragment {
 	private NoteGroupAdapter mAdapter;
+	RestRequestManager mRequestManager = RestRequestManager.from(getActivity());
 	private static final int LOADER_ID = 1;
 	private final String[] PROJECTION = { 
 			Note._ID,
@@ -39,12 +44,12 @@ public class GroupFragment extends ListFragment {
 			Note.USER,
 			Note.COLOR
 	    };
+	String CREATOR = "creator";
 	
 	private View mRootView;
 	private String mSessionHash;
-	private String mGroupSlug;
+	private RestGroup mCurrentGroup;
 	
-	public static final String NOT_LOCAL = "not_local";
 	public static final String GROUP_SLUG = "group_slug";
 	
 	@Override
@@ -56,50 +61,85 @@ public class GroupFragment extends ListFragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {		
 		mRootView = inflater.inflate(R.layout.fragment_note_list, container, false);
-		
-		loadNotes();
+
+		// DataDroid RequestManager
+		Request request = RequestFactory.getLoadNotesRequest(mSessionHash, mCurrentGroup.getSlug());
+		mRequestManager.execute(request, mLoadRequestListener);
 		
 		return mRootView;
 	}
 	
-	public void setValues(String sessionHash, String groupSlug){
+	public void setValues(String sessionHash, RestGroup refGroup){
 		mSessionHash = sessionHash;
-		mGroupSlug = groupSlug;
-	}
-	
-	public void loadNotes(){
-		// DataDroid-lib RequestManager
-		RestRequestManager requestManager = RestRequestManager.from(getActivity());
-		// Integrate session hash and group slug into request
-		Request request = RequestFactory.getLoadNotesRequest(mSessionHash, mGroupSlug);
-		// Add RequestListener
-		requestManager.execute(request, mRequestListener);
+		mCurrentGroup = refGroup;
 	}
 	
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-		inflater.inflate(R.menu.main, menu);
-		menu.add(0, Menu.FIRST, Menu.NONE, "Discard").setIcon(R.drawable.discard);
-		menu.add(0,0,0,"Update Information");
+		inflater.inflate(R.menu.notes, menu);
+		if(mCurrentGroup.getRole().equals(CREATOR)){
+			menu.removeItem(R.id.action_left);
+		} else {
+			menu.removeItem(R.id.action_discard);
+		}
 		super.onCreateOptionsMenu(menu, inflater);
 	}
 
 	@Override
 	public void onPrepareOptionsMenu(Menu menu) {
-		MenuItem item = menu.findItem(R.id.action_new);	
-		item.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+		MenuItem newItem = menu.findItem(R.id.action_new);	
+		newItem.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 			@Override
 			public boolean onMenuItemClick(MenuItem item) {
-				Intent intent = new Intent(getActivity(), CreateNoteActivity.class);
-				intent.putExtra(NOT_LOCAL, true);
-				intent.putExtra(GROUP_SLUG, mGroupSlug);
+				Intent intent = new Intent(getActivity(), CreateGroupNoteActivity.class);
+				intent.putExtra(GROUP_SLUG, mCurrentGroup.getSlug());
 				startActivity(intent);
 				return true;
 			}
 		});
+		
+		if(mCurrentGroup.getRole().equals(CREATOR)){
+			MenuItem discardItem = menu.findItem(R.id.action_discard);
+			discardItem.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+				@Override
+				public boolean onMenuItemClick(MenuItem item) {
+					AlertDialog.Builder builderInner = new AlertDialog.Builder(getActivity());
+	                builderInner.setTitle("Attention");
+	                builderInner.setMessage("Do you really want to delete group: " + mCurrentGroup.getSlug() + "?");
+	                builderInner.setPositiveButton("OK",
+	                        new DialogInterface.OnClickListener() {
+	                            @Override
+	                            public void onClick(DialogInterface dialog, int index) {
+	                                dialog.dismiss();
+	                                Request request = RequestFactory.getDeleteGroupRequest(mSessionHash, mCurrentGroup.getSlug());
+	            					mRequestManager.execute(request, mDeleteRequestListener);
+	                            }
+	                        });
+	                builderInner.setNegativeButton("Cancel",
+	                        new DialogInterface.OnClickListener() {
+	                            @Override
+	                            public void onClick(DialogInterface dialog, int index) {
+	                                dialog.dismiss();
+	                            }
+	                        });
+	                builderInner.show();
+					return true;
+				}
+			});
+		} else {
+			MenuItem discardItem = menu.findItem(R.id.action_left);
+			discardItem.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+				@Override
+				public boolean onMenuItemClick(MenuItem item) {
+					Toast.makeText(getActivity(), "action_left", 5).show();
+					return true;
+				}
+			});
+		}
+		
 	}
 	
-	private RequestListener mRequestListener = new RequestListener() {
+	private RequestListener mLoadRequestListener = new RequestListener() {
 		@Override
 		public void onRequestFinished(Request request, Bundle resultData) {
 			mAdapter = new NoteGroupAdapter(
@@ -133,6 +173,31 @@ public class GroupFragment extends ListFragment {
 		
 	};
 	
+	private RequestListener mDeleteRequestListener = new RequestListener() {
+		@Override
+		public void onRequestFinished(Request request, Bundle resultData) {
+			Toast.makeText(getActivity(), "Group deleted", Toast.LENGTH_SHORT).show();
+			MainActivity.instance.loadGroups();
+			MainActivity.instance.updateGroups("Local");
+		}
+
+		@Override
+		public void onRequestConnectionError(Request request, int statusCode) {
+			Toast.makeText(getActivity(), "onRequestConnectionError", 5).show();
+		}
+
+		@Override
+		public void onRequestDataError(Request request) {
+			Toast.makeText(getActivity(), "onRequestDataError", 5).show();
+		}
+
+		@Override
+		public void onRequestCustomError(Request request, Bundle resultData) {
+			Toast.makeText(getActivity(), "onRequestCustomError", 5).show();
+		}
+		
+	};
+	
 	private LoaderCallbacks<Cursor> loaderCallbacks = new LoaderCallbacks<Cursor>() {
 
         @Override
@@ -142,7 +207,7 @@ public class GroupFragment extends ListFragment {
                 Note.CONTENT_URI,
                 PROJECTION,
                 Note.GROUP + " = ?",
-                new String[]{mGroupSlug},
+                new String[]{mCurrentGroup.getSlug()},
                 Note._ID + " DESC"
             );
         }

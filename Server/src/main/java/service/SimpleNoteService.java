@@ -15,6 +15,9 @@ import domain.UserGroup;
 public class SimpleNoteService {
 
 	public void createSimpleNote(String title, String body, String slug, String sessionHash) throws Exception {
+		if(title.isEmpty()){
+			throw new IllegalArgumentException("Title is empty");
+		}
 		HibernateUtil.beginTransaction(); // ---->
 		Session session = DAOFactory.getSessionDAO().findByHash(sessionHash);
 		if(session == null){

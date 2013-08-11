@@ -56,7 +56,7 @@ public class CreateGroupFragment extends Fragment {
 		@Override
 		public void onRequestFinished(Request request, Bundle resultData) {
 			MainActivity mainActivity = (MainActivity) getActivity();
-			mainActivity.addGroup(mGroupSlug, mGroupName);
+			mainActivity.loadGroups();
 			mainActivity.updateGroups(mGroupSlug);
 			Toast.makeText(getActivity(), mGroupName + " created", 5).show();
 			InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);

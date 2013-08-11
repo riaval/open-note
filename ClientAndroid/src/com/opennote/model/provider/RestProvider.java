@@ -63,7 +63,7 @@ public class RestProvider extends ContentProvider {
 			db.execSQL(sql);
 			sql = 
 				"create table " + TABLE_NOTES + " (" + 
-						Note._ID + " integer primary key autoincrement, " +
+						Note._ID + " integer primary key, " +
 						Note.TITLE + " text, " +
 						Note.BODY + " text, " +
 						Note.DATE + " text, " +
@@ -79,7 +79,6 @@ public class RestProvider extends ContentProvider {
 						User.LOGIN + " text, " +
 						User.FULL_NAME + " text, " +
 						User.DATE + " text " +
-//						User.COLOR + " integer " +
 					")";
 			db.execSQL(sql);
 			sql = 

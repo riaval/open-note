@@ -5,8 +5,10 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -62,7 +64,7 @@ public class SimpleNote {
 	
 //	UserGroup
 	@JsonIgnore
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.REFRESH)
     @JoinColumn(name="[userGroup]", nullable=false)
 	public UserGroup getUserGroup() {
 		return userGroup;
@@ -86,11 +88,14 @@ public class SimpleNote {
 	public User jsonUser() {
 		return this.userGroup.getUser();
 	}
-	
 	@JsonProperty("date")
 	public String jsonDate() {
 		SimpleDateFormat sdf = new SimpleDateFormat("dd MMM. HH:mm", Locale.US);
 		return sdf.format(date);
+	}
+	@JsonProperty("id")
+	public long id() {
+		return id;
 	}
 	
 }

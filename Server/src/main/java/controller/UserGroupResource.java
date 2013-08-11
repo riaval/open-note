@@ -3,11 +3,13 @@ package controller;
 import org.restlet.data.Form;
 import org.restlet.ext.jackson.JacksonRepresentation;
 import org.restlet.representation.Representation;
+import org.restlet.resource.Delete;
 import org.restlet.resource.Post;
 import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
 
 import service.InviteService;
+import service.UserGroupService;
 import service.exception.BadAuthenticationException;
 import controller.representation.Status;
 import controller.representation.StatusFactory;
@@ -30,6 +32,27 @@ public class UserGroupResource extends ServerResource{
 			inviteService.acceptInvitation(sessionHash, groupSlug);
 			
 			return new JacksonRepresentation<Status>( StatusFactory.created() );
+		} catch (BadAuthenticationException e) {
+			e.printStackTrace();
+			return new JacksonRepresentation<Status>( StatusFactory.clientUnauthorized() );
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+			return new JacksonRepresentation<Status>( StatusFactory.clientBadRequest() );
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new JacksonRepresentation<Status>( StatusFactory.serverInternalError() );
+		}
+	}
+	
+	@Delete
+	public Representation deleteUserFromGroup(){
+		try {
+			UserGroupService userGroupService = new UserGroupService();
+			String sessionHash = getQuery().getValues("session_hash");
+			String groupSlug = getQuery().getValues("group_slug");
+			userGroupService.deleteUserFromGroup(sessionHash, groupSlug);
+			
+			return new JacksonRepresentation<Status>( StatusFactory.ok() );
 		} catch (BadAuthenticationException e) {
 			e.printStackTrace();
 			return new JacksonRepresentation<Status>( StatusFactory.clientUnauthorized() );

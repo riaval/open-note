@@ -9,9 +9,7 @@ import java.util.Map;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
-import android.app.SearchManager;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
@@ -27,13 +25,13 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.foxykeep.datadroid.requestmanager.Request;
 import com.foxykeep.datadroid.requestmanager.RequestManager.RequestListener;
 import com.opennote.R;
 import com.opennote.model.DrawerListItem;
 import com.opennote.model.RequestFactory;
+import com.opennote.model.RestGroup;
 import com.opennote.model.RestRequestManager;
 import com.opennote.model.adapter.DrawerArrayAdapter;
 import com.opennote.model.adapter.SeparatedListAdapter;
@@ -44,8 +42,8 @@ import com.opennote.ui.fragment.CreateGroupFragment;
 import com.opennote.ui.fragment.FeedbackFragment;
 import com.opennote.ui.fragment.GroupFragment;
 import com.opennote.ui.fragment.InvitationsFragment;
-import com.opennote.ui.fragment.LocalFragment;
 import com.opennote.ui.fragment.InviteUserFragment;
+import com.opennote.ui.fragment.LocalFragment;
 import com.opennote.ui.fragment.SettingsFragment;
 import com.opennote.ui.fragment.SignInFragment;
 import com.opennote.ui.fragment.SignUpFragment;
@@ -60,11 +58,12 @@ public class MainActivity extends Activity {
 
 	private CharSequence mDrawerTitle;
 	private CharSequence mTitle;
+	private List<DrawerListItem> mGroupHeadersItems;
 	private List<DrawerListItem> mGroupItems;
 	
 	private boolean authorized = false;
 	private String mUserLogin;
-	private Map<String, String> mGroups = new HashMap<String, String>();
+	private Map<String, RestGroup> mGroups;
 	private String mSessionHash;
 	
 	// Adapter for ListView Contents
@@ -168,7 +167,8 @@ public class MainActivity extends Activity {
 
 		// Generate Drawer lists
 		List<DrawerListItem> accauntItems = DrawerListItem.generateItems(accauntText, accauntIcon);
-		mGroupItems = DrawerListItem.generateItems(groupText, groupIcon);
+		mGroupHeadersItems = DrawerListItem.generateItems(groupText, groupIcon);
+		mGroupItems = new ArrayList<DrawerListItem>(mGroupHeadersItems);
 		List<DrawerListItem> additionalItems = DrawerListItem.generateItems(additionalText, additionalIcon);
 
 		if (authorized) {
@@ -195,6 +195,25 @@ public class MainActivity extends Activity {
 		mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 	}
 
+	/* Called whenever we call invalidateOptionsMenu() */
+	@Override
+	public boolean onPrepareOptionsMenu(Menu menu) {
+	  // If the nav drawer is open, hide action items related to the content view
+	  boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
+	  menu.setGroupVisible(0, !drawerOpen);
+	  return super.onPrepareOptionsMenu(menu);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+	  // The action bar home/up action should open or close the drawer.
+	  // ActionBarDrawerToggle will take care of this.
+	  if (mDrawerToggle.onOptionsItemSelected(item)) {
+	    return true;
+	  }
+	  return false;
+	}
+	
 	/* The click listner for ListView in the navigation drawer */
 	private class DrawerItemClickListener implements ListView.OnItemClickListener {
 		@Override
@@ -231,7 +250,7 @@ public class MainActivity extends Activity {
 			fragment = new SettingsFragment();
 		} else {
 			GroupFragment groupFragment = new GroupFragment();
-			groupFragment.setValues(mSessionHash, text);
+			groupFragment.setValues(mSessionHash, mGroups.get(text));
 			fragment = groupFragment;
 			groupSelect = true;
 		}
@@ -247,9 +266,10 @@ public class MainActivity extends Activity {
 		mDrawerList.setItemChecked(adapter.getPossition(text), true);
 		if(!groupSelect){
 			setTitle(text);
-		} else
-			setTitle(mGroups.get(text));
-
+		} else{
+			setTitle( mGroups.get(text).getName() );
+		}
+		
 		mDrawerLayout.closeDrawer(mDrawerList);
 	}
 	
@@ -273,8 +293,8 @@ public class MainActivity extends Activity {
 		mDrawerToggle.onConfigurationChanged(newConfig);
 	}
 	
-	public void addGroup(String groupSlug, String groupName){
-		mGroups.put(groupSlug, groupName);
+	private void addGroup(String groupSlug, String groupName, String groupRole){
+		mGroups.put(groupSlug, new RestGroup(groupSlug, groupName, groupRole));
 		mGroupItems.add( new DrawerListItem(groupSlug) );
 	}
 	
@@ -286,25 +306,32 @@ public class MainActivity extends Activity {
 		mDrawerList.setAdapter(adapter);
 	}
 	
+	public void loadGroups(){
+		// get groups from SQLite
+		mGroups = new HashMap<String, RestGroup>();
+		mGroupItems.clear();
+		mGroupItems.addAll(mGroupHeadersItems);
+		Cursor cursor = MainActivity.this.getApplicationContext().getContentResolver().query(
+				  RestContact.Group.CONTENT_URI
+				, null
+				, null
+				, null
+				, Group.SLUG
+			);
+		while(cursor.moveToNext()) {
+			addGroup(
+				  cursor.getString(1)
+				, cursor.getString(2)
+				, cursor.getString(3)
+				);
+		}
+		cursor.close();
+	}
+	
 	private RequestListener mRequestListener = new RequestListener(){
 		@Override
 		public void onRequestFinished(Request request, Bundle resultData) {
-			Toast.makeText(MainActivity.this.getApplicationContext(), "onRequestFinished", 5).show();
-			// get groups from SQLite
-			Cursor cursor = MainActivity.this.getApplicationContext().getContentResolver().query(
-					  RestContact.Group.CONTENT_URI
-					, null
-					, null
-					, null
-					, Group.SLUG
-				);
-			while(cursor.moveToNext()) {
-				addGroup(
-					  cursor.getString(1)
-					, cursor.getString(2)
-					);
-			}
-			cursor.close();
+			loadGroups();
 			updateGroups("Local");
 		}
 

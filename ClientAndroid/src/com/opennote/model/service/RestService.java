@@ -6,6 +6,7 @@ import com.opennote.model.operation.AcceptInvitationOperation;
 import com.opennote.model.operation.AddNoteOperation;
 import com.opennote.model.operation.CreateGroupOperation;
 import com.opennote.model.operation.CreateInvitationOperation;
+import com.opennote.model.operation.DeleteGroupOperation;
 import com.opennote.model.operation.DeleteInvitationOperation;
 import com.opennote.model.operation.FindUsersOperation;
 import com.opennote.model.operation.LoadGroupsOperation;
@@ -41,6 +42,8 @@ public class RestService extends RequestService{
 			return new CreateInvitationOperation();
 		case RequestFactory.ACCEPT_INVITATION:
 			return new AcceptInvitationOperation();
+		case RequestFactory.DELETE_GROUP:
+				return new DeleteGroupOperation();
 		default:
 			return null;
 		}

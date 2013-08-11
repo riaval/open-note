@@ -63,7 +63,7 @@
         android:fontFamily="sans-serif"
         android:hint="At least 6 characters"
         android:inputType="textPassword"
-        android:text="qwerty" />
+        android:text="password" />
 
     <CheckBox
         android:id="@+id/passUpChBx"

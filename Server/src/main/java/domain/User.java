@@ -95,7 +95,7 @@ public class User {
 	
 //	sessions
 	@JsonIgnore
-	@OneToMany(mappedBy="user", fetch=FetchType.EAGER, cascade=CascadeType.ALL)
+	@OneToMany(mappedBy="user", fetch=FetchType.EAGER, cascade=CascadeType.REFRESH)
 	public Set<Session> getSession(){
 		return sessions;
 	}

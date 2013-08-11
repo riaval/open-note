@@ -1,5 +1,6 @@
 package domain;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -28,7 +29,7 @@ public class Invite {
 	
 //	user
 	@JsonIgnore
-	@ManyToOne
+	@ManyToOne(cascade=CascadeType.REFRESH)
     @JoinColumn(name = "[user]")
 	public User getUser() {
 		return user;
@@ -39,7 +40,7 @@ public class Invite {
 	
 //	userGroup
 	@JsonIgnore
-	@ManyToOne
+	@ManyToOne(cascade=CascadeType.REFRESH)
     @JoinColumn(name = "[userGroup]")
 	public UserGroup getUserGroup() {
 		return userGroup;
@@ -50,7 +51,7 @@ public class Invite {
 	
 //	groupRole
 	@JsonIgnore
-	@ManyToOne
+	@ManyToOne(cascade=CascadeType.REFRESH)
     @JoinColumn(name = "[groupRole]")
 	public GroupRole getGroupRole() {
 		return groupRole;

@@ -27,7 +27,7 @@ public class Session {
 	
 //	user
 	@JsonIgnore
-	@ManyToOne(fetch=FetchType.EAGER, cascade = CascadeType.ALL)
+	@ManyToOne(fetch=FetchType.EAGER, cascade = CascadeType.REFRESH)
     @JoinColumn(name="[user]", nullable=false)
 	public User getUser() {
 		return user;

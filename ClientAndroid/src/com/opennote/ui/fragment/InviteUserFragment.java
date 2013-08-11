@@ -6,6 +6,7 @@ import java.util.List;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.LoaderManager.LoaderCallbacks;
+import android.content.Context;
 import android.content.CursorLoader;
 import android.content.DialogInterface;
 import android.content.Loader;
@@ -14,6 +15,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -82,12 +84,14 @@ public class InviteUserFragment extends Fragment {
 		public void onClick(View view) {			
 			String searchValue = mSearchEdit.getText().toString();
 
-			// DataDroid-lib RequestManager
+			// DataDroid RequestManager
 			RestRequestManager requestManager = RestRequestManager.from(getActivity());
-			// Integrate session hash and group slug into request
 			Request request = RequestFactory.getInviteUserRequest(MainActivity.instance.getSessionHash(), searchValue);
-			// Add RequestListener
 			requestManager.execute(request, mRequestListener);
+			
+			//Hide keyboard
+			InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+	    	imm.toggleSoftInput(InputMethodManager.RESULT_UNCHANGED_HIDDEN, 0);
 		}		
 	}
 	
@@ -95,7 +99,6 @@ public class InviteUserFragment extends Fragment {
 		@Override
 		public void onRequestFinished(Request request, Bundle resultData) {
 	        getLoaderManager().initLoader(LOADER_ID, null, loaderCallbacks);
-	        Toast.makeText(getActivity(), "onRequestFinished", 5).show();
 		}
 
 		@Override
@@ -131,6 +134,9 @@ public class InviteUserFragment extends Fragment {
         @Override
         public void onLoadFinished(Loader<Cursor> arg0, Cursor cursor) {
             mAdapter.swapCursor(cursor);
+            if(cursor.getCount() == 0){
+            	Toast.makeText(getActivity(), "Nothing found", Toast.LENGTH_LONG).show();
+            }
         }
 
         @Override

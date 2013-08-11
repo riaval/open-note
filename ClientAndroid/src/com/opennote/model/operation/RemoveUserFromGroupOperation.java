@@ -2,7 +2,6 @@ package com.opennote.model.operation;
 
 import java.util.HashMap;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.os.Bundle;
 
@@ -16,39 +15,30 @@ import com.foxykeep.datadroid.requestmanager.Request;
 import com.foxykeep.datadroid.service.RequestService.Operation;
 import com.opennote.R;
 import com.opennote.model.provider.RestContact;
-import com.opennote.model.provider.RestContact.Invitation;
+import com.opennote.model.provider.RestContact.Group;
 
-public class AcceptInvitationOperation implements Operation {
+public class RemoveUserFromGroupOperation implements Operation {
 
 	@Override
 	public Bundle execute(Context context, Request request) throws ConnectionException, DataException, CustomRequestException {
 		String host = context.getString(R.string.host_name);
-		String groupSlug = request.getString("slug");
-		String address = "http://" + host + "/api/groups/" + groupSlug + "/users";
+		String groupSlug = request.getString("group_slug");
+		String address = "http://" + host + "/groups/" + groupSlug + "/users/";
 
 		NetworkConnection connection = new NetworkConnection(context, address);
 		HashMap<String, String> params = new HashMap<String, String>();
 		String sessionHash = request.getString("session_hash");
 		params.put("session_hash", sessionHash);
 		connection.setParameters(params);
-		
-		connection.setMethod(Method.POST);
+
+		connection.setMethod(Method.DELETE);
 		ConnectionResult result = connection.execute();
 		
 		context.getContentResolver().delete(
-				RestContact.Invitation.CONTENT_URI
-				, Invitation.GROUP_SLUG+"=?"
+				RestContact.Group.CONTENT_URI
+				, Group.SLUG+"=?"
 				, new String[]{groupSlug}
 		);
-		
-		String groupName = request.getString("name");
-		ContentValues group = new ContentValues();
-		group.put("slug", groupSlug);
-		group.put("name", groupName);
-		group.put("role", "member");
-		
-		context.getContentResolver().insert(RestContact.Group.CONTENT_URI, group);
-		
 		return null;
 	}
 

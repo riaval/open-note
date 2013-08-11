@@ -45,16 +45,16 @@ public class LoadNotesOperation implements Operation{
 
 			for (int i = 0; i < groupsJson.length(); i++) {
 				ContentValues note = new ContentValues();
-				note.put("title", groupsJson.getJSONObject(i).getString("title"));
-				note.put("body", groupsJson.getJSONObject(i).getString("body"));
-				note.put("date", groupsJson.getJSONObject(i).getString("date"));
+				note.put(Note.TITLE, groupsJson.getJSONObject(i).getString("title"));
+				note.put(Note.BODY, groupsJson.getJSONObject(i).getString("body"));
+				note.put(Note.DATE, groupsJson.getJSONObject(i).getString("date"));
 				JSONObject user = groupsJson.getJSONObject(i).getJSONObject("user");
 
 				note.put("user", user.getString("fullName"));
 				
-//				note.put("user", groupsJson.getJSONObject(i).getString("user"));
-				note.put("group_slug", slug);
-				note.put("color", user.getInt("color"));
+				note.put(Note._ID, groupsJson.getJSONObject(i).getString("id"));
+				note.put(Note.GROUP, slug);
+				note.put(Note.COLOR, user.getInt("color"));
 				notesValues[i] = note;
 			}
 		} catch (JSONException e) {

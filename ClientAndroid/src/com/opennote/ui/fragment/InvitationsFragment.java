@@ -29,7 +29,7 @@ import com.opennote.ui.activity.MainActivity;
 
 public class InvitationsFragment extends Fragment {
 	private View mRootView;
-//	private View mNothingView;
+	ListView mListView;
 	private SimpleCursorAdapter mAdapter;
 	private static final int LOADER_ID = 1;
 	private final String[] PROJECTION = { 
@@ -49,7 +49,6 @@ public class InvitationsFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		mRootView = inflater.inflate(R.layout.activity_search_result, container, false);
-//		mNothingView = inflater.inflate(R.layout.nothing, container, false);
 
 		// DataDroid
 		RestRequestManager requestManager = RestRequestManager.from(getActivity());
@@ -69,9 +68,9 @@ public class InvitationsFragment extends Fragment {
 		            new String[]{ Invitation.USER_LOGIN, Invitation.USER_NAME, Invitation.GROUP_SLUG, Invitation.GROUP_NAME },
 		            new int[]{ R.id.invitationLogin, R.id.invitationFullName , R.id.invitationSlug, R.id.invitationGroupName}, 
 		            0);
-			ListView listView = (ListView) mRootView;
-	        listView.setAdapter(mAdapter);
-	        listView.setOnItemClickListener(new InvitationClickListener());
+			mListView = (ListView) mRootView.findViewById(R.id.searchListView);
+	        mListView.setAdapter(mAdapter);
+	        mListView.setOnItemClickListener(new InvitationClickListener());
 	        getLoaderManager().initLoader(LOADER_ID, null, loaderCallbacks);
 			Toast.makeText(getActivity(), "onRequestFinished", 5).show();
 		}
@@ -110,6 +109,9 @@ public class InvitationsFragment extends Fragment {
         @Override
         public void onLoadFinished(Loader<Cursor> arg0, Cursor cursor) {
             mAdapter.swapCursor(cursor);
+            if(cursor.getCount() == 0){
+            	mListView.setVisibility(View.GONE);
+            };
         }
 
         @Override
@@ -141,7 +143,7 @@ public class InvitationsFragment extends Fragment {
 			alertDialog.setPositiveButton(joinToGroup, new OnClickListener() {
 				public void onClick(DialogInterface dialog, int arg1) {
 					RestRequestManager requestManager = RestRequestManager.from(getActivity());
-					Request request = RequestFactory.getAcceptInvitationsRequest(MainActivity.instance.getSessionHash(), mGroupSlug);
+					Request request = RequestFactory.getAcceptInvitationsRequest(MainActivity.instance.getSessionHash(), mGroupSlug, mGroupName);
 					requestManager.execute(request, invitationAcceptListener);
 				}
 			});
@@ -162,7 +164,8 @@ public class InvitationsFragment extends Fragment {
 		public void onRequestFinished(Request request, Bundle resultData) {
 			getActivity().getContentResolver().notifyChange(RestContact.Invitation.CONTENT_URI, null);
 			MainActivity mainActivity = (MainActivity) getActivity();
-			mainActivity.addGroup(mGroupSlug, mGroupName);
+//			mainActivity.addGroup(mGroupSlug, mGroupName, "member");
+			mainActivity.loadGroups();
 			mainActivity.updateGroups();
 		}
 

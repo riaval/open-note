@@ -25,7 +25,7 @@ import com.opennote.R;
 import com.opennote.model.adapter.NoteLocalAdapter;
 import com.opennote.model.provider.LocalContract;
 import com.opennote.model.provider.LocalContract.LocalNotes;
-import com.opennote.ui.activity.CreateNoteActivity;
+import com.opennote.ui.activity.CreateLocalNoteActivity;
 
 import de.timroes.swipetodismiss.SwipeDismissList;
 import de.timroes.swipetodismiss.SwipeDismissList.SwipeDirection;
@@ -122,7 +122,9 @@ public class LocalFragment extends Fragment {
 
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-		inflater.inflate(R.menu.main, menu);
+		inflater.inflate(R.menu.notes, menu);
+		menu.removeItem(R.id.action_discard);
+		menu.removeItem(R.id.action_left);
 		super.onCreateOptionsMenu(menu, inflater);
 	}
 
@@ -133,7 +135,7 @@ public class LocalFragment extends Fragment {
 			@Override
 			public boolean onMenuItemClick(MenuItem item) {
 				mSwipeLis.discardUndo();
-				Intent intent = new Intent(getActivity(), CreateNoteActivity.class);
+				Intent intent = new Intent(getActivity(), CreateLocalNoteActivity.class);
 				startActivity(intent);
 				return true;
 			}
@@ -173,7 +175,7 @@ public class LocalFragment extends Fragment {
 			int backgroundColor = ((ColorDrawable) view.getBackground()).getColor();
 			
 			// Starting update activity
-			Intent intent = new Intent(getActivity(), CreateNoteActivity.class);
+			Intent intent = new Intent(getActivity(), CreateLocalNoteActivity.class);
 			intent.putExtra(ID_VALUE_MESSAGE, id);
 			intent.putExtra(TITLE_VALUE_MESSAGE, title);
 			intent.putExtra(BODY_VALUE_MESSAGE, body);

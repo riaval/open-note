@@ -52,9 +52,9 @@ public class Group{
 		this.name = name;
 	}
 	
-//	User_Role
+//	User_Group
 	@JsonIgnore
-	@OneToMany(mappedBy="group", cascade=CascadeType.ALL)
+	@OneToMany(mappedBy="group", cascade=CascadeType.REFRESH)
 	public Set<UserGroup> getUserGroup() {
 		return this.userGroups;
 	}

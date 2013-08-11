@@ -1,6 +1,5 @@
 package service;
 
-import java.util.HashSet;
 import java.util.Set;
 
 import service.exception.BadAuthenticationException;
