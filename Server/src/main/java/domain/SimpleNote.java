@@ -97,5 +97,12 @@ public class SimpleNote {
 	public long id() {
 		return id;
 	}
+	@JsonProperty("creator")
+	public boolean creator() {
+		if(userGroup.getGroupRole().getRole().equals("creator")){
+			return true;
+		}
+		return false;
+	}
 	
 }

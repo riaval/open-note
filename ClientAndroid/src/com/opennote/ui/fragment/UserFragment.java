@@ -20,7 +20,7 @@ public class UserFragment extends Fragment {
 		mRootView = inflater.inflate(R.layout.fragment_user, container, false);
 
 		// Get action button
-		Button button = (Button) mRootView.findViewById(R.id.logOutBt);
+		Button button = (Button) mRootView.findViewById(R.id.userLogOutBt);
 		// Add onClick listener
 		button.setOnClickListener(new LogOutAction());
 		

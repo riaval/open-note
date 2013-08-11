@@ -49,7 +49,7 @@ public class UserGroupResource extends ServerResource{
 		try {
 			UserGroupService userGroupService = new UserGroupService();
 			String sessionHash = getQuery().getValues("session_hash");
-			String groupSlug = getQuery().getValues("group_slug");
+			System.out.println(groupSlug);
 			userGroupService.deleteUserFromGroup(sessionHash, groupSlug);
 			
 			return new JacksonRepresentation<Status>( StatusFactory.ok() );

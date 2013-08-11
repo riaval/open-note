@@ -112,7 +112,7 @@ public class GroupFragment extends ListFragment {
 	                            public void onClick(DialogInterface dialog, int index) {
 	                                dialog.dismiss();
 	                                Request request = RequestFactory.getDeleteGroupRequest(mSessionHash, mCurrentGroup.getSlug());
-	            					mRequestManager.execute(request, mDeleteRequestListener);
+	            					mRequestManager.execute(request, mDismissRequestListener);
 	                            }
 	                        });
 	                builderInner.setNegativeButton("Cancel",
@@ -131,7 +131,26 @@ public class GroupFragment extends ListFragment {
 			discardItem.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 				@Override
 				public boolean onMenuItemClick(MenuItem item) {
-					Toast.makeText(getActivity(), "action_left", 5).show();
+					AlertDialog.Builder builderInner = new AlertDialog.Builder(getActivity());
+	                builderInner.setTitle("Attention");
+	                builderInner.setMessage("Do you really want to left the group: " + mCurrentGroup.getSlug() + "?");
+	                builderInner.setPositiveButton("OK",
+	                        new DialogInterface.OnClickListener() {
+	                            @Override
+	                            public void onClick(DialogInterface dialog, int index) {
+	                                dialog.dismiss();
+	                                Request request = RequestFactory.getRemoveUserFromGroupRequest(mSessionHash, mCurrentGroup.getSlug());
+	            					mRequestManager.execute(request, mDismissRequestListener);
+	                            }
+	                        });
+	                builderInner.setNegativeButton("Cancel",
+	                        new DialogInterface.OnClickListener() {
+	                            @Override
+	                            public void onClick(DialogInterface dialog, int index) {
+	                                dialog.dismiss();
+	                            }
+	                        });
+	                builderInner.show();
 					return true;
 				}
 			});
@@ -173,10 +192,10 @@ public class GroupFragment extends ListFragment {
 		
 	};
 	
-	private RequestListener mDeleteRequestListener = new RequestListener() {
+	private RequestListener mDismissRequestListener = new RequestListener() {
 		@Override
 		public void onRequestFinished(Request request, Bundle resultData) {
-			Toast.makeText(getActivity(), "Group deleted", Toast.LENGTH_SHORT).show();
+			Toast.makeText(getActivity(), "Executed", Toast.LENGTH_SHORT).show();
 			MainActivity.instance.loadGroups();
 			MainActivity.instance.updateGroups("Local");
 		}
