@@ -12,7 +12,6 @@ import com.opennote.R;
 import com.opennote.model.RequestFactory;
 import com.opennote.model.RestRequestManager;
 import com.opennote.ui.fragment.GroupFragment;
-import com.opennote.ui.fragment.LocalFragment;
 
 public class CreateGroupNoteActivity extends Activity implements ActionBar.OnNavigationListener{
 
@@ -28,10 +27,11 @@ public class CreateGroupNoteActivity extends Activity implements ActionBar.OnNav
 		
 		// Get the message from the intent
 	    Intent intent = getIntent();
-		mGroupSlug = intent.getStringExtra(GroupFragment.GROUP_SLUG);
-	    mId = intent.getLongExtra(LocalFragment.ID_VALUE_MESSAGE, -1);
-	    mTitle = intent.getStringExtra(LocalFragment.TITLE_VALUE_MESSAGE);
-	    mBody = intent.getStringExtra(LocalFragment.BODY_VALUE_MESSAGE);
+		mGroupSlug = intent.getStringExtra(GroupFragment.GROUP_SLUG_MESSAGE);
+	    mId = intent.getLongExtra(GroupFragment.ID_VALUE_MESSAGE, -1);
+	    System.out.println(mId);
+	    mTitle = intent.getStringExtra(GroupFragment.TITLE_VALUE_MESSAGE);
+	    mBody = intent.getStringExtra(GroupFragment.BODY_VALUE_MESSAGE);
 		
 	    // Preload
 	    final EditText titleEditText = ((EditText) findViewById(R.id.note_title));
@@ -65,6 +65,10 @@ public class CreateGroupNoteActivity extends Activity implements ActionBar.OnNav
 				Request request = RequestFactory.getAddNoteRequest(MainActivity.instance.getSessionHash(), mGroupSlug, title, body);
 				requestManager.execute(request, mRequestListener);
 			} else {
+				if ( !mTitle.equals(title) || !mBody.equals(body) ){
+					Request request = RequestFactory.getEditNoteRequest(MainActivity.instance.getSessionHash(), mId, title, body);
+					requestManager.execute(request, mRequestListener);
+				}
 			}
 		}
 		

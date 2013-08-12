@@ -17,6 +17,7 @@ public class RequestFactory {
 	public static final int ACCEPT_INVITATION = 11;
 	public static final int DELETE_GROUP = 12;
 	public static final int REMOVE_USER = 13;
+	public static final int EDIT_NOTE = 14;
 	
 	public static Request getSignInRequest(String login, String password) {
 		Request request = new Request(SIGN_IN);
@@ -110,6 +111,15 @@ public class RequestFactory {
 		Request request = new Request(REMOVE_USER);
 		request.put("session_hash", sessionHash);
 		request.put("slug", groupSlug);
+		return request;
+	}
+	
+	public static Request getEditNoteRequest(String sessionHash, long id, String title, String body){
+		Request request = new Request(EDIT_NOTE);
+		request.put("session_hash", sessionHash);
+		request.put("id", id);
+		request.put("title", title);
+		request.put("body", body);
 		return request;
 	}
 	

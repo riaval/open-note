@@ -61,6 +61,9 @@ public class SimpleNote {
 	public void setDate(Date date) {
 		this.date = date;
 	}
+	public void updateDate(){
+		this.date = Calendar.getInstance().getTime();
+	}
 	
 //	UserGroup
 	@JsonIgnore

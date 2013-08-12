@@ -41,16 +41,21 @@ public class GroupFragment extends ListFragment {
 			Note.TITLE,
 			Note.BODY,
 			Note.DATE,
-			Note.USER,
-			Note.COLOR
+			Note.FULL_NAME,
+			Note.COLOR,
+			Note.LOGIN
 	    };
-	String CREATOR = "creator";
 	
 	private View mRootView;
 	private String mSessionHash;
 	private RestGroup mCurrentGroup;
 	
-	public static final String GROUP_SLUG = "group_slug";
+	public static final String CREATOR = "creator";
+	public static final String GROUP_SLUG_MESSAGE = "group_slug";
+	public static final String ID_VALUE_MESSAGE = "id";
+	public static final String TITLE_VALUE_MESSAGE = "title";
+	public static final String BODY_VALUE_MESSAGE = "body";
+	public static final String EDITABLE_MESSAGE = "editable";
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -92,7 +97,7 @@ public class GroupFragment extends ListFragment {
 			@Override
 			public boolean onMenuItemClick(MenuItem item) {
 				Intent intent = new Intent(getActivity(), CreateGroupNoteActivity.class);
-				intent.putExtra(GROUP_SLUG, mCurrentGroup.getSlug());
+				intent.putExtra(GROUP_SLUG_MESSAGE, mCurrentGroup.getSlug());
 				startActivity(intent);
 				return true;
 			}
@@ -165,7 +170,7 @@ public class GroupFragment extends ListFragment {
 	        		getActivity(),
 		            R.layout.local_item, 
 		            null, 
-		            new String[]{ Note.TITLE, Note.BODY, Note.DATE, Note.USER, Note.COLOR },
+		            new String[]{ Note.TITLE, Note.BODY, Note.DATE, Note.FULL_NAME, Note.COLOR, Note.LOGIN },
 		            new int[]{ R.id.local_title, R.id.local_body , R.id.local_date, R.id.local_author}, 
 		            0);
 			ListView listView = (ListView) mRootView;
@@ -246,7 +251,17 @@ public class GroupFragment extends ListFragment {
 	private class GroupListClickListener implements ListView.OnItemClickListener {
 		@Override
 		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-			System.out.println( ((ColorDrawable) view.getBackground()).getColor() );
+			Cursor cursor = (Cursor) mAdapter.getItem(position);
+			String login = cursor.getString(6);
+			if(login.equals(MainActivity.instance.getUserLogin())){
+				Intent intent = new Intent(getActivity(), CreateGroupNoteActivity.class);
+				intent.putExtra(GROUP_SLUG_MESSAGE, mCurrentGroup.getSlug());
+				intent.putExtra(ID_VALUE_MESSAGE, cursor.getLong(0));
+				intent.putExtra(TITLE_VALUE_MESSAGE, cursor.getString(1));
+				intent.putExtra(BODY_VALUE_MESSAGE, cursor.getString(2));
+//				intent.putExtra(EDITABLE_MESSAGE, true);
+				startActivity(intent);
+			}
 		}
 	}
 

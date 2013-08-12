@@ -29,12 +29,11 @@ public class NoteGroupAdapter extends SimpleCursorAdapter{
 		
 		// set item color
 		Cursor cursor = getCursor();
-		int lastIndex = cursor.getColumnCount() - 1;
-		int color = cursor.getInt(lastIndex);
+		int colorIndex = cursor.getColumnCount() - 2;
+		int color = cursor.getInt(colorIndex);
 		view.setBackgroundColor(color);
 		
 		return view;
 	}
-	
 	
 }

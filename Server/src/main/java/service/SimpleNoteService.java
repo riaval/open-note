@@ -76,4 +76,25 @@ public class SimpleNoteService {
 		throw new IllegalArgumentException("No rules");
 	}
 	
+	public void editSimpleNote(String sessionHash, long id, String title, String body) throws Exception{
+		HibernateUtil.beginTransaction(); // ---->
+		Session session = DAOFactory.getSessionDAO().findByHash(sessionHash);
+		if(session == null){
+			HibernateUtil.commitTransaction(); // <----
+			throw new BadAuthenticationException("Session is empty");
+		}
+		SimpleNote simpleNote = DAOFactory.getSimpleNoteDAO().findByID(SimpleNote.class, id);
+		UserGroup userGroup = simpleNote.getUserGroup();
+		if (userGroup.getUser().equals(session.getUser())){
+			simpleNote.setTitle(title);
+			simpleNote.setBody(body);
+			simpleNote.updateDate();
+			DAOFactory.getSimpleNoteDAO().merge(simpleNote);
+			HibernateUtil.commitTransaction(); // <----
+			return;
+		}
+		HibernateUtil.commitTransaction(); // <----
+		throw new IllegalArgumentException("No rules");
+	}
+	
 }

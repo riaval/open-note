@@ -18,7 +18,8 @@ public class RestContact {
 		public static final String TITLE = "title";
 		public static final String BODY = "body";
 		public static final String DATE = "date";
-		public static final String USER = "user";
+		public static final String LOGIN = "login";
+		public static final String FULL_NAME = "full_name";
 		public static final String GROUP = "group_slug";
 		public static final String COLOR = "color";
 	}

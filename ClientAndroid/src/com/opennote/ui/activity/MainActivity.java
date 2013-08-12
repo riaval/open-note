@@ -127,10 +127,6 @@ public class MainActivity extends Activity {
 		}
 		return true;
 	}
-	
-	public String getSessionHash(){
-		return mSessionHash;
-	}
 
 	private void configurateAdapter(boolean authorized){
 		// SectionHeaders
@@ -271,6 +267,13 @@ public class MainActivity extends Activity {
 		}
 		
 		mDrawerLayout.closeDrawer(mDrawerList);
+	}
+	
+	public String getSessionHash(){
+		return mSessionHash;
+	}
+	public String getUserLogin(){
+		return mUserLogin;
 	}
 	
 	@Override

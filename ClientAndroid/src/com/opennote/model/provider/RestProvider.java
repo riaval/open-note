@@ -67,9 +67,11 @@ public class RestProvider extends ContentProvider {
 						Note.TITLE + " text, " +
 						Note.BODY + " text, " +
 						Note.DATE + " text, " +
-						Note.USER + " text, " +
+						Note.LOGIN + " text, " +
+						Note.FULL_NAME + " text, " +
 						Note.GROUP + " text, " +
 						Note.COLOR + " integer " +
+						
 				")";
 			System.out.println(sql);
 			db.execSQL(sql);
