@@ -1,6 +1,7 @@
 package service;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import service.exception.BadAuthenticationException;
@@ -97,7 +98,7 @@ public class SimpleNoteService {
 		throw new IllegalArgumentException("No rules");
 	}
 	
-	public Set<SimpleNote> getAllSimpleNotes(String sessionHash) throws Exception{
+	public Set<SimpleNote> getAllSimpleNotes(String sessionHash) throws Exception {
 		HibernateUtil.beginTransaction(); // ---->
 		Session session = DAOFactory.getSessionDAO().findByHash(sessionHash);
 		if(session == null){
@@ -111,6 +112,21 @@ public class SimpleNoteService {
 		}
 		HibernateUtil.commitTransaction(); // <----
 		return allSimpleNotes;
+	}
+	
+	public void deleteSimpleNotes(String sessionHash, Long[] IDs) throws Exception {
+		HibernateUtil.beginTransaction(); // ---->
+		Session session = DAOFactory.getSessionDAO().findByHash(sessionHash);
+		if(session == null){
+			HibernateUtil.commitTransaction(); // <----
+			throw new BadAuthenticationException("Session is empty");
+		}
+		System.out.println(IDs[0]);
+		List<SimpleNote> simpleNotes = DAOFactory.getSimpleNoteDAO().findByIDs(IDs);
+		for(SimpleNote sn : simpleNotes){
+			System.out.println(sn.getTitle());
+		}
+		HibernateUtil.commitTransaction(); // <----
 	}
 	
 }

@@ -19,6 +19,7 @@ public class RequestFactory {
 	public static final int REMOVE_USER = 13;
 	public static final int EDIT_NOTE = 14;
 	public static final int LOAD_ALL_NOTES = 15;
+	public static final int DELETE_NOTES = 16;
 	
 	public static Request getSignInRequest(String login, String password) {
 		Request request = new Request(SIGN_IN);
@@ -127,6 +128,18 @@ public class RequestFactory {
 	public static Request getLoadAllNoteRequest(String sessionHash){
 		Request request = new Request(LOAD_ALL_NOTES);
 		request.put("session_hash", sessionHash);
+		return request;
+	}
+	
+	public static Request getDeleteNotesRequest(String sessionHash, long[] IDs){
+		Request request = new Request(DELETE_NOTES);
+		request.put("session_hash", sessionHash);
+		int counter = 0;
+		for (long id : IDs){
+			request.put("id"+counter++, id);
+		}
+		request.put("length", counter);
+		
 		return request;
 	}
 	

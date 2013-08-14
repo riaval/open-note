@@ -5,6 +5,7 @@ import java.util.Set;
 import org.restlet.data.Form;
 import org.restlet.ext.jackson.JacksonRepresentation;
 import org.restlet.representation.Representation;
+import org.restlet.resource.Delete;
 import org.restlet.resource.Get;
 import org.restlet.resource.Put;
 import org.restlet.resource.ResourceException;
@@ -65,6 +66,31 @@ public class SimpleNoteResource extends ServerResource {
 		} catch (IllegalArgumentException e) {
 			e.printStackTrace();
 			return new JacksonRepresentation<Status>( StatusFactory.clientBadRequest() );
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new JacksonRepresentation<Status>( StatusFactory.serverInternalError() );
+		}
+	}
+	
+	@Delete
+	public Representation deleteSimpleNotes(){
+		SimpleNoteService simpleNoteService = new SimpleNoteService();
+		try {
+			String sessionHash = getQuery().getValues("session_hash");
+			String[] stringIDs = getQuery().getValuesArray("id");
+			Long[] IDs = new Long[stringIDs.length];
+			for(int i=0; i<IDs.length; i++){
+				IDs[i] = Long.parseLong(stringIDs[i]);
+			}
+			simpleNoteService.deleteSimpleNotes(sessionHash, IDs);
+
+			return new JacksonRepresentation<Status>( StatusFactory.ok() );
+//		} catch (BadAuthenticationException e) {
+//			e.printStackTrace();
+//			return new JacksonRepresentation<Status>( StatusFactory.clientUnauthorized() );
+//		} catch (IllegalArgumentException e) {
+//			e.printStackTrace();
+//			return new JacksonRepresentation<Status>( StatusFactory.clientBadRequest() );
 		} catch (Exception e) {
 			e.printStackTrace();
 			return new JacksonRepresentation<Status>( StatusFactory.serverInternalError() );

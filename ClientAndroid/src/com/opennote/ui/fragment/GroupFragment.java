@@ -189,7 +189,6 @@ public class GroupFragment extends ListFragment {
 	            @Override
 	            public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
 	            	mode.setTitle( String.valueOf(mListView.getCheckedItemCount()) + " selected");
-	            	mListView.getCheckItemIds();
 	                // Here you can do something when items are selected/de-selected,
 	                // such as update the title in the CAB
 	            }
@@ -199,6 +198,9 @@ public class GroupFragment extends ListFragment {
 	                // Respond to clicks on the actions in the CAB
 	                switch (item.getItemId()) {
 	                    case R.id.action_delete:
+	                    	long[] IDs = mListView.getCheckedItemIds();
+	    	            	Request request = RequestFactory.getDeleteNotesRequest(mSessionHash, IDs);
+	    					mRequestManager.execute(request, mDismissRequestListener);
 	                    	Toast.makeText(getActivity(), "hello", 5).show();
 	                        mode.finish();
 	                        return true;
