@@ -8,7 +8,6 @@ import java.util.Locale;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -106,6 +105,10 @@ public class SimpleNote {
 			return true;
 		}
 		return false;
+	}
+	@JsonProperty("group")
+	public String group() {
+		return userGroup.getGroup().getSlug();
 	}
 	
 }

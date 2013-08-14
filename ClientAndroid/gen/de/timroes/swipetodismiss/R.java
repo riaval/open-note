@@ -20,11 +20,11 @@ public final class R {
 		public static final int separator_color = 0x7f050004;
 	}
 	public static final class drawable {
-		public static final int ic_action_undo = 0x7f020008;
-		public static final int popup_bg = 0x7f02000d;
-		public static final int undo_btn_bg = 0x7f020015;
-		public static final int undo_btn_bg_focused = 0x7f020016;
-		public static final int undo_btn_bg_pressed = 0x7f020017;
+		public static final int ic_action_undo = 0x7f020009;
+		public static final int popup_bg = 0x7f02000e;
+		public static final int undo_btn_bg = 0x7f020017;
+		public static final int undo_btn_bg_focused = 0x7f020018;
+		public static final int undo_btn_bg_pressed = 0x7f020019;
 	}
 	public static final class id {
 		public static final int text = 0x7f0b0030;

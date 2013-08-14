@@ -49,33 +49,37 @@ public final class R {
         public static final int action_left=0x7f020001;
         public static final int action_new=0x7f020002;
         public static final int action_search=0x7f020003;
-        public static final int all_notes=0x7f020004;
-        public static final int dotted=0x7f020005;
-        public static final int drawer_shadow=0x7f020006;
-        public static final int feedback=0x7f020007;
-        public static final int ic_action_undo=0x7f020008;
-        public static final int ic_drawer=0x7f020009;
-        public static final int ic_launcher=0x7f02000a;
-        public static final int invite=0x7f02000b;
-        public static final int local=0x7f02000c;
-        public static final int popup_bg=0x7f02000d;
-        public static final int search=0x7f02000e;
-        public static final int search_dark=0x7f02000f;
-        public static final int selected_item=0x7f020010;
-        public static final int selected_item_view=0x7f020011;
-        public static final int settings=0x7f020012;
-        public static final int sign_up=0x7f020013;
-        public static final int textlines=0x7f020014;
-        public static final int undo_btn_bg=0x7f020015;
-        public static final int undo_btn_bg_focused=0x7f020016;
-        public static final int undo_btn_bg_pressed=0x7f020017;
-        public static final int user=0x7f020018;
-        public static final int user_foto_default=0x7f020019;
+        public static final int action_share=0x7f020004;
+        public static final int all_notes=0x7f020005;
+        public static final int dotted=0x7f020006;
+        public static final int drawer_shadow=0x7f020007;
+        public static final int feedback=0x7f020008;
+        public static final int ic_action_undo=0x7f020009;
+        public static final int ic_drawer=0x7f02000a;
+        public static final int ic_launcher=0x7f02000b;
+        public static final int invite=0x7f02000c;
+        public static final int local=0x7f02000d;
+        public static final int popup_bg=0x7f02000e;
+        public static final int search=0x7f02000f;
+        public static final int search_dark=0x7f020010;
+        public static final int selected_group_item=0x7f020011;
+        public static final int selected_item=0x7f020012;
+        public static final int selected_item_view=0x7f020013;
+        public static final int settings=0x7f020014;
+        public static final int sign_up=0x7f020015;
+        public static final int textlines=0x7f020016;
+        public static final int undo_btn_bg=0x7f020017;
+        public static final int undo_btn_bg_focused=0x7f020018;
+        public static final int undo_btn_bg_pressed=0x7f020019;
+        public static final int user=0x7f02001a;
+        public static final int user_foto_default=0x7f02001b;
     }
     public static final class id {
-        public static final int action_discard=0x7f0b0032;
-        public static final int action_left=0x7f0b0033;
-        public static final int action_new=0x7f0b0034;
+        public static final int action_delete=0x7f0b0033;
+        public static final int action_discard=0x7f0b0034;
+        public static final int action_left=0x7f0b0035;
+        public static final int action_new=0x7f0b0036;
+        public static final int action_share=0x7f0b0032;
         public static final int content_frame=0x7f0b0001;
         public static final int createGroupBt=0x7f0b000c;
         public static final int drawer_layout=0x7f0b0000;
@@ -149,16 +153,18 @@ public final class R {
         public static final int undo_popup=0x7f030012;
     }
     public static final class menu {
-        public static final int notes=0x7f0a0000;
+        public static final int context=0x7f0a0000;
+        public static final int notes=0x7f0a0001;
     }
     public static final class string {
         public static final int action_discard=0x7f060012;
-        public static final int action_left=0x7f060013;
+        public static final int action_left=0x7f060014;
         public static final int action_new=0x7f060011;
-        public static final int action_refresh=0x7f060014;
+        public static final int action_refresh=0x7f060015;
         public static final int action_settings=0x7f060006;
+        public static final int action_share=0x7f060013;
         public static final int app_name=0x7f060002;
-        public static final int app_not_available=0x7f060015;
+        public static final int app_not_available=0x7f060016;
         public static final int create_note=0x7f060003;
         public static final int drawer_close=0x7f060010;
         public static final int drawer_open=0x7f06000f;

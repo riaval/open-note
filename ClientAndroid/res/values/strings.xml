@@ -20,6 +20,7 @@
     <string name="drawer_close">Close navigation drawer</string>
     <string name="action_new">New note</string>
     <string name="action_discard">Delete group</string>
+    <string name="action_share">Share note</string>
     <string name="action_left">Left group</string>
     <string name="action_refresh">Refresh</string>
     <string name="app_not_available">Sorry, there\'s no web browser available</string>

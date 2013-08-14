@@ -10,6 +10,7 @@ import com.opennote.model.operation.DeleteGroupOperation;
 import com.opennote.model.operation.DeleteInvitationOperation;
 import com.opennote.model.operation.EditNoteOperation;
 import com.opennote.model.operation.FindUsersOperation;
+import com.opennote.model.operation.LoadAllNotesOperation;
 import com.opennote.model.operation.LoadGroupsOperation;
 import com.opennote.model.operation.LoadInvitationsOperation;
 import com.opennote.model.operation.LoadNotesOperation;
@@ -50,6 +51,8 @@ public class RestService extends RequestService{
 			return new RemoveUserFromGroupOperation();
 		case RequestFactory.EDIT_NOTE:
 			return new EditNoteOperation();
+		case RequestFactory.LOAD_ALL_NOTES:
+			return new LoadAllNotesOperation();
 		default:
 			return null;
 		}

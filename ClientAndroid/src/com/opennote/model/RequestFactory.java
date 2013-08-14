@@ -18,6 +18,7 @@ public class RequestFactory {
 	public static final int DELETE_GROUP = 12;
 	public static final int REMOVE_USER = 13;
 	public static final int EDIT_NOTE = 14;
+	public static final int LOAD_ALL_NOTES = 15;
 	
 	public static Request getSignInRequest(String login, String password) {
 		Request request = new Request(SIGN_IN);
@@ -120,6 +121,12 @@ public class RequestFactory {
 		request.put("id", id);
 		request.put("title", title);
 		request.put("body", body);
+		return request;
+	}
+	
+	public static Request getLoadAllNoteRequest(String sessionHash){
+		Request request = new Request(LOAD_ALL_NOTES);
+		request.put("session_hash", sessionHash);
 		return request;
 	}
 	

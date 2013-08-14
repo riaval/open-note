@@ -97,4 +97,20 @@ public class SimpleNoteService {
 		throw new IllegalArgumentException("No rules");
 	}
 	
+	public Set<SimpleNote> getAllSimpleNotes(String sessionHash) throws Exception{
+		HibernateUtil.beginTransaction(); // ---->
+		Session session = DAOFactory.getSessionDAO().findByHash(sessionHash);
+		if(session == null){
+			HibernateUtil.commitTransaction(); // <----
+			throw new BadAuthenticationException("Session is empty");
+		}
+		Set<UserGroup> userGroup = session.getUser().getUserGroups();
+		Set<SimpleNote> allSimpleNotes = new HashSet<SimpleNote>();
+		for (UserGroup each : userGroup){
+			allSimpleNotes.addAll(each.getSimpleNotes());
+		}
+		HibernateUtil.commitTransaction(); // <----
+		return allSimpleNotes;
+	}
+	
 }

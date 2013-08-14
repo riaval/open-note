@@ -12,7 +12,7 @@ public class ColorSpinnerAdapter extends ArrayAdapter<String>{
 	final public static String[] NAMES = {
 		  "White"
 		, "Cyan"
-		, "LightGreen"
+		, "Light Green"
 		, "Yellow"
 		, "Pink"
 		, "Magenta"
@@ -20,11 +20,11 @@ public class ColorSpinnerAdapter extends ArrayAdapter<String>{
 	
 	final public static String[] COLORS = {
 		  "#FFFFFF"
-		, "#c7f1ea"
-		, "#E1F0B5"
+		, "#b1ede2"
+		, "#cef4ac"
 		, "#FCFDB1"
-		, "#fbd2ca"
-		, "#efcee4"
+		, "#fbc2b7"
+		, "#efb8dc"
 	};
 	
 	public ColorSpinnerAdapter(Context context, int resource) {

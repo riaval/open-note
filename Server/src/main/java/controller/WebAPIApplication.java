@@ -20,6 +20,7 @@ public class WebAPIApplication extends Application {
 		router.attach("/groups/{slug}", GroupResource.class);
 		router.attach("/groups/", GroupResource.class);
 		
+		router.attach("/snote/", SimpleNoteResource.class);
 		router.attach("/snote/{snoteID}", SimpleNoteResource.class);
 		router.attach("/groups/{groupSlug}/snote/", GroupSimpleNoteResource.class);
 		

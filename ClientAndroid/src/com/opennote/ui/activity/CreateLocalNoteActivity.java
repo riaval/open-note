@@ -52,7 +52,7 @@ public class CreateLocalNoteActivity extends Activity{
         final ActionBar actionBar = getActionBar();
         actionBar.setDisplayShowTitleEnabled(false);
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
-        getActionBar().setListNavigationCallbacks(adapter, new OnNavigationListener() {
+        actionBar.setListNavigationCallbacks(adapter, new OnNavigationListener() {
             @Override
             public boolean onNavigationItemSelected(int itemPosition, long itemId) {
                 mBackgroundColor = ColorSpinnerAdapter.COLORS[itemPosition];

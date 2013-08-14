@@ -33,7 +33,17 @@ public class NoteGroupAdapter extends SimpleCursorAdapter{
 		int color = cursor.getInt(colorIndex);
 		view.setBackgroundColor(color);
 		
+		System.out.println("olololo");
+		
 		return view;
+	}
+	
+	@Override
+	public boolean isEnabled(int position){
+//		if (position == 0)
+//			return false;
+		return true;
+		
 	}
 	
 }
