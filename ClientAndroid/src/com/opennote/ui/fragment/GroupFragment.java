@@ -179,6 +179,8 @@ public class GroupFragment extends ListFragment {
 		            new String[]{ Note.TITLE, Note.BODY, Note.DATE, Note.FULL_NAME, Note.COLOR, Note.LOGIN },
 		            new int[]{ R.id.local_title, R.id.local_body , R.id.local_date, R.id.local_author}, 
 		            0);
+			mAdapter.setmCreator( mCurrentGroup.getRole().equals(CREATOR) );
+			mAdapter.setmCurrentLogin(MainActivity.instance.getUserLogin());
 			mListView = (ListView) mRootView;
 	        mListView.setAdapter(mAdapter);
 	        mListView.setOnItemClickListener(new GroupListClickListener());

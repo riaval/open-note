@@ -11,6 +11,8 @@ import com.opennote.R;
 
 public class NoteGroupAdapter extends SimpleCursorAdapter{
 
+	boolean mCreator;
+	String mCurrentLogin;
 	
 	public NoteGroupAdapter(Context context, int layout, Cursor c, String[] from, int[] to, int flags) {
 		super(context, layout, c, from, to, flags);
@@ -35,13 +37,31 @@ public class NoteGroupAdapter extends SimpleCursorAdapter{
 		
 		return view;
 	}
-	
+
 	@Override
 	public boolean isEnabled(int position){
-//		if (position == 0)
-//			return false;
-		return true;
+		if(mCreator)
+			return true;
+		Cursor cursor = (Cursor) getItem(position);
+		String login = cursor.getString(6);
+		if( login.equals(mCurrentLogin) )
+			return true;
 		
+		return false;
+	}
+	
+	public boolean ismCreator() {
+		return mCreator;
+	}
+	public void setmCreator(boolean creator) {
+		this.mCreator = creator;
+	}
+
+	public String getmCurrentLogin() {
+		return mCurrentLogin;
+	}
+	public void setmCurrentLogin(String currentLogin) {
+		this.mCurrentLogin = currentLogin;
 	}
 	
 }

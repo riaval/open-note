@@ -17,18 +17,18 @@ public class SimpleNoteService {
 
 	public void createSimpleNote(String title, String body, String slug, String sessionHash) throws Exception {
 		if(title.isEmpty()){
-			throw new IllegalArgumentException("Title is empty");
+			throw new IllegalArgumentException("Title is empty.");
 		}
 		HibernateUtil.beginTransaction(); // ---->
 		Session session = DAOFactory.getSessionDAO().findByHash(sessionHash);
 		if(session == null){
 			HibernateUtil.commitTransaction(); // <----
-			throw new BadAuthenticationException("Session is empty");
+			throw new BadAuthenticationException("Session is empty.");
 		}
 		Group group = DAOFactory.getGroupDAO().findBySlug(slug);
 		if(group == null){
 			HibernateUtil.commitTransaction(); // <----
-			throw new IllegalArgumentException("Group does not exist");
+			throw new IllegalArgumentException("Group does not exist.");
 		}
 		User user = session.getUser();
 		Set<UserGroup> userUserGroups = user.getUserGroups();
@@ -43,7 +43,7 @@ public class SimpleNoteService {
 			}
 	    }
 		HibernateUtil.commitTransaction(); // <----
-		throw new IllegalArgumentException("No rules");
+		throw new IllegalArgumentException("No rules.");
 	}
 
 	public Set<SimpleNote> getSimpleNotes(String slug, String sessionHash) throws Exception {	
@@ -51,12 +51,12 @@ public class SimpleNoteService {
 		Session session = DAOFactory.getSessionDAO().findByHash(sessionHash);
 		if(session == null){
 			HibernateUtil.commitTransaction(); // <----
-			throw new BadAuthenticationException("Session is empty");
+			throw new BadAuthenticationException("Session is empty.");
 		}
 		Group group = DAOFactory.getGroupDAO().findBySlug(slug);
 		if(group == null){
 			HibernateUtil.commitTransaction(); // <----
-			throw new IllegalArgumentException("Group does not exist");
+			throw new IllegalArgumentException("Group does not exist.");
 		}
 		User user = session.getUser();
 		Set<UserGroup> userUserGroups = user.getUserGroups();
@@ -74,7 +74,7 @@ public class SimpleNoteService {
 			}
 	    }
 		HibernateUtil.commitTransaction(); // <----
-		throw new IllegalArgumentException("No rules");
+		throw new IllegalArgumentException("No rules.");
 	}
 	
 	public void editSimpleNote(String sessionHash, long id, String title, String body) throws Exception{
@@ -82,7 +82,7 @@ public class SimpleNoteService {
 		Session session = DAOFactory.getSessionDAO().findByHash(sessionHash);
 		if(session == null){
 			HibernateUtil.commitTransaction(); // <----
-			throw new BadAuthenticationException("Session is empty");
+			throw new BadAuthenticationException("Session is empty.");
 		}
 		SimpleNote simpleNote = DAOFactory.getSimpleNoteDAO().findByID(SimpleNote.class, id);
 		UserGroup userGroup = simpleNote.getUserGroup();
@@ -95,7 +95,7 @@ public class SimpleNoteService {
 			return;
 		}
 		HibernateUtil.commitTransaction(); // <----
-		throw new IllegalArgumentException("No rules");
+		throw new IllegalArgumentException("No rules.");
 	}
 	
 	public Set<SimpleNote> getAllSimpleNotes(String sessionHash) throws Exception {
@@ -103,13 +103,20 @@ public class SimpleNoteService {
 		Session session = DAOFactory.getSessionDAO().findByHash(sessionHash);
 		if(session == null){
 			HibernateUtil.commitTransaction(); // <----
-			throw new BadAuthenticationException("Session is empty");
+			throw new BadAuthenticationException("Session is empty.");
 		}
-		Set<UserGroup> userGroup = session.getUser().getUserGroups();
+		Set<UserGroup> userGroups = session.getUser().getUserGroups();
+		Set<Group> groups = new HashSet<Group>();
+		for(UserGroup each: userGroups){
+			groups.add(each.getGroup());
+		}
+		
 		Set<SimpleNote> allSimpleNotes = new HashSet<SimpleNote>();
-		for (UserGroup each : userGroup){
-			allSimpleNotes.addAll(each.getSimpleNotes());
+		for(UserGroup eachUserGroup: userGroups){
+			Set<SimpleNote> simpleNotes = eachUserGroup.getSimpleNotes();
+			allSimpleNotes.addAll(simpleNotes);
 		}
+		
 		HibernateUtil.commitTransaction(); // <----
 		return allSimpleNotes;
 	}
@@ -119,12 +126,24 @@ public class SimpleNoteService {
 		Session session = DAOFactory.getSessionDAO().findByHash(sessionHash);
 		if(session == null){
 			HibernateUtil.commitTransaction(); // <----
-			throw new BadAuthenticationException("Session is empty");
+			throw new BadAuthenticationException("Session is empty.");
 		}
-		System.out.println(IDs[0]);
+		User user = session.getUser();
 		List<SimpleNote> simpleNotes = DAOFactory.getSimpleNoteDAO().findByIDs(IDs);
-		for(SimpleNote sn : simpleNotes){
-			System.out.println(sn.getTitle());
+		for(SimpleNote eachSimpleNote : simpleNotes){
+			UserGroup userGroup = eachSimpleNote.getUserGroup();
+			Group group = userGroup.getGroup();
+			Set<UserGroup> userGroups = group.getUserGroup();
+			User groupCreator = null;
+			for(UserGroup eachUserGroup : userGroups){
+				if(eachUserGroup.getGroupRole().getRole().equals("creator"))
+					groupCreator = eachUserGroup.getUser();
+			}
+			if (!eachSimpleNote.getUserGroup().getUser().equals(user) && !groupCreator.equals(user)){
+				HibernateUtil.commitTransaction(); // <----
+				throw new IllegalArgumentException("No rules.");
+			}
+			System.out.println(eachSimpleNote.getTitle());
 		}
 		HibernateUtil.commitTransaction(); // <----
 	}
