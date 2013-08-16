@@ -107,14 +107,17 @@ public class SimpleNoteService {
 		}
 		Set<UserGroup> userGroups = session.getUser().getUserGroups();
 		Set<Group> groups = new HashSet<Group>();
-		for(UserGroup each: userGroups){
-			groups.add(each.getGroup());
+		for(UserGroup each : userGroups){
+			groups.add( each.getGroup() );
 		}
 		
 		Set<SimpleNote> allSimpleNotes = new HashSet<SimpleNote>();
-		for(UserGroup eachUserGroup: userGroups){
-			Set<SimpleNote> simpleNotes = eachUserGroup.getSimpleNotes();
-			allSimpleNotes.addAll(simpleNotes);
+		for(Group eachGroups : groups){
+			Set<UserGroup> targetUserGroups = eachGroups.getUserGroup();
+			for(UserGroup target : targetUserGroups){
+				Set<SimpleNote> simpleNotes = target.getSimpleNotes();
+				allSimpleNotes.addAll(simpleNotes);
+			}
 		}
 		
 		HibernateUtil.commitTransaction(); // <----
@@ -143,7 +146,7 @@ public class SimpleNoteService {
 				HibernateUtil.commitTransaction(); // <----
 				throw new IllegalArgumentException("No rules.");
 			}
-			System.out.println(eachSimpleNote.getTitle());
+			DAOFactory.getSimpleNoteDAO().delete(eachSimpleNote);
 		}
 		HibernateUtil.commitTransaction(); // <----
 	}

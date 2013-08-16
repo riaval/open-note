@@ -16,8 +16,8 @@ import android.widget.EditText;
 
 import com.opennote.R;
 import com.opennote.model.adapter.ColorSpinnerAdapter;
-import com.opennote.model.provider.LocalContract;
-import com.opennote.model.provider.LocalContract.LocalNotes;
+import com.opennote.model.provider.LocalContact;
+import com.opennote.model.provider.LocalContact.LocalNotes;
 import com.opennote.ui.fragment.LocalFragment;
 
 public class CreateLocalNoteActivity extends Activity{
@@ -91,11 +91,11 @@ public class CreateLocalNoteActivity extends Activity{
 			
 			note.put("color", mBackgroundColor);
 			if(mId == -1) {
-				this.getContentResolver().insert(LocalContract.LocalNotes.CONTENT_URI, note);
+				this.getContentResolver().insert(LocalContact.LocalNotes.CONTENT_URI, note);
 			} else {
 //				if ( !mTitle.equals(title) || !mBody.equals(body) ){
-				this.getContentResolver().update(LocalContract.LocalNotes.CONTENT_URI, note, LocalNotes._ID + " = ?", new String[]{String.valueOf(mId)});
-				this.getContentResolver().notifyChange(LocalContract.LocalNotes.CONTENT_URI, null);
+				this.getContentResolver().update(LocalContact.LocalNotes.CONTENT_URI, note, LocalNotes._ID + " = ?", new String[]{String.valueOf(mId)});
+				this.getContentResolver().notifyChange(LocalContact.LocalNotes.CONTENT_URI, null);
 //				}
 			}
 		}

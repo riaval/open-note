@@ -3,7 +3,7 @@ package com.opennote.model.provider;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
-public final class LocalContract {
+public final class LocalContact {
 	
 	public static final String AUTHORITY = "com.opennote.local";
 	

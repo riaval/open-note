@@ -10,7 +10,7 @@ import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.net.Uri;
 
-import com.opennote.model.provider.LocalContract.LocalNotes;
+import com.opennote.model.provider.LocalContact.LocalNotes;
 
 public class LocalProvider extends ContentProvider {
 	
@@ -28,7 +28,7 @@ public class LocalProvider extends ContentProvider {
 	
 	static {
 		sUriMatcher = new UriMatcher(PATH_ROOT);
-		sUriMatcher.addURI(LocalContract.AUTHORITY, LocalContract.LocalNotes.CONTENT_PATH, PATH_TWEETS); 
+		sUriMatcher.addURI(LocalContact.AUTHORITY, LocalContact.LocalNotes.CONTENT_PATH, PATH_TWEETS); 
 	}
 	
 	private DatabaseHeloper mDatabaseHelper;
@@ -70,7 +70,7 @@ public class LocalProvider extends ContentProvider {
 		switch (sUriMatcher.match(uri)) {
 		case PATH_TWEETS: {
 			Cursor cursor = mDatabaseHelper.getReadableDatabase().query(TABLE_LOCAL_NOTES, projection, selection, selectionArgs, null, null, sortOrder);
-			cursor.setNotificationUri(getContext().getContentResolver(), LocalContract.LocalNotes.CONTENT_URI);
+			cursor.setNotificationUri(getContext().getContentResolver(), LocalContact.LocalNotes.CONTENT_URI);
 			return cursor;
 		}
 		default:
@@ -82,7 +82,7 @@ public class LocalProvider extends ContentProvider {
 	public String getType(Uri uri) {
 		switch (sUriMatcher.match(uri)) {
 		case PATH_TWEETS:
-			return LocalContract.LocalNotes.CONTENT_TYPE;
+			return LocalContact.LocalNotes.CONTENT_TYPE;
 		default:
 			return null;
 		}
@@ -93,7 +93,7 @@ public class LocalProvider extends ContentProvider {
 		switch (sUriMatcher.match(uri)) {
 		case PATH_TWEETS: {
 			mDatabaseHelper.getWritableDatabase().insert(TABLE_LOCAL_NOTES, null, values);
-			getContext().getContentResolver().notifyChange(LocalContract.LocalNotes.CONTENT_URI, null);
+			getContext().getContentResolver().notifyChange(LocalContact.LocalNotes.CONTENT_URI, null);
 		}
 		default:
 			return null;

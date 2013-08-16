@@ -75,11 +75,11 @@ public final class R {
         public static final int user_foto_default=0x7f02001b;
     }
     public static final class id {
-        public static final int action_delete=0x7f0b0033;
-        public static final int action_discard=0x7f0b0034;
-        public static final int action_left=0x7f0b0035;
-        public static final int action_new=0x7f0b0036;
-        public static final int action_share=0x7f0b0032;
+        public static final int action_delete=0x7f0b0034;
+        public static final int action_discard=0x7f0b0035;
+        public static final int action_left=0x7f0b0036;
+        public static final int action_new=0x7f0b0037;
+        public static final int action_share=0x7f0b0033;
         public static final int content_frame=0x7f0b0001;
         public static final int createGroupBt=0x7f0b000c;
         public static final int drawer_layout=0x7f0b0000;
@@ -95,11 +95,11 @@ public final class R {
         public static final int list_header_title=0x7f0b002a;
         public static final int list_item_icon=0x7f0b0007;
         public static final int list_item_title=0x7f0b0008;
-        public static final int local_author=0x7f0b002f;
-        public static final int local_body=0x7f0b002c;
-        public static final int local_date=0x7f0b002e;
+        public static final int local_author=0x7f0b0030;
+        public static final int local_body=0x7f0b002d;
+        public static final int local_date=0x7f0b002f;
         public static final int local_item=0x7f0b0029;
-        public static final int local_title=0x7f0b002b;
+        public static final int local_title=0x7f0b002c;
         public static final int loginInEdit=0x7f0b0011;
         public static final int loginInView=0x7f0b0010;
         public static final int loginUpEdit=0x7f0b0017;
@@ -119,13 +119,14 @@ public final class R {
         public static final int searchFullNameTextView=0x7f0b0026;
         public static final int searchListView=0x7f0b0003;
         public static final int searchLoginTextView=0x7f0b0027;
+        public static final int selectableLocalItem=0x7f0b002b;
         public static final int signInBt=0x7f0b0015;
         public static final int signUpBt=0x7f0b001d;
-        public static final int signature=0x7f0b002d;
-        public static final int text=0x7f0b0030;
+        public static final int signature=0x7f0b002e;
+        public static final int text=0x7f0b0031;
         public static final int textView1=0x7f0b0004;
         public static final int textView2=0x7f0b000a;
-        public static final int undo=0x7f0b0031;
+        public static final int undo=0x7f0b0032;
         public static final int userEmailEdit=0x7f0b0021;
         public static final int userFullNameEdit=0x7f0b0020;
         public static final int userLogOutBt=0x7f0b001f;

@@ -1,16 +1,14 @@
 package com.opennote.ui.fragment;
 
-import android.app.ActionBar;
-import android.app.ActionBar.OnNavigationListener;
 import android.app.AlertDialog;
 import android.app.ListFragment;
 import android.app.LoaderManager.LoaderCallbacks;
 import android.content.CursorLoader;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
@@ -31,8 +29,8 @@ import com.opennote.R;
 import com.opennote.model.RequestFactory;
 import com.opennote.model.RestGroup;
 import com.opennote.model.RestRequestManager;
-import com.opennote.model.adapter.ColorSpinnerAdapter;
 import com.opennote.model.adapter.NoteGroupAdapter;
+import com.opennote.model.provider.RestContact;
 import com.opennote.model.provider.RestContact.Note;
 import com.opennote.ui.activity.CreateGroupNoteActivity;
 import com.opennote.ui.activity.MainActivity;
@@ -72,6 +70,78 @@ public class GroupFragment extends ListFragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {		
 		mRootView = inflater.inflate(R.layout.fragment_note_list, container, false);
+		mAdapter = new NoteGroupAdapter(
+        		getActivity(),
+	            R.layout.local_item, 
+	            null, 
+	            new String[]{ Note.TITLE, Note.BODY, Note.DATE, Note.FULL_NAME, Note.COLOR, Note.LOGIN },
+	            new int[]{ R.id.local_title, R.id.local_body , R.id.local_date, R.id.local_author}, 
+	            0);
+		mAdapter.setmCreator( mCurrentGroup.getRole().equals(CREATOR) );
+		mAdapter.setmCurrentLogin(MainActivity.instance.getUserLogin());
+		mListView = (ListView) mRootView;
+        mListView.setAdapter(mAdapter);
+        
+        mListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+        mListView.setMultiChoiceModeListener(new MultiChoiceModeListener() {
+            @Override
+            public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
+            	mode.setTitle( String.valueOf(mListView.getCheckedItemCount()) + " selected");
+                // Here you can do something when items are selected/de-selected,
+                // such as update the title in the CAB
+            }
+            @Override
+            public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+                // Respond to clicks on the actions in the CAB
+                switch (item.getItemId()) {
+                    case R.id.action_delete:
+                    	deleteDialogue(mode);
+                        return true;
+                    default:
+                        return false;
+                }
+            }
+            private void deleteDialogue(final ActionMode mode){
+            	AlertDialog.Builder alertDialog;
+    			alertDialog = new AlertDialog.Builder(getActivity());
+    			alertDialog.setTitle("Attention");
+    			alertDialog.setMessage("Do you really want to delete selected notes?");
+    			String ok = "OK";
+    			String cancel = "Cancel";
+    			alertDialog.setPositiveButton(ok, new OnClickListener() {
+    				public void onClick(DialogInterface dialog, int arg1) {
+    					long[] IDs = mListView.getCheckedItemIds();
+    	            	Request request = RequestFactory.getDeleteNotesRequest(mSessionHash, IDs);
+    					mRequestManager.execute(request, mLoadRequestListener);
+    					mode.finish();
+    				}
+    			});
+    			alertDialog.setNegativeButton(cancel, new OnClickListener() {
+    				public void onClick(DialogInterface dialog, int arg1) {
+    					dialog.dismiss();
+    				}
+    			});
+    			alertDialog.show();
+            }
+            @Override
+            public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+                // Inflate the menu for the CAB
+                MenuInflater inflater = mode.getMenuInflater();
+                inflater.inflate(R.menu.context, menu);
+                return true;
+            }
+            @Override
+            public void onDestroyActionMode(ActionMode mode) {
+                // Here you can make any necessary updates to the activity when
+                // the CAB is removed. By default, selected items are deselected/unchecked.
+            }
+            @Override
+            public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+                // Here you can perform updates to the CAB due to
+                // an invalidate() request
+                return false;
+            }
+        });
 
 		// DataDroid RequestManager
 		Request request = RequestFactory.getLoadNotesRequest(mSessionHash, mCurrentGroup.getSlug());
@@ -172,83 +242,18 @@ public class GroupFragment extends ListFragment {
 	private RequestListener mLoadRequestListener = new RequestListener() {
 		@Override
 		public void onRequestFinished(Request request, Bundle resultData) {
-			mAdapter = new NoteGroupAdapter(
-	        		getActivity(),
-		            R.layout.local_item, 
-		            null, 
-		            new String[]{ Note.TITLE, Note.BODY, Note.DATE, Note.FULL_NAME, Note.COLOR, Note.LOGIN },
-		            new int[]{ R.id.local_title, R.id.local_body , R.id.local_date, R.id.local_author}, 
-		            0);
-			mAdapter.setmCreator( mCurrentGroup.getRole().equals(CREATOR) );
-			mAdapter.setmCurrentLogin(MainActivity.instance.getUserLogin());
-			mListView = (ListView) mRootView;
-	        mListView.setAdapter(mAdapter);
-	        mListView.setOnItemClickListener(new GroupListClickListener());
-	        
-	        mListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
-	        mListView.setMultiChoiceModeListener(new MultiChoiceModeListener() {
-
-	            @Override
-	            public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
-	            	mode.setTitle( String.valueOf(mListView.getCheckedItemCount()) + " selected");
-	                // Here you can do something when items are selected/de-selected,
-	                // such as update the title in the CAB
-	            }
-
-	            @Override
-	            public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-	                // Respond to clicks on the actions in the CAB
-	                switch (item.getItemId()) {
-	                    case R.id.action_delete:
-	                    	long[] IDs = mListView.getCheckedItemIds();
-	    	            	Request request = RequestFactory.getDeleteNotesRequest(mSessionHash, IDs);
-	    					mRequestManager.execute(request, mDismissRequestListener);
-	                    	Toast.makeText(getActivity(), "hello", 5).show();
-	                        mode.finish();
-	                        return true;
-	                    default:
-	                        return false;
-	                }
-	            }
-
-	            @Override
-	            public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-	                // Inflate the menu for the CAB
-	                MenuInflater inflater = mode.getMenuInflater();
-	                inflater.inflate(R.menu.context, menu);
-	                return true;
-	            }
-
-	            @Override
-	            public void onDestroyActionMode(ActionMode mode) {
-	                // Here you can make any necessary updates to the activity when
-	                // the CAB is removed. By default, selected items are deselected/unchecked.
-	            }
-
-	            @Override
-	            public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-	                // Here you can perform updates to the CAB due to
-	                // an invalidate() request
-	                return false;
-	            }
-	        });
-	        
-	        
-	        
+			mListView.setOnItemClickListener(new GroupListClickListener());
 	        getLoaderManager().initLoader(LOADER_ID, null, loaderCallbacks);
-			Toast.makeText(getActivity(), "onRequestFinished", 5).show();
+	        getActivity().getContentResolver().notifyChange(RestContact.Note.CONTENT_URI, null);
 		}
-
 		@Override
 		public void onRequestConnectionError(Request request, int statusCode) {
 			Toast.makeText(getActivity(), "onRequestConnectionError", 5).show();
 		}
-
 		@Override
 		public void onRequestDataError(Request request) {
 			Toast.makeText(getActivity(), "onRequestDataError", 5).show();
 		}
-
 		@Override
 		public void onRequestCustomError(Request request, Bundle resultData) {
 			Toast.makeText(getActivity(), "onRequestCustomError", 5).show();
@@ -263,26 +268,21 @@ public class GroupFragment extends ListFragment {
 			MainActivity.instance.loadGroups();
 			MainActivity.instance.updateGroups("Local");
 		}
-
 		@Override
 		public void onRequestConnectionError(Request request, int statusCode) {
 			Toast.makeText(getActivity(), "onRequestConnectionError", 5).show();
 		}
-
 		@Override
 		public void onRequestDataError(Request request) {
 			Toast.makeText(getActivity(), "onRequestDataError", 5).show();
 		}
-
 		@Override
 		public void onRequestCustomError(Request request, Bundle resultData) {
 			Toast.makeText(getActivity(), "onRequestCustomError", 5).show();
 		}
-		
 	};
 	
 	private LoaderCallbacks<Cursor> loaderCallbacks = new LoaderCallbacks<Cursor>() {
-
         @Override
         public Loader<Cursor> onCreateLoader(int loaderId, Bundle arg1) {
             return new CursorLoader(
@@ -294,13 +294,11 @@ public class GroupFragment extends ListFragment {
                 Note._ID + " DESC"
             );
         }
-
         @Override
         public void onLoadFinished(Loader<Cursor> arg0, Cursor cursor) {
             mAdapter.swapCursor(cursor);
             mAdapter.notifyDataSetChanged();
         }
-
         @Override
         public void onLoaderReset(Loader<Cursor> arg0) {
             mAdapter.swapCursor(null);
@@ -312,13 +310,13 @@ public class GroupFragment extends ListFragment {
 		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 			Cursor cursor = (Cursor) mAdapter.getItem(position);
 			String login = cursor.getString(6);
+			System.out.println(cursor.getString(6));
 			if(login.equals(MainActivity.instance.getUserLogin())){
 				Intent intent = new Intent(getActivity(), CreateGroupNoteActivity.class);
 				intent.putExtra(GROUP_SLUG_MESSAGE, mCurrentGroup.getSlug());
 				intent.putExtra(ID_VALUE_MESSAGE, cursor.getLong(0));
 				intent.putExtra(TITLE_VALUE_MESSAGE, cursor.getString(1));
 				intent.putExtra(BODY_VALUE_MESSAGE, cursor.getString(2));
-//				intent.putExtra(EDITABLE_MESSAGE, true);
 				startActivity(intent);
 			}
 		}

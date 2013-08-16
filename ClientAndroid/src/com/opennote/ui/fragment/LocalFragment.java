@@ -18,13 +18,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.opennote.R;
 import com.opennote.model.adapter.NoteLocalAdapter;
-import com.opennote.model.provider.LocalContract;
-import com.opennote.model.provider.LocalContract.LocalNotes;
+import com.opennote.model.provider.LocalContact;
+import com.opennote.model.provider.LocalContact.LocalNotes;
 import com.opennote.ui.activity.CreateLocalNoteActivity;
 
 import de.timroes.swipetodismiss.SwipeDismissList;
@@ -58,7 +59,7 @@ public class LocalFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View rootView = inflater.inflate(R.layout.fragment_note_list, container, false);
-        
+		
         mAdapter = new NoteLocalAdapter(
         		getActivity(),
 	            R.layout.local_item, 
@@ -104,8 +105,8 @@ public class LocalFragment extends Fragment {
 
                     // Called when user cannot undo the action anymore
                     public void discard() {
-                    	getActivity().getContentResolver().delete(LocalContract.LocalNotes.CONTENT_URI, LocalNotes._ID + "=?", new String[]{String.valueOf(deletedId)});
-                    	getActivity().getContentResolver().notifyChange(LocalContract.LocalNotes.CONTENT_URI, null);
+                    	getActivity().getContentResolver().delete(LocalContact.LocalNotes.CONTENT_URI, LocalNotes._ID + "=?", new String[]{String.valueOf(deletedId)});
+                    	getActivity().getContentResolver().notifyChange(LocalContact.LocalNotes.CONTENT_URI, null);
                     }
                 };
             }
