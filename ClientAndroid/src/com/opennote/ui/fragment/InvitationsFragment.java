@@ -48,7 +48,7 @@ public class InvitationsFragment extends Fragment {
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		mRootView = inflater.inflate(R.layout.activity_search_result, container, false);
+		mRootView = inflater.inflate(R.layout.fragment_invitations, container, false);
 
 		// DataDroid
 		RestRequestManager requestManager = RestRequestManager.from(getActivity());

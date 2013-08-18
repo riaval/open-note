@@ -9,7 +9,7 @@
     <string name="title_section1">Log in</string>
     <string name="title_section2">Sign Up</string>
     <string name="title_activity_main">OpenNote</string>
-    <string name="nothing">Nothing so far.</string>
+    <string name="nothing">Nothing so far</string>
     
     <string name="host_name">192.168.0.100:8080</string>
     <string name="preference_file_key">pref_file</string>

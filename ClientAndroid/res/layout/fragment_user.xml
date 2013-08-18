@@ -1,30 +1,87 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="10dp" >
+    android:padding="16dp" >
+
+    <TextView
+        android:id="@+id/loginUpView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="11dp"
+        android:text="User login" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal" >
 
-        <TextView
-            android:id="@+id/userLoginView"
+        <EditText
+            android:id="@+id/loginUpEdit"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="7dp"
+            android:layout_height="48dp"
             android:layout_weight="1"
-            android:text="Login"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
+            android:ems="10"
+            android:enabled="false"
+            android:hint="6—15 characters"
+            android:inputType="text"
+            android:text="riaval" />
 
-        <Button
+        <ImageButton
             android:id="@+id/userLogOutBt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Logout" />
+            android:layout_gravity="center_vertical|center_horizontal"
+            android:padding="5dp"
+            android:background="@drawable/action_button"
+            android:contentDescription="Logout"
+            android:src="@drawable/content_backspace" />
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/fullNameUpView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="11dp"
+        android:layout_marginTop="10dp"
+        android:text="Full name" />
+
+    <EditText
+        android:id="@+id/fullNameUpEdit"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_below="@+id/fullNameUpView"
+        android:ems="10"
+        android:hint="First and last name"
+        android:inputType="textPersonName"
+        android:text="Zhukov Dmitry" />
+
+    <TextView
+        android:id="@+id/passUpView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="11dp"
+        android:layout_marginTop="10dp"
+        android:text="Email" />
+
+    <EditText
+        android:id="@+id/passUpEdit"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:ems="10"
+        android:fontFamily="sans-serif"
+        android:hint="Type email"
+        android:inputType="textEmailAddress" />
+
+    <TextView
+        android:id="@+id/passUpView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="11dp"
+        android:layout_marginTop="10dp"
+        android:text="Password" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -32,26 +89,35 @@
         android:orientation="horizontal" >
 
         <EditText
-            android:id="@+id/userFullNameEdit"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:id="@+id/passUpEdit"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
             android:ems="10"
-            android:hint="Full name"
-            android:inputType="textPersonName" />
+            android:enabled="false"
+            android:fontFamily="sans-serif"
+            android:hint="At least 6 characters"
+            android:inputType="textPassword"
+            android:text="password" />
+
+        <ImageButton
+            android:id="@+id/searchBt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|center_horizontal"
+            android:padding="5dp"
+            android:background="@drawable/action_button"
+            android:contentDescription="Logout"
+            android:src="@drawable/edit" />
     </LinearLayout>
-    
-    <LinearLayout
+
+    <Button
+        android:id="@+id/userSaveBt"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal" >
-
-        <EditText
-            android:id="@+id/userEmailEdit"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="Email"
-            android:inputType="textPersonName" />
-    </LinearLayout>
+        android:layout_marginTop="15dp"
+        android:background="@drawable/button"
+        android:text="Save changes"
+        android:textColor="#fff" />
 
 </LinearLayout>

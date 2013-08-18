@@ -31,7 +31,7 @@
         android:layout_gravity="start"
         android:background="#3b3b3b"
         android:choiceMode="singleChoice"
-        android:divider="#444444"
-        android:dividerHeight="0sp" />
+        android:divider="@android:color/transparent"
+        android:dividerHeight="0dp" />
 
 </android.support.v4.widget.DrawerLayout>

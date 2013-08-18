@@ -7,33 +7,58 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="8dp" >
 
-        <EditText
-            android:id="@+id/searchEdit"
-            android:layout_width="0dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:background="#eee"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="7dp"
-            android:layout_weight="1"
-            android:ems="10"
-            android:hint="Login or username" >
+            android:layout_margin="7dp"
+            android:background="#eee"
+            android:orientation="horizontal" >
 
-            <requestFocus />
-        </EditText>
+            <EditText
+                android:id="@+id/searchEdit"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:ems="10"
+                android:hint="User login or name" >
+            </EditText>
 
-        <ImageButton
-            android:id="@+id/searchBt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:contentDescription="Find user"
-            android:src="@drawable/search_dark" />
+            <ImageButton
+                android:id="@+id/searchBt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/action_button"
+                android:contentDescription="Find user"
+                android:padding="5dp"
+                android:src="@drawable/search_dark" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2px"
+            android:background="#cfd0d2" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2px"
+            android:background="#dbdee0" />
     </LinearLayout>
 
     <ListView
         android:id="@+id/searchListView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="match_parent"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="10dp"
+        android:padding="10dp" >
     </ListView>
 
 </LinearLayout>

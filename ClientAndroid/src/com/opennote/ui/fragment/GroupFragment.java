@@ -185,8 +185,8 @@ public class GroupFragment extends ListFragment {
 				@Override
 				public boolean onMenuItemClick(MenuItem item) {
 					AlertDialog.Builder builderInner = new AlertDialog.Builder(getActivity());
-	                builderInner.setTitle("Attention");
-	                builderInner.setMessage("Do you really want to delete group: " + mCurrentGroup.getSlug() + "?");
+	                builderInner.setTitle("Alert");
+	                builderInner.setMessage("Are you sure you want to delete the group \"" + mCurrentGroup.getSlug() + "\"?");
 	                builderInner.setPositiveButton("OK",
 	                        new DialogInterface.OnClickListener() {
 	                            @Override
@@ -213,8 +213,8 @@ public class GroupFragment extends ListFragment {
 				@Override
 				public boolean onMenuItemClick(MenuItem item) {
 					AlertDialog.Builder builderInner = new AlertDialog.Builder(getActivity());
-	                builderInner.setTitle("Attention");
-	                builderInner.setMessage("Do you really want to left the group: " + mCurrentGroup.getSlug() + "?");
+	                builderInner.setTitle("Alert");
+	                builderInner.setMessage("Left the group: \"" + mCurrentGroup.getSlug() + "\"?");
 	                builderInner.setPositiveButton("OK",
 	                        new DialogInterface.OnClickListener() {
 	                            @Override

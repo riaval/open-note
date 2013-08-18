@@ -88,10 +88,6 @@ public class InviteUserFragment extends Fragment {
 			RestRequestManager requestManager = RestRequestManager.from(getActivity());
 			Request request = RequestFactory.getInviteUserRequest(MainActivity.instance.getSessionHash(), searchValue);
 			requestManager.execute(request, mRequestListener);
-			
-			//Hide keyboard
-			InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-	    	imm.toggleSoftInput(InputMethodManager.RESULT_UNCHANGED_HIDDEN, 0);
 		}		
 	}
 	
