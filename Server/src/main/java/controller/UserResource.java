@@ -1,5 +1,6 @@
 package controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.restlet.data.Form;
@@ -16,6 +17,7 @@ import controller.representation.Status;
 import controller.representation.StatusFactory;
 import domain.Session;
 import domain.User;
+import domain.response.UserPublicResponse;
 
 public class UserResource extends ServerResource {
 	
@@ -63,8 +65,12 @@ public class UserResource extends ServerResource {
 			String search = getQuery().getValues("search");
 			
 			List<User> users = userService.getUsers(sessionHash, search);
+			List<UserPublicResponse> usersResponse = new ArrayList<UserPublicResponse>();
+			for (User each : users) {
+				usersResponse.add(new UserPublicResponse(each));
+			}
 
-			return new JacksonRepresentation<List<User>>(users);
+			return new JacksonRepresentation<List<UserPublicResponse>>(usersResponse);
 		} catch (BadAuthenticationException e) {
 			e.printStackTrace();
 			return new JacksonRepresentation<Status>( StatusFactory.clientUnauthorized() );

@@ -41,11 +41,7 @@ public class GroupService {
 		}
 		User user = session.getUser();
 		Set<UserGroup> userGroups = user.getUserGroups();
-		
-//		Set<Group> groups = new HashSet<Group>();
-//		for (UserGroup each : userGroups) {
-//			groups.add(each.getGroup());
-//		}		
+			
 		HibernateUtil.commitTransaction(); // <---
 		HibernateUtil.closeSession();
 

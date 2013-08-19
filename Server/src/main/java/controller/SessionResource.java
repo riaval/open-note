@@ -3,16 +3,15 @@ package controller;
 import org.restlet.data.Form;
 import org.restlet.ext.jackson.JacksonRepresentation;
 import org.restlet.representation.Representation;
-import org.restlet.resource.Get;
 import org.restlet.resource.Post;
 import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
 
+import service.SessionService;
 import controller.representation.Status;
 import controller.representation.StatusFactory;
-import service.SessionService;
-import service.exception.BadAuthenticationException;
 import domain.Session;
+import domain.response.SessionResponse;
 
 public class SessionResource extends ServerResource {
 
@@ -35,7 +34,7 @@ public class SessionResource extends ServerResource {
 
 			Session session = sessionService.openSession(login, password, hostIp, hostAgent);
 
-			return new JacksonRepresentation<Session>(session);
+			return new JacksonRepresentation<SessionResponse>(new SessionResponse(session));
 		} catch (IllegalArgumentException e) {
 			e.printStackTrace();
 			return new JacksonRepresentation<Status>( StatusFactory.clientBadRequest() );

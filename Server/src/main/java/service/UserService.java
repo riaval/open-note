@@ -32,7 +32,7 @@ public class UserService {
 		return session;
 	}
 	
-	public List<User> getUsers(String sessionHash, String search) throws Exception{
+	public List<User> getUsers(String sessionHash, String search) throws Exception {
 		HibernateUtil.beginTransaction(); // ---->
 		Session session = DAOFactory.getSessionDAO().findByHash(sessionHash);
 		if(session == null){
@@ -48,6 +48,18 @@ public class UserService {
 		}
 		HibernateUtil.commitTransaction(); // <----
 		return users;
+	}
+	
+	public User getCurrentUser(String sessionHash) throws Exception {
+		HibernateUtil.beginTransaction(); // ---->
+		Session session = DAOFactory.getSessionDAO().findByHash(sessionHash);
+		if(session == null){
+			HibernateUtil.commitTransaction(); // <----
+			throw new BadAuthenticationException("Session is empty");
+		}
+		User user = session.getUser();
+		
+		return null;
 	}
 
 }

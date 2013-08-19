@@ -1,12 +1,12 @@
 package controller;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import org.restlet.data.Form;
-import org.restlet.data.MediaType;
 import org.restlet.ext.jackson.JacksonRepresentation;
 import org.restlet.representation.Representation;
-import org.restlet.representation.StringRepresentation;
 import org.restlet.resource.Delete;
 import org.restlet.resource.Get;
 import org.restlet.resource.Post;
@@ -18,6 +18,9 @@ import service.exception.BadAuthenticationException;
 import controller.representation.Status;
 import controller.representation.StatusFactory;
 import domain.Invite;
+import domain.SimpleNote;
+import domain.response.InviteResponse;
+import domain.response.SimpleNoteResponse;
 
 public class InviteResource extends ServerResource {
 	
@@ -63,7 +66,12 @@ public class InviteResource extends ServerResource {
 			String sessionHash = getQuery().getValues("session_hash");
 			Set<Invite> invites = inviteService.getInvitations(sessionHash);
 
-			return new JacksonRepresentation<Set<Invite>>(invites);
+			List<InviteResponse> invitationsResponse = new ArrayList<InviteResponse>();
+			for (Invite each : invites) {
+				invitationsResponse.add(new InviteResponse(each));
+			}
+
+			return new JacksonRepresentation<List<InviteResponse>>(invitationsResponse);
 		} catch (BadAuthenticationException e) {
 			e.printStackTrace();
 			return new JacksonRepresentation<Status>( StatusFactory.clientUnauthorized() );

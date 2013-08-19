@@ -1,11 +1,9 @@
 package domain;
 
 import java.awt.Color;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.Locale;
 import java.util.Random;
 import java.util.Set;
 
@@ -17,134 +15,119 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
-import org.codehaus.jackson.annotate.JsonProperty;
-
 @Entity
 public class User {
-	private long id;
-	private String login;
-	private String fullName;
-	private String passwordHash;
-	private String email;
-	private Date date;
-	private int color;
-	private Set<Session> sessions = new HashSet<Session>();
-	private Set<UserGroup> userGroups = new HashSet<UserGroup>();
-	private Set<Invite> invites = new HashSet<Invite>();
+	
+	private long mId;
+	private String mLogin;
+	private String mFullName;
+	private String mPasswordHash;
+	private String mEmail;
+	private Date mDate;
+	private int mColor;
+	private Set<Session> mSessions = new HashSet<Session>();
+	private Set<UserGroup> mUserGroups = new HashSet<UserGroup>();
+	private Set<Invite> mInvites = new HashSet<Invite>();
 	
 	public User(){
 	}
 	
 	public User(String login, String fullName, String passwordHash) {
-		this.login = login;
-		this.fullName = fullName;
-		this.passwordHash = passwordHash;
-//		this.email = ""; null or ""
-		this.date = Calendar.getInstance().getTime();
-		this.color = generateRandomColor(new Color(255, 255, 255)).getRGB();
+		mLogin = login;
+		mFullName = fullName;
+		mPasswordHash = passwordHash;
+		mDate = Calendar.getInstance().getTime();
+		mColor = generateRandomColor(new Color(255, 255, 255)).getRGB();
 	}
 	
-//	login
+	// login
 	@Column(unique=true, nullable = false, length = 24)
 	public String getLogin() {
-		return login;
+		return mLogin;
 	}
 	public void setLogin(String login){
-		this.login = login;
+		this.mLogin = login;
 	}
 	
-//	full name
+	// full name
 	@Column(unique=false, nullable = false, length = 36)
 	public String getFullName() {
-		return fullName;
+		return mFullName;
 	}
 	public void setFullName(String firstName){
-		this.fullName = firstName;
+		this.mFullName = firstName;
 	}
 	
-//	passwordHash
-	@JsonIgnore
+	// passwordHash
 	@Column(unique=false, nullable = false, length = 124)
 	public String getPasswordHash() {
-		return passwordHash;
+		return mPasswordHash;
 	}
 	public void setPasswordHash(String passwordHash){
-		this.passwordHash = passwordHash;
+		this.mPasswordHash = passwordHash;
 	}
 	
-//	email
-	@JsonIgnore
+	// email
 	@Column(unique=false, nullable = true, length = 45)
 	public String getEmail() {
-		return email;
+		return mEmail;
 	}
 	public void setEmail(String email){
-		this.email = email;
+		this.mEmail = email;
 	}
 	
-//	date
-	@JsonIgnore
+	// date
 	@Column(unique=false, nullable = false)
 	public Date getDate() {
-		return date;
+		return mDate;
 	}
 	public void setDate(Date date){
-		this.date = date;
+		this.mDate = date;
 	}
 	
-//	sessions
-	@JsonIgnore
+	// sessions
 	@OneToMany(mappedBy="user", fetch=FetchType.EAGER, cascade=CascadeType.REFRESH)
 	public Set<Session> getSession(){
-		return sessions;
+		return mSessions;
 	}
 	public void setSession(Set<Session> sessions){
-		this.sessions = sessions;
+		this.mSessions = sessions;
 	}
 	
-//	UserGroup
-	@JsonIgnore
+	// userGroups
 	@OneToMany(mappedBy="user", fetch=FetchType.EAGER, cascade=CascadeType.REFRESH)
 	public Set<UserGroup> getUserGroups() {
-		return this.userGroups;
+		return this.mUserGroups;
 	}
 	public void setUserGroups(Set<UserGroup> userGroups) {
-		this.userGroups = userGroups;
+		this.mUserGroups = userGroups;
 	}
 	
-//	Invite
-	@JsonIgnore
+	// invites
 	@OneToMany(mappedBy="user", fetch=FetchType.EAGER, cascade=CascadeType.REFRESH)
 	public Set<Invite> getInvites() {
-		return invites;
+		return mInvites;
 	}
 	public void setInvites(Set<Invite> invites) {
-		this.invites = invites;
+		this.mInvites = invites;
 	}
 	
 	@Column(unique=false, nullable = true)
 	public int getColor() {
-		return color;
+		return mColor;
 	}
 	public void setColor(int color) {
-		this.color = color;
+		this.mColor = color;
 	}
 	
 	@Id
 	@GeneratedValue
 	@Column(unique = true, nullable = false)
-	protected long getId() {
-		return id;
+	public long getId() {
+		return mId;
 	}
 	protected void setId(long id){
-		this.id = id;
-	}
-
-	@JsonProperty("date")
-	public String jsonDate() {
-		SimpleDateFormat sdf = new SimpleDateFormat("dd MMM", Locale.US);
-		return sdf.format(date);
+		this.mId = id;
 	}
 	
 	private Color generateRandomColor(Color mix) {
@@ -168,7 +151,7 @@ public class User {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + (int) (id ^ (id >>> 32));
+		result = prime * result + (int) (mId ^ (mId >>> 32));
 		return result;
 	}
 
@@ -181,7 +164,7 @@ public class User {
 		if (getClass() != obj.getClass())
 			return false;
 		User other = (User) obj;
-		if (id != other.id)
+		if (mId != other.mId)
 			return false;
 		return true;
 	}

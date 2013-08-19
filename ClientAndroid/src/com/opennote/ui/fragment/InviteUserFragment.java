@@ -158,7 +158,7 @@ public class InviteUserFragment extends Fragment {
 			}
 			cursor.close();
 			AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-			builder.setTitle("Select group");
+			builder.setTitle("Create invitation");
 			builder.setNegativeButton("Cancel",
 					new DialogInterface.OnClickListener() {
 						@Override
@@ -168,7 +168,7 @@ public class InviteUserFragment extends Fragment {
 					});
 			try {
 				final Object[] groupSlugs = groupSlugsList.toArray();
-				builder.setItems(groupNamesList.toArray(new String[groupNamesList.size() - 1]),
+				builder.setItems(groupSlugsList.toArray(new String[groupSlugsList.size() - 1]),
 						new DialogInterface.OnClickListener() {
 							public void onClick(DialogInterface dialog, int index) {
 								RestRequestManager requestManager = RestRequestManager.from(getActivity());
@@ -182,7 +182,7 @@ public class InviteUserFragment extends Fragment {
 				alert.show();
 			} catch (Exception e) {
 				AlertDialog.Builder builderInner = new AlertDialog.Builder(getActivity());
-                builderInner.setTitle("Attention");
+                builderInner.setTitle("Alert");
                 builderInner.setMessage("No groups available for select.\nCreate new group.");
                 builderInner.setPositiveButton("OK",
                         new DialogInterface.OnClickListener() {

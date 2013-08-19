@@ -9,58 +9,54 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
-import org.codehaus.jackson.annotate.JsonProperty;
-
 @Entity
 public class Session {
-	private long id;
-	private User user;
-	private String hash;
+	
+	private long mId;
+	private User mUser;
+	private String mHash;
 	
 	public Session(){
 	}
 	
 	public Session(String hash) {
-		this.hash = hash;
+		mHash = hash;
 	}
 	
-//	user
-	@JsonIgnore
+	// user
 	@ManyToOne(fetch=FetchType.EAGER, cascade = CascadeType.REFRESH)
     @JoinColumn(name="[user]", nullable=false)
 	public User getUser() {
-		return user;
+		return mUser;
 	}
 	public void setUser(User user) {
-		this.user = user;
+		this.mUser = user;
 	}
 
-//	hash
-	@JsonProperty("session_hash")
+	// hash
 	@Column(unique=true, nullable = false, length = 140)
 	public String getHash() {
-        return hash;
+        return mHash;
     }
 	public void setHash(String hash){
-		this.hash = hash;
+		this.mHash = hash;
 	}
 
 	@Id
     @GeneratedValue
     @Column(unique = true, nullable = false)
-	protected long getId() {
-        return id;
+	public long getId() {
+        return mId;
     }
 	protected void setId(long id){
-		this.id = id;
+		this.mId = id;
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + (int) (id ^ (id >>> 32));
+		result = prime * result + (int) (mId ^ (mId >>> 32));
 		return result;
 	}
 
@@ -73,7 +69,7 @@ public class Session {
 		if (getClass() != obj.getClass())
 			return false;
 		Session other = (Session) obj;
-		if (id != other.id)
+		if (mId != other.mId)
 			return false;
 		return true;
 	}

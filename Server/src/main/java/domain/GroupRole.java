@@ -10,56 +10,53 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
-
 @Entity
 public class GroupRole {
-	private long id;
-	private String role;
-	private Set<UserGroup> userGroups = new HashSet<UserGroup>();	
+	
+	private long mId;
+	private String mRole;
+	private Set<UserGroup> mUserGroups = new HashSet<UserGroup>();	
 	
 	public GroupRole(){
 	}
 	
 	public GroupRole(String role) {
-		this.role = role;
+		mRole = role;
 	}
 	
-	//	role
-	@JsonIgnore
-	@Column(unique=true, nullable = false, length = 20)
+	// role
+	@Column(name="[role]", unique=true, nullable = false, length = 20)
 	public String getRole() {
-        return role;
+        return mRole;
     }
 	public void setRole(String role){
-		this.role = role;
+		this.mRole = role;
 	}
 	
-//	UserGroup
-	@JsonIgnore
+	// userGroups
 	@OneToMany(mappedBy="groupRole", cascade=CascadeType.REFRESH)
 	public Set<UserGroup> getUserGroup() {
-		return this.userGroups;
+		return this.mUserGroups;
 	}
 	public void setUserGroup(Set<UserGroup> userGroups) {
-		this.userGroups = userGroups;
+		this.mUserGroups = userGroups;
 	}
 
 	@Id
     @GeneratedValue
     @Column(unique = true, nullable = false)
-    protected long getId() {
-        return id;
+    public long getId() {
+        return mId;
     }
 	protected void setId(long id){
-		this.id = id;
+		this.mId = id;
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + (int) (id ^ (id >>> 32));
+		result = prime * result + (int) (mId ^ (mId >>> 32));
 		return result;
 	}
 
@@ -72,7 +69,7 @@ public class GroupRole {
 		if (getClass() != obj.getClass())
 			return false;
 		GroupRole other = (GroupRole) obj;
-		if (id != other.id)
+		if (mId != other.mId)
 			return false;
 		return true;
 	}

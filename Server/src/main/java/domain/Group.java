@@ -11,79 +11,65 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
-import org.codehaus.jackson.annotate.JsonProperty;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 @Entity
 @Table(catalog="opennote")
 public class Group{
 	
-	private long id;
-	private String slug;
-	private String name;
-	private Set<UserGroup> userGroups = new HashSet<UserGroup>();	
-//	private Set<SimpleNote> simpleNotes = new HashSet<SimpleNote>();
+	private long mId;
+	private String mSlug;
+	private String mName;
+	private Set<UserGroup> mUserGroups = new HashSet<UserGroup>();	
 	
 	public Group(){
 	}
 	
 	public Group(String slug, String name) {
-		this.slug = slug;
-		this.name = name;
+		this.mSlug = slug;
+		this.mName = name;
 	}
 	
-//	slug
+	// slug
 	@Column(name="[slug]", unique=true, nullable = false, length = 20)
 	public String getSlug() {
-	    return slug;
+	    return mSlug;
 	}
 	public void setSlug(String slug){
-		this.slug = slug;
+		this.mSlug = slug;
 	}
 	
-//	name
+	// name
 	@Column(name="[name]", unique=false, nullable = false, length = 30)
 	public String getName() {
-	    return name;
+	    return mName;
 	}
 	public void setName(String name){
-		this.name = name;
+		this.mName = name;
 	}
 	
-//	User_Group
-	@JsonIgnore
+	// userGroups
 	@OneToMany(mappedBy="group", cascade=CascadeType.REFRESH)
 	public Set<UserGroup> getUserGroup() {
-		return this.userGroups;
+		return this.mUserGroups;
 	}
 	public void setUserGroup(Set<UserGroup> userGroups) {
-		this.userGroups = userGroups;
+		this.mUserGroups = userGroups;
 	}
 	
 	@Id
 	@GeneratedValue
 	@Column(unique = true, nullable = false)
 	protected long getId() {
-		return id;
+		return mId;
 	}
 	protected void setId(long id){
-		this.id = id;
-	}
-	
-	public String toJson() throws JSONException {
-		JSONObject json = new JSONObject();
-		json.put("slug", this.slug);
-		json.put("name", this.name);
-		return json.toString();
+		this.mId = id;
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + (int) (id ^ (id >>> 32));
+		result = prime * result + (int) (mId ^ (mId >>> 32));
 		return result;
 	}
 
@@ -96,7 +82,7 @@ public class Group{
 		if (getClass() != obj.getClass())
 			return false;
 		Group other = (Group) obj;
-		if (id != other.id)
+		if (mId != other.mId)
 			return false;
 		return true;
 	}

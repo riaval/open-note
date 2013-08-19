@@ -13,94 +13,88 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
-import org.codehaus.jackson.annotate.JsonProperty;
-
 @Entity
 public class UserGroup {
-	private long id;
-	private User user;
-	private Group group;
-	private GroupRole groupRole;
-	private Set<SimpleNote> simpleNotes = new HashSet<SimpleNote>();
-	private Set<Invite> invites = new HashSet<Invite>();
+	
+	private long mId;
+	private User mUser;
+	private Group mGroup;
+	private GroupRole mGroupRole;
+	private Set<SimpleNote> mSimpleNotes = new HashSet<SimpleNote>();
+	private Set<Invite> mInvites = new HashSet<Invite>();
 	
 	public UserGroup(){
 	}
 	
 	public UserGroup(User user, Group group, GroupRole groupRole) {
-		this.user = user;
-		this.group = group;
-		this.groupRole = groupRole;
+		this.mUser = user;
+		this.mGroup = group;
+		this.mGroupRole = groupRole;
 	}
 	
-//	user
-	@JsonIgnore
+	// user
 	@ManyToOne(fetch=FetchType.EAGER, cascade=CascadeType.REFRESH)
     @JoinColumn(name = "[user]")
 	public User getUser() {
-		return user;
+		return mUser;
 	}
 	public void setUser(User user) {
-		this.user = user;
+		this.mUser = user;
 	}
 	
-//	group
+	// group
 	@ManyToOne(fetch=FetchType.EAGER, cascade=CascadeType.REFRESH)
     @JoinColumn(name = "[group]")
 	public Group getGroup() {
-		return group;
+		return mGroup;
 	}
 	public void setGroup(Group group) {
-		this.group = group;
+		this.mGroup = group;
 	}
 	
-//	groupRole
-	@JsonIgnore
+	// groupRole
 	@ManyToOne(fetch=FetchType.EAGER, cascade=CascadeType.REFRESH)
     @JoinColumn(name = "[groupRole]")
 	public GroupRole getGroupRole() {
-		return groupRole;
+		return mGroupRole;
 	}
 	public void setGroupRole(GroupRole groupRole) {
-		this.groupRole = groupRole;
+		this.mGroupRole = groupRole;
 	}
 	
-//	simpleNotes
-	@JsonIgnore
+	// simpleNotes
 	@OneToMany(mappedBy="userGroup", fetch=FetchType.EAGER, cascade=CascadeType.REFRESH)
 	public Set<SimpleNote> getSimpleNotes(){
-		return simpleNotes;
+		return mSimpleNotes;
 	}
 	public void setSimpleNotes(Set<SimpleNote> simpleNotes){
-		this.simpleNotes = simpleNotes;
+		this.mSimpleNotes = simpleNotes;
 	}
 	
-//	invites
-	@JsonIgnore
+	// invites
 	@OneToMany(mappedBy="userGroup", fetch=FetchType.EAGER, cascade=CascadeType.REFRESH)
 	public Set<Invite> getInvites(){
-		return invites;
+		return mInvites;
 	}
 	public void setInvites(Set<Invite> invites){
-		this.invites = invites;
+		this.mInvites = invites;
 	}
 	
 	@Id
 	@GeneratedValue
 	@Column(unique = true, nullable = false)
 	protected long getId() {
-		return id;
+		return mId;
 	}
 	protected void setId(long id){
-		this.id = id;
+		this.mId = id;
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + (int) (id ^ (id >>> 32));
+		result = prime * result + (int) (mId ^ (mId >>> 32));
 		return result;
 	}
 
@@ -113,14 +107,9 @@ public class UserGroup {
 		if (getClass() != obj.getClass())
 			return false;
 		UserGroup other = (UserGroup) obj;
-		if (id != other.id)
+		if (mId != other.mId)
 			return false;
 		return true;
-	}
-	
-	@JsonProperty("group_role")
-	public String groupRole() {
-		return groupRole.getRole();
 	}
 	
 }

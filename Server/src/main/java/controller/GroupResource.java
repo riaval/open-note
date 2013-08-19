@@ -1,5 +1,7 @@
 package controller;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import org.restlet.data.Form;
@@ -15,7 +17,10 @@ import service.GroupService;
 import service.exception.BadAuthenticationException;
 import controller.representation.Status;
 import controller.representation.StatusFactory;
+import domain.User;
 import domain.UserGroup;
+import domain.response.UserGroupResponse;
+import domain.response.UserPublicResponse;
 
 public class GroupResource extends ServerResource {
 
@@ -55,8 +60,13 @@ public class GroupResource extends ServerResource {
 			GroupService groupService = new GroupService();
 			String sessionHash = getQuery().getValues("session_hash");
 			Set<UserGroup> userGroups = groupService.getGroups(sessionHash);
-
-			return new JacksonRepresentation<Set<UserGroup>>(userGroups);
+			
+			List<UserGroupResponse> groupsResponse = new ArrayList<UserGroupResponse>();
+			for (UserGroup each : userGroups) {
+				groupsResponse.add(new UserGroupResponse(each));
+			}
+			
+			return new JacksonRepresentation<List<UserGroupResponse>>(groupsResponse);
 		} catch (BadAuthenticationException e) {
 			e.printStackTrace();
 			return new JacksonRepresentation<Status>( StatusFactory.clientUnauthorized() );

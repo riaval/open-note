@@ -50,7 +50,7 @@ public class LoadAllNotesOperation implements Operation {
 				JSONObject user = groupsJson.getJSONObject(i).getJSONObject("user");
 
 				note.put(Note.LOGIN, user.getString("login") );
-				note.put(Note.FULL_NAME, user.getString("fullName"));
+				note.put(Note.FULL_NAME, user.getString("full_name"));
 				
 				note.put(Note._ID, groupsJson.getJSONObject(i).getString("id"));
 				note.put(Note.GROUP, groupsJson.getJSONObject(i).getString("group"));

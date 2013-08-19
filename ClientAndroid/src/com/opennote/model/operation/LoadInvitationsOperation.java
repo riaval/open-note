@@ -48,7 +48,7 @@ public class LoadInvitationsOperation implements Operation {
 				
 				invitation.put(Invitation._ID, groupsJson.getJSONObject(i).getString("id"));
 				invitation.put(Invitation.USER_LOGIN, user.getString("login"));
-				invitation.put(Invitation.USER_NAME, user.getString("fullName"));
+				invitation.put(Invitation.USER_NAME, user.getString("full_name"));
 				invitation.put(Invitation.GROUP_SLUG, group.getString("slug"));
 				invitation.put(Invitation.GROUP_NAME, group.getString("name"));
 				groupsValues[i] = invitation;

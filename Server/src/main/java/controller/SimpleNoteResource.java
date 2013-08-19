@@ -1,5 +1,7 @@
 package controller;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import org.restlet.data.Form;
@@ -16,6 +18,7 @@ import service.exception.BadAuthenticationException;
 import controller.representation.Status;
 import controller.representation.StatusFactory;
 import domain.SimpleNote;
+import domain.response.SimpleNoteResponse;
 
 public class SimpleNoteResource extends ServerResource {
 
@@ -36,7 +39,12 @@ public class SimpleNoteResource extends ServerResource {
 			String sessionHash = getQuery().getValues("session_hash");
 			Set<SimpleNote> simpleNotes = simpleNoteService.getAllSimpleNotes(sessionHash);
 
-			return new JacksonRepresentation<Set<SimpleNote>>(simpleNotes);
+			List<SimpleNoteResponse> simpleNotesResponse = new ArrayList<SimpleNoteResponse>();
+			for (SimpleNote each : simpleNotes) {
+				simpleNotesResponse.add(new SimpleNoteResponse(each));
+			}
+
+			return new JacksonRepresentation<List<SimpleNoteResponse>>(simpleNotesResponse);
 		} catch (BadAuthenticationException e) {
 			e.printStackTrace();
 			return new JacksonRepresentation<Status>( StatusFactory.clientUnauthorized() );
@@ -85,12 +93,12 @@ public class SimpleNoteResource extends ServerResource {
 			simpleNoteService.deleteSimpleNotes(sessionHash, IDs);
 
 			return new JacksonRepresentation<Status>( StatusFactory.ok() );
-//		} catch (BadAuthenticationException e) {
-//			e.printStackTrace();
-//			return new JacksonRepresentation<Status>( StatusFactory.clientUnauthorized() );
-//		} catch (IllegalArgumentException e) {
-//			e.printStackTrace();
-//			return new JacksonRepresentation<Status>( StatusFactory.clientBadRequest() );
+		} catch (BadAuthenticationException e) {
+			e.printStackTrace();
+			return new JacksonRepresentation<Status>( StatusFactory.clientUnauthorized() );
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+			return new JacksonRepresentation<Status>( StatusFactory.clientBadRequest() );
 		} catch (Exception e) {
 			e.printStackTrace();
 			return new JacksonRepresentation<Status>( StatusFactory.serverInternalError() );

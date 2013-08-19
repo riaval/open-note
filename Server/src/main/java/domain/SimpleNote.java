@@ -1,9 +1,7 @@
 package domain;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Locale;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -13,102 +11,94 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
-import org.codehaus.jackson.annotate.JsonProperty;
-
 @Entity
 public class SimpleNote {
-	private long id;
-	private String title;
-	private String body;
-	private Date date;
-	private UserGroup userGroup = new UserGroup();	
+	
+	private long mId;
+	private String mTitle;
+	private String mBody;
+	private Date mDate;
+	private UserGroup mUserGroup = new UserGroup();	
 	
 	public SimpleNote(){
 	}
 	
 	public SimpleNote(String title, String body) {
-		this.title = title;
-		this.body = body;
-		this.date = Calendar.getInstance().getTime();
+		mTitle = title;
+		mBody = body;
+		mDate = Calendar.getInstance().getTime();
 	}
 	
-//	title
+	// title
 	@Column(unique=false, nullable = false, length = 45)
 	public String getTitle() {
-		return title;
+		return mTitle;
 	}
 	public void setTitle(String title) {
-		this.title = title;
+		this.mTitle = title;
 	}
 
-//	body
+	// body
 	@Column(unique=false, nullable = true, length = 250)
 	public String getBody() {
-		return body;
+		return mBody;
 	}
 	public void setBody(String body) {
-		this.body = body;
+		this.mBody = body;
 	}
 
-//	date
-	@JsonIgnore
+	// date
 	@Column(unique=false, nullable = false)
 	public Date getDate() {
-		return date;
+		return mDate;
 	}
 	public void setDate(Date date) {
-		this.date = date;
+		this.mDate = date;
 	}
 	public void updateDate(){
-		this.date = Calendar.getInstance().getTime();
+		this.mDate = Calendar.getInstance().getTime();
 	}
 	
-//	UserGroup
-	@JsonIgnore
+	// userGroup
 	@ManyToOne(cascade = CascadeType.REFRESH)
     @JoinColumn(name="[userGroup]", nullable=false)
 	public UserGroup getUserGroup() {
-		return userGroup;
+		return mUserGroup;
 	}
 	public void setUserGroup(UserGroup userGroup) {
-		this.userGroup = userGroup;
+		this.mUserGroup = userGroup;
 	}
 	
 	@Id
     @GeneratedValue
     @Column(unique = true, nullable = false)
-    protected long getId() {
-        return id;
+    public long getId() {
+        return mId;
     }
 	protected void setId(long id){
-		this.id = id;
+		this.mId = id;
 	}
 
-//	JSON
-	@JsonProperty("user")
-	public User jsonUser() {
-		return this.userGroup.getUser();
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + (int) (mId ^ (mId >>> 32));
+		return result;
 	}
-	@JsonProperty("date")
-	public String jsonDate() {
-		SimpleDateFormat sdf = new SimpleDateFormat("dd MMM. HH:mm", Locale.US);
-		return sdf.format(date);
-	}
-	@JsonProperty("id")
-	public long id() {
-		return id;
-	}
-	@JsonProperty("creator")
-	public boolean creator() {
-		if(userGroup.getGroupRole().getRole().equals("creator")){
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
 			return true;
-		}
-		return false;
-	}
-	@JsonProperty("group")
-	public String group() {
-		return userGroup.getGroup().getSlug();
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		SimpleNote other = (SimpleNote) obj;
+		if (mId != other.mId)
+			return false;
+		return true;
 	}
 	
 }

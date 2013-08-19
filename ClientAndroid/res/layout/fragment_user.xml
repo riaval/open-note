@@ -7,7 +7,6 @@
     android:padding="16dp" >
 
     <TextView
-        android:id="@+id/loginUpView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="11dp"
@@ -19,7 +18,7 @@
         android:orientation="horizontal" >
 
         <EditText
-            android:id="@+id/loginUpEdit"
+            android:id="@+id/userLoginEdit"
             android:layout_width="0dp"
             android:layout_height="48dp"
             android:layout_weight="1"
@@ -27,7 +26,7 @@
             android:enabled="false"
             android:hint="6—15 characters"
             android:inputType="text"
-            android:text="riaval" />
+            android:text="[login]" />
 
         <ImageButton
             android:id="@+id/userLogOutBt"
@@ -41,7 +40,6 @@
     </LinearLayout>
 
     <TextView
-        android:id="@+id/fullNameUpView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="11dp"
@@ -49,17 +47,16 @@
         android:text="Full name" />
 
     <EditText
-        android:id="@+id/fullNameUpEdit"
+        android:id="@+id/userFullNameEdit"
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:layout_below="@+id/fullNameUpView"
         android:ems="10"
         android:hint="First and last name"
         android:inputType="textPersonName"
-        android:text="Zhukov Dmitry" />
+        android:text="[Full name]" />
 
     <TextView
-        android:id="@+id/passUpView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="11dp"
@@ -67,7 +64,7 @@
         android:text="Email" />
 
     <EditText
-        android:id="@+id/passUpEdit"
+        android:id="@+id/userEmailEdit"
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:ems="10"
@@ -76,7 +73,6 @@
         android:inputType="textEmailAddress" />
 
     <TextView
-        android:id="@+id/passUpView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="11dp"
@@ -89,7 +85,6 @@
         android:orientation="horizontal" >
 
         <EditText
-            android:id="@+id/passUpEdit"
             android:layout_width="0dp"
             android:layout_height="48dp"
             android:layout_weight="1"
@@ -101,7 +96,7 @@
             android:text="password" />
 
         <ImageButton
-            android:id="@+id/searchBt"
+            android:id="@+id/userEditPassImgBt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical|center_horizontal"

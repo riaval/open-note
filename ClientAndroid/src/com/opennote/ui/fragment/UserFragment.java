@@ -9,23 +9,42 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageButton;
 
-import com.foxykeep.datadroid.requestmanager.Request;
 import com.opennote.R;
-import com.opennote.model.RequestFactory;
 
 public class UserFragment extends Fragment {
 
 	View mRootView;
+	String mFullName;
+	String mEmail;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		mRootView = inflater.inflate(R.layout.fragment_user, container, false);
 
-		// Get action button
+		// Get Preferences values
+		SharedPreferences sharedPref = getActivity().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+		String login = sharedPref.getString(getString(R.string.user_login), null);
+		String fullName = sharedPref.getString(getString(R.string.user_full_name), null);
+		String email = sharedPref.getString(getString(R.string.user_email), null);
+		
+		// Get EtitText
+		EditText loginEdit = (EditText) mRootView.findViewById(R.id.userLoginEdit);
+		EditText fullNameEdit = (EditText) mRootView.findViewById(R.id.userFullNameEdit);
+		EditText emailEdit = (EditText) mRootView.findViewById(R.id.userEmailEdit);
+		
+		// Swap EtitText values
+		mFullName = fullNameEdit.getText().toString();
+		mEmail = emailEdit.getText().toString();
+		
+		// Set Preferences values to EditTexts
+		loginEdit.setText(login);
+		fullNameEdit.setText(fullName);
+		emailEdit.setText(email);
+		
 		ImageButton button = (ImageButton) mRootView.findViewById(R.id.userLogOutBt);
-		// Add onClick listener
 		button.setOnClickListener(new LogOutAction());
 		
 		return mRootView;

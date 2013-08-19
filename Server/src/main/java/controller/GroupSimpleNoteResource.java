@@ -1,5 +1,7 @@
 package controller;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import org.restlet.data.Form;
@@ -15,6 +17,7 @@ import service.exception.BadAuthenticationException;
 import controller.representation.Status;
 import controller.representation.StatusFactory;
 import domain.SimpleNote;
+import domain.response.SimpleNoteResponse;
 
 public class GroupSimpleNoteResource extends ServerResource {
 
@@ -57,7 +60,12 @@ public class GroupSimpleNoteResource extends ServerResource {
 			String sessionHash = getQuery().getValues("session_hash");
 			Set<SimpleNote> simpleNotes = simpleNoteService.getSimpleNotes(groupSlug, sessionHash);
 
-			return new JacksonRepresentation<Set<SimpleNote>>(simpleNotes);
+			List<SimpleNoteResponse> simpleNotesResponse = new ArrayList<SimpleNoteResponse>();
+			for (SimpleNote each : simpleNotes) {
+				simpleNotesResponse.add(new SimpleNoteResponse(each));
+			}
+
+			return new JacksonRepresentation<List<SimpleNoteResponse>>(simpleNotesResponse);
 		} catch (BadAuthenticationException e) {
 			e.printStackTrace();
 			return new JacksonRepresentation<Status>( StatusFactory.clientUnauthorized() );
