@@ -158,6 +158,7 @@ public class GroupFragment extends ListFragment {
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		inflater.inflate(R.menu.notes, menu);
+		menu.removeItem(R.id.action_new_list);
 		if(mCurrentGroup.getRole().equals(CREATOR)){
 			menu.removeItem(R.id.action_left);
 		} else {

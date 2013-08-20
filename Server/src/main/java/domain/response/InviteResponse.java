@@ -16,19 +16,19 @@ public class InviteResponse {
 	public long getId() {
 		return mInvite.getId();
 	}
-	
+
 	@JsonProperty("user")
 	public UserPublicResponse getUser() {
 		return new UserPublicResponse(
 				mInvite.getUserGroup().getUser()
-			);
+				);
 	}
-	
+
 	@JsonProperty("group")
 	public GroupResponse getGroup() {
 		return new GroupResponse(
 				mInvite.getUserGroup().getGroup()
-			);
+				);
 	}
 
 }

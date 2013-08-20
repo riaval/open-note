@@ -17,12 +17,12 @@ import controller.representation.StatusFactory;
 public class UserGroupResource extends ServerResource{
 
 	private String groupSlug;
-	
+
 	@Override
 	protected void doInit() throws ResourceException {
 		this.groupSlug = (String) getRequest().getAttributes().get("groupSlug");
 	}
-	
+
 	@Post
 	public Representation addUserToGroup(Representation entity) {
 		Form form = new Form(entity);
@@ -30,7 +30,7 @@ public class UserGroupResource extends ServerResource{
 			InviteService inviteService = new InviteService();
 			String sessionHash = form.getFirstValue("session_hash");
 			inviteService.acceptInvitation(sessionHash, groupSlug);
-			
+
 			return new JacksonRepresentation<Status>( StatusFactory.created() );
 		} catch (BadAuthenticationException e) {
 			e.printStackTrace();
@@ -43,7 +43,7 @@ public class UserGroupResource extends ServerResource{
 			return new JacksonRepresentation<Status>( StatusFactory.serverInternalError() );
 		}
 	}
-	
+
 	@Delete
 	public Representation deleteUserFromGroup(){
 		try {
@@ -51,7 +51,7 @@ public class UserGroupResource extends ServerResource{
 			String sessionHash = getQuery().getValues("session_hash");
 			System.out.println(groupSlug);
 			userGroupService.deleteUserFromGroup(sessionHash, groupSlug);
-			
+
 			return new JacksonRepresentation<Status>( StatusFactory.ok() );
 		} catch (BadAuthenticationException e) {
 			e.printStackTrace();
@@ -64,5 +64,5 @@ public class UserGroupResource extends ServerResource{
 			return new JacksonRepresentation<Status>( StatusFactory.serverInternalError() );
 		}
 	}
-	
+
 }

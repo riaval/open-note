@@ -20,7 +20,6 @@ public class ServiceUtil {
 	}
 
 	static private String getMD5(String str) throws NoSuchAlgorithmException {
-
 		MessageDigest md = MessageDigest.getInstance("MD5");
 		md.update(str.getBytes());
 

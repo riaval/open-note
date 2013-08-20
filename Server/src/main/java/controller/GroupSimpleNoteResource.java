@@ -77,5 +77,5 @@ public class GroupSimpleNoteResource extends ServerResource {
 			return new JacksonRepresentation<Status>( StatusFactory.serverInternalError() );
 		}
 	}
-	
+
 }

@@ -10,7 +10,8 @@ import domain.User;
 
 public class UserService {
 
-	public Session createUser(String login, String fullName, String password, String hostIp, String hostAgent) throws Exception {
+	public Session createUser(String login, String fullName, String password, String hostIp, String hostAgent)
+			throws Exception {
 		if (login.length() < 4) {
 			throw new IllegalArgumentException("Login length < 4 characters.");
 		}
@@ -25,41 +26,61 @@ public class UserService {
 		session.setUser(user);
 
 		HibernateUtil.beginTransaction(); // ---->
-		DAOFactory.getUserDAO().save(user);
-		DAOFactory.getSessionDAO().save(session);
-		HibernateUtil.commitTransaction(); // <----
+		try {
+			DAOFactory.getUserDAO().save(user);
+			DAOFactory.getSessionDAO().save(session);
+			HibernateUtil.commitTransaction(); // <----
+		} catch (Exception e) {
+			HibernateUtil.rollbackTransaction();
+			throw e;
+		} finally {
+			HibernateUtil.closeSession();
+		}
 
 		return session;
 	}
-	
+
 	public List<User> getUsers(String sessionHash, String search) throws Exception {
 		HibernateUtil.beginTransaction(); // ---->
-		Session session = DAOFactory.getSessionDAO().findByHash(sessionHash);
-		if(session == null){
-			HibernateUtil.commitTransaction(); // <----
-			throw new BadAuthenticationException("Session is empty");
-		}
-		User user = session.getUser();
-		List<User> users = DAOFactory.getUserDAO().findUsers(search);
-		for (int i=0; i<users.size(); i++){
-			if (users.get(i).equals(user)){
-				users.remove(i);
+		try {
+			Session session = DAOFactory.getSessionDAO().findByHash(sessionHash);
+			if (session == null) {
+				throw new BadAuthenticationException("Session is empty");
 			}
+			User user = session.getUser();
+			List<User> users = DAOFactory.getUserDAO().findUsers(search);
+			for (int i = 0; i < users.size(); i++) {
+				if (users.get(i).equals(user)) {
+					users.remove(i);
+				}
+			}
+			HibernateUtil.commitTransaction(); // <----
+
+			return users;
+		} catch (Exception e) {
+			HibernateUtil.rollbackTransaction();
+			throw e;
+		} finally {
+			HibernateUtil.closeSession();
 		}
-		HibernateUtil.commitTransaction(); // <----
-		return users;
 	}
-	
+
 	public User getCurrentUser(String sessionHash) throws Exception {
 		HibernateUtil.beginTransaction(); // ---->
-		Session session = DAOFactory.getSessionDAO().findByHash(sessionHash);
-		if(session == null){
-			HibernateUtil.commitTransaction(); // <----
-			throw new BadAuthenticationException("Session is empty");
+		try {
+			Session session = DAOFactory.getSessionDAO().findByHash(sessionHash);
+			if (session == null) {
+				throw new BadAuthenticationException("Session is empty");
+			}
+			User user = session.getUser();
+
+			return user;
+		} catch (Exception e) {
+			HibernateUtil.rollbackTransaction();
+			throw e;
+		} finally {
+			HibernateUtil.closeSession();
 		}
-		User user = session.getUser();
-		
-		return null;
 	}
 
 }

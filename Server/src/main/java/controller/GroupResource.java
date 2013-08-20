@@ -17,10 +17,8 @@ import service.GroupService;
 import service.exception.BadAuthenticationException;
 import controller.representation.Status;
 import controller.representation.StatusFactory;
-import domain.User;
 import domain.UserGroup;
 import domain.response.UserGroupResponse;
-import domain.response.UserPublicResponse;
 
 public class GroupResource extends ServerResource {
 
@@ -60,12 +58,12 @@ public class GroupResource extends ServerResource {
 			GroupService groupService = new GroupService();
 			String sessionHash = getQuery().getValues("session_hash");
 			Set<UserGroup> userGroups = groupService.getGroups(sessionHash);
-			
+
 			List<UserGroupResponse> groupsResponse = new ArrayList<UserGroupResponse>();
 			for (UserGroup each : userGroups) {
 				groupsResponse.add(new UserGroupResponse(each));
 			}
-			
+
 			return new JacksonRepresentation<List<UserGroupResponse>>(groupsResponse);
 		} catch (BadAuthenticationException e) {
 			e.printStackTrace();
@@ -75,7 +73,7 @@ public class GroupResource extends ServerResource {
 			return new JacksonRepresentation<Status>( StatusFactory.serverInternalError() );
 		}
 	}
-	
+
 	@Delete
 	public Representation deleteGroup(){
 		try {

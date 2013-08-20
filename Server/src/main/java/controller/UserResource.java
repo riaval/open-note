@@ -17,37 +17,41 @@ import controller.representation.Status;
 import controller.representation.StatusFactory;
 import domain.Session;
 import domain.User;
+import domain.response.SessionResponse;
+import domain.response.UserPrivateResponse;
 import domain.response.UserPublicResponse;
 
 public class UserResource extends ServerResource {
-	
-	private String login;
-	
+
+	private String mLogin;
+
 	@Override
 	protected void doInit() throws ResourceException {
-	    this.login = (String) getRequest().getAttributes().get("login");
+		mLogin = (String) getRequest().getAttributes().get("login");
 	}
-	
+
 	@Post
 	public Representation createUser(Representation entity) {
 		Form form = new Form(entity);
 		try {
 			UserService userService = new UserService();
-			
+
 			String fullName = form.getFirstValue("full_name");
 			String password = form.getFirstValue("password");
 			String hostIp = getClientInfo().getAddress();
 			String hostAgent = getClientInfo().getAgent();
-			
+
 			Session session = userService.createUser(
-					  login
+					  mLogin
 					, fullName
 					, password
 					, hostIp
 					, hostAgent
-			);
-	
-			return new JacksonRepresentation<Session>(session);
+					);
+
+			return new JacksonRepresentation<SessionResponse>(
+					new SessionResponse(session)
+					);
 		} catch (IllegalArgumentException e) {
 			e.printStackTrace();
 			return new JacksonRepresentation<Status>( StatusFactory.clientBadRequest() );
@@ -56,21 +60,15 @@ public class UserResource extends ServerResource {
 			return new JacksonRepresentation<Status>( StatusFactory.serverInternalError() );
 		}
 	}
-	
-	@Get("json")
-	public Representation getUsers(){
-		try {
-			UserService userService = new UserService();
-			String sessionHash = getQuery().getValues("session_hash");
-			String search = getQuery().getValues("search");
-			
-			List<User> users = userService.getUsers(sessionHash, search);
-			List<UserPublicResponse> usersResponse = new ArrayList<UserPublicResponse>();
-			for (User each : users) {
-				usersResponse.add(new UserPublicResponse(each));
-			}
 
-			return new JacksonRepresentation<List<UserPublicResponse>>(usersResponse);
+	@Get("json")
+	public Representation getUserData(){
+		try {
+			if (getQuery().getValues("search") == null){
+				return mono();
+			} else {
+				return multi();
+			}
 		} catch (BadAuthenticationException e) {
 			e.printStackTrace();
 			return new JacksonRepresentation<Status>( StatusFactory.clientUnauthorized() );
@@ -79,4 +77,29 @@ public class UserResource extends ServerResource {
 		}
 	}
 	
+	private Representation multi() throws Exception {
+		UserService userService = new UserService();
+		String sessionHash = getQuery().getValues("session_hash");
+		String search = getQuery().getValues("search");
+
+		List<User> users = userService.getUsers(sessionHash, search);
+		List<UserPublicResponse> usersResponse = new ArrayList<UserPublicResponse>();
+		for (User each : users) {
+			usersResponse.add(new UserPublicResponse(each));
+		}
+
+		return new JacksonRepresentation<List<UserPublicResponse>>(usersResponse);
+	}
+	
+	private Representation mono() throws Exception {
+		UserService userService = new UserService();
+		String sessionHash = getQuery().getValues("session_hash");
+		
+		User user = userService.getCurrentUser(sessionHash);
+		
+		return new JacksonRepresentation<UserPrivateResponse>(
+				new UserPrivateResponse(user)
+				);
+	}
+
 }

@@ -11,21 +11,21 @@ import javax.persistence.ManyToOne;
 
 @Entity
 public class Session {
-	
+
 	private long mId;
 	private User mUser;
 	private String mHash;
-	
+
 	public Session(){
 	}
-	
+
 	public Session(String hash) {
 		mHash = hash;
 	}
-	
+
 	// user
 	@ManyToOne(fetch=FetchType.EAGER, cascade = CascadeType.REFRESH)
-    @JoinColumn(name="[user]", nullable=false)
+	@JoinColumn(name="[user]", nullable=false)
 	public User getUser() {
 		return mUser;
 	}
@@ -36,18 +36,18 @@ public class Session {
 	// hash
 	@Column(unique=true, nullable = false, length = 140)
 	public String getHash() {
-        return mHash;
-    }
+		return mHash;
+	}
 	public void setHash(String hash){
 		this.mHash = hash;
 	}
 
 	@Id
-    @GeneratedValue
-    @Column(unique = true, nullable = false)
+	@GeneratedValue
+	@Column(unique = true, nullable = false)
 	public long getId() {
-        return mId;
-    }
+		return mId;
+	}
 	protected void setId(long id){
 		this.mId = id;
 	}
@@ -73,5 +73,5 @@ public class Session {
 			return false;
 		return true;
 	}
-	
+
 }

@@ -61,7 +61,8 @@ public class LoadNotesOperation implements Operation{
 		} catch (JSONException e) {
 			throw new DataException(e.getMessage());
 		}
-        context.getContentResolver().delete(RestContact.Note.CONTENT_URI, Note.GROUP + " = ?", new String[]{slug});
+        context.getContentResolver().delete(RestContact.Note.CONTENT_URI, null, null);
+//        context.getContentResolver().delete(RestContact.Note.CONTENT_URI, Note.GROUP + " = ?", new String[]{slug});
         context.getContentResolver().bulkInsert(RestContact.Note.CONTENT_URI, notesValues);
         
 		return null;

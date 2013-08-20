@@ -18,12 +18,10 @@ import service.exception.BadAuthenticationException;
 import controller.representation.Status;
 import controller.representation.StatusFactory;
 import domain.Invite;
-import domain.SimpleNote;
 import domain.response.InviteResponse;
-import domain.response.SimpleNoteResponse;
 
 public class InviteResource extends ServerResource {
-	
+
 	private String slug;
 	private String login;
 	private long invitationId;
@@ -37,7 +35,7 @@ public class InviteResource extends ServerResource {
 			this.invitationId = Long.parseLong(invitationId);
 		}
 	}
-	
+
 	@Post
 	public Representation createInvite(Representation entity) {
 		Form form = new Form(entity);
@@ -45,7 +43,7 @@ public class InviteResource extends ServerResource {
 			InviteService inviteService = new InviteService();
 			String sessionHash = form.getFirstValue("session_hash");
 			inviteService.createInvitation(slug, login, sessionHash);
-			
+
 			return new JacksonRepresentation<Status>( StatusFactory.created() );
 		} catch (BadAuthenticationException e) {
 			e.printStackTrace();
@@ -58,7 +56,7 @@ public class InviteResource extends ServerResource {
 			return new JacksonRepresentation<Status>( StatusFactory.serverInternalError() );
 		}
 	}
-	
+
 	@Get
 	public Representation getInvites() {
 		try {
@@ -80,7 +78,7 @@ public class InviteResource extends ServerResource {
 			return new JacksonRepresentation<Status>( StatusFactory.serverInternalError() );
 		}
 	}
-	
+
 	@Delete
 	public Representation deleteInvite() {
 		try {
@@ -100,5 +98,5 @@ public class InviteResource extends ServerResource {
 			return new JacksonRepresentation<Status>( StatusFactory.serverInternalError() );
 		}
 	}
-	
+
 }

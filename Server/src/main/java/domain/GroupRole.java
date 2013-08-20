@@ -12,27 +12,27 @@ import javax.persistence.OneToMany;
 
 @Entity
 public class GroupRole {
-	
+
 	private long mId;
 	private String mRole;
 	private Set<UserGroup> mUserGroups = new HashSet<UserGroup>();	
-	
+
 	public GroupRole(){
 	}
-	
+
 	public GroupRole(String role) {
 		mRole = role;
 	}
-	
+
 	// role
 	@Column(name="[role]", unique=true, nullable = false, length = 20)
 	public String getRole() {
-        return mRole;
-    }
+		return mRole;
+	}
 	public void setRole(String role){
 		this.mRole = role;
 	}
-	
+
 	// userGroups
 	@OneToMany(mappedBy="groupRole", cascade=CascadeType.REFRESH)
 	public Set<UserGroup> getUserGroup() {
@@ -43,11 +43,11 @@ public class GroupRole {
 	}
 
 	@Id
-    @GeneratedValue
-    @Column(unique = true, nullable = false)
-    public long getId() {
-        return mId;
-    }
+	@GeneratedValue
+	@Column(unique = true, nullable = false)
+	public long getId() {
+		return mId;
+	}
 	protected void setId(long id){
 		this.mId = id;
 	}
@@ -73,5 +73,5 @@ public class GroupRole {
 			return false;
 		return true;
 	}
-	
+
 }

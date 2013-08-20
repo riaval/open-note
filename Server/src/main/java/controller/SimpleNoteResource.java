@@ -31,7 +31,7 @@ public class SimpleNoteResource extends ServerResource {
 			this.snoteID = Long.parseLong(snoteIDObj.toString());
 		}
 	}
-	
+
 	@Get("json")
 	public Representation getAllSimpleNotes(){
 		SimpleNoteService simpleNoteService = new SimpleNoteService();
@@ -56,7 +56,7 @@ public class SimpleNoteResource extends ServerResource {
 			return new JacksonRepresentation<Status>( StatusFactory.serverInternalError() );
 		}
 	}
-	
+
 	@Put
 	public Representation editSimpleNote(Representation entity){
 		Form form = new Form(entity);
@@ -79,7 +79,7 @@ public class SimpleNoteResource extends ServerResource {
 			return new JacksonRepresentation<Status>( StatusFactory.serverInternalError() );
 		}
 	}
-	
+
 	@Delete
 	public Representation deleteSimpleNotes(){
 		SimpleNoteService simpleNoteService = new SimpleNoteService();

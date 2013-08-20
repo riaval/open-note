@@ -31,22 +31,51 @@ public final class SignInOperation implements Operation {
 		HashMap<String, String> params = new HashMap<String, String>();
 		params.put("password", request.getString("password"));
 		connection.setParameters(params);
-
 		connection.setMethod(Method.POST);
 		ConnectionResult result = connection.execute();
 		
+		String sessionHash;
         try {
 			JSONObject jsonBbject = new JSONObject(result.body);
-			SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-			SharedPreferences.Editor editor = sharedPref.edit();
+//			SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+//			SharedPreferences.Editor editor = sharedPref.edit();
 			
-			String sessionHash = jsonBbject.get("session_hash").toString();
-			editor.putString(context.getString(R.string.session_hash), sessionHash);
-			editor.putString(context.getString(R.string.user_login), login);
-			editor.commit();
+			sessionHash = jsonBbject.get("session_hash").toString();
+//			editor.putString(context.getString(R.string.session_hash), sessionHash);
+//			editor.putString(context.getString(R.string.user_login), login);
+//			editor.commit();
         } catch (JSONException e) {
             throw new DataException(e.getMessage());
         }
+        
+		params.clear();
+		params.put("session_hash", sessionHash);
+		address = "http://" + host + "/api/users/";
+		connection = new NetworkConnection(context, address);
+		connection.setParameters(params);
+		connection.setMethod(Method.GET);
+		result = connection.execute();
+		
+		String fullName;
+        String email;
+        
+        try {
+			JSONObject jsonBbject = new JSONObject(result.body);
+			fullName = jsonBbject.get("full_name").toString();	
+			email = jsonBbject.get("email").toString();
+		} catch (JSONException e) {
+			throw new DataException(e.getMessage());
+		}
+        
+        SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+		SharedPreferences.Editor editor = sharedPref.edit();
+		
+		editor.putString(context.getString(R.string.session_hash), sessionHash);
+		editor.putString(context.getString(R.string.user_login), login);
+		editor.putString(context.getString(R.string.user_full_name), fullName);
+		editor.putString(context.getString(R.string.user_email), email);
+		
+		editor.commit();
       
 		return null;
 	}

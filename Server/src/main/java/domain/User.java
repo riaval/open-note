@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.Random;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -17,7 +16,7 @@ import javax.persistence.OneToMany;
 
 @Entity
 public class User {
-	
+
 	private long mId;
 	private String mLogin;
 	private String mFullName;
@@ -28,18 +27,20 @@ public class User {
 	private Set<Session> mSessions = new HashSet<Session>();
 	private Set<UserGroup> mUserGroups = new HashSet<UserGroup>();
 	private Set<Invite> mInvites = new HashSet<Invite>();
-	
+
 	public User(){
 	}
-	
+
 	public User(String login, String fullName, String passwordHash) {
 		mLogin = login;
 		mFullName = fullName;
 		mPasswordHash = passwordHash;
 		mDate = Calendar.getInstance().getTime();
-		mColor = generateRandomColor(new Color(255, 255, 255)).getRGB();
+		mColor = DomainUtil.generateRandomColor(
+				new Color(255, 255, 255)
+				).getRGB();
 	}
-	
+
 	// login
 	@Column(unique=true, nullable = false, length = 24)
 	public String getLogin() {
@@ -48,7 +49,7 @@ public class User {
 	public void setLogin(String login){
 		this.mLogin = login;
 	}
-	
+
 	// full name
 	@Column(unique=false, nullable = false, length = 36)
 	public String getFullName() {
@@ -57,7 +58,7 @@ public class User {
 	public void setFullName(String firstName){
 		this.mFullName = firstName;
 	}
-	
+
 	// passwordHash
 	@Column(unique=false, nullable = false, length = 124)
 	public String getPasswordHash() {
@@ -66,7 +67,7 @@ public class User {
 	public void setPasswordHash(String passwordHash){
 		this.mPasswordHash = passwordHash;
 	}
-	
+
 	// email
 	@Column(unique=false, nullable = true, length = 45)
 	public String getEmail() {
@@ -75,7 +76,7 @@ public class User {
 	public void setEmail(String email){
 		this.mEmail = email;
 	}
-	
+
 	// date
 	@Column(unique=false, nullable = false)
 	public Date getDate() {
@@ -84,7 +85,7 @@ public class User {
 	public void setDate(Date date){
 		this.mDate = date;
 	}
-	
+
 	// sessions
 	@OneToMany(mappedBy="user", fetch=FetchType.EAGER, cascade=CascadeType.REFRESH)
 	public Set<Session> getSession(){
@@ -93,7 +94,7 @@ public class User {
 	public void setSession(Set<Session> sessions){
 		this.mSessions = sessions;
 	}
-	
+
 	// userGroups
 	@OneToMany(mappedBy="user", fetch=FetchType.EAGER, cascade=CascadeType.REFRESH)
 	public Set<UserGroup> getUserGroups() {
@@ -102,7 +103,7 @@ public class User {
 	public void setUserGroups(Set<UserGroup> userGroups) {
 		this.mUserGroups = userGroups;
 	}
-	
+
 	// invites
 	@OneToMany(mappedBy="user", fetch=FetchType.EAGER, cascade=CascadeType.REFRESH)
 	public Set<Invite> getInvites() {
@@ -111,7 +112,7 @@ public class User {
 	public void setInvites(Set<Invite> invites) {
 		this.mInvites = invites;
 	}
-	
+
 	@Column(unique=false, nullable = true)
 	public int getColor() {
 		return mColor;
@@ -119,7 +120,7 @@ public class User {
 	public void setColor(int color) {
 		this.mColor = color;
 	}
-	
+
 	@Id
 	@GeneratedValue
 	@Column(unique = true, nullable = false)
@@ -128,23 +129,6 @@ public class User {
 	}
 	protected void setId(long id){
 		this.mId = id;
-	}
-	
-	private Color generateRandomColor(Color mix) {
-	    Random random = new Random();
-	    int red = random.nextInt(256);
-	    int green = random.nextInt(256);
-	    int blue = random.nextInt(256);
-
-	    // mix the color
-	    if (mix != null) {
-	        red = (red + mix.getRed()) / 2;
-	        green = (green + mix.getGreen()) / 2;
-	        blue = (blue + mix.getBlue()) / 2;
-	    }
-
-	    Color color = new Color(red, green, blue);
-	    return color;
 	}
 
 	@Override

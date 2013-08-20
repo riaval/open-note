@@ -16,7 +16,7 @@ public class UserGroupResponse {
 	public GroupResponse getSlug() {
 		return new GroupResponse(
 				mUserGroup.getGroup()
-			);
+				);
 	}
 
 	@JsonProperty("group_role")

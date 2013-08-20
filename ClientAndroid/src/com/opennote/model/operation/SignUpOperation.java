@@ -29,8 +29,10 @@ public final class SignUpOperation implements Operation {
 
 		NetworkConnection connection = new NetworkConnection(context, address);
 		HashMap<String, String> params = new HashMap<String, String>();
-		params.put("full_name", request.getString("full_name"));
-		params.put("password", request.getString("password"));
+		String fullName = request.getString("full_name");
+		String password = request.getString("password");
+		params.put("full_name", fullName);
+		params.put("password", password);
 		connection.setParameters(params);
 
 		connection.setMethod(Method.POST);
@@ -42,7 +44,9 @@ public final class SignUpOperation implements Operation {
 			SharedPreferences.Editor editor = sharedPref.edit();
 			
 			editor.putString(context.getString(R.string.session_hash), jsonBbject.get("session_hash").toString());
+			editor.putString(context.getString(R.string.user_full_name), fullName);
 			editor.putString(context.getString(R.string.user_login), login);
+			editor.putString(context.getString(R.string.user_email), null);
 			editor.commit();
 		} catch (JSONException e) {
 			throw new DataException(e.getMessage());

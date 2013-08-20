@@ -15,53 +15,53 @@ import javax.persistence.OneToMany;
 
 @Entity
 public class UserGroup {
-	
+
 	private long mId;
 	private User mUser;
 	private Group mGroup;
 	private GroupRole mGroupRole;
 	private Set<SimpleNote> mSimpleNotes = new HashSet<SimpleNote>();
 	private Set<Invite> mInvites = new HashSet<Invite>();
-	
+
 	public UserGroup(){
 	}
-	
+
 	public UserGroup(User user, Group group, GroupRole groupRole) {
 		this.mUser = user;
 		this.mGroup = group;
 		this.mGroupRole = groupRole;
 	}
-	
+
 	// user
 	@ManyToOne(fetch=FetchType.EAGER, cascade=CascadeType.REFRESH)
-    @JoinColumn(name = "[user]")
+	@JoinColumn(name = "[user]")
 	public User getUser() {
 		return mUser;
 	}
 	public void setUser(User user) {
 		this.mUser = user;
 	}
-	
+
 	// group
 	@ManyToOne(fetch=FetchType.EAGER, cascade=CascadeType.REFRESH)
-    @JoinColumn(name = "[group]")
+	@JoinColumn(name = "[group]")
 	public Group getGroup() {
 		return mGroup;
 	}
 	public void setGroup(Group group) {
 		this.mGroup = group;
 	}
-	
+
 	// groupRole
 	@ManyToOne(fetch=FetchType.EAGER, cascade=CascadeType.REFRESH)
-    @JoinColumn(name = "[groupRole]")
+	@JoinColumn(name = "[groupRole]")
 	public GroupRole getGroupRole() {
 		return mGroupRole;
 	}
 	public void setGroupRole(GroupRole groupRole) {
 		this.mGroupRole = groupRole;
 	}
-	
+
 	// simpleNotes
 	@OneToMany(mappedBy="userGroup", fetch=FetchType.EAGER, cascade=CascadeType.REFRESH)
 	public Set<SimpleNote> getSimpleNotes(){
@@ -70,7 +70,7 @@ public class UserGroup {
 	public void setSimpleNotes(Set<SimpleNote> simpleNotes){
 		this.mSimpleNotes = simpleNotes;
 	}
-	
+
 	// invites
 	@OneToMany(mappedBy="userGroup", fetch=FetchType.EAGER, cascade=CascadeType.REFRESH)
 	public Set<Invite> getInvites(){
@@ -79,7 +79,7 @@ public class UserGroup {
 	public void setInvites(Set<Invite> invites){
 		this.mInvites = invites;
 	}
-	
+
 	@Id
 	@GeneratedValue
 	@Column(unique = true, nullable = false)
@@ -111,5 +111,5 @@ public class UserGroup {
 			return false;
 		return true;
 	}
-	
+
 }

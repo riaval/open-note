@@ -10,57 +10,57 @@ import javax.persistence.ManyToOne;
 
 @Entity
 public class Invite {
-	
+
 	private long mId;
 	private User mUser;
 	private UserGroup mUserGroup;
 	private GroupRole mGroupRole;
-	
+
 	public Invite(){
 	}
-	
+
 	public Invite(User user, UserGroup userGroup, GroupRole groupRole) {
 		mUser = user;
 		mUserGroup = userGroup;
 		mGroupRole = groupRole;
 	}
-	
+
 	// user
 	@ManyToOne(cascade=CascadeType.REFRESH)
-    @JoinColumn(name="[user]")
+	@JoinColumn(name="[user]")
 	public User getUser() {
 		return mUser;
 	}
 	public void setUser(User user) {
 		this.mUser = user;
 	}
-	
+
 	// userGroup
 	@ManyToOne(cascade=CascadeType.REFRESH)
-    @JoinColumn(name="[userGroup]")
+	@JoinColumn(name="[userGroup]")
 	public UserGroup getUserGroup() {
 		return mUserGroup;
 	}
 	public void setUserGroup(UserGroup userGroup) {
 		this.mUserGroup = userGroup;
 	}
-	
+
 	// groupRole
 	@ManyToOne(cascade=CascadeType.REFRESH)
-    @JoinColumn(name="[groupRole]")
+	@JoinColumn(name="[groupRole]")
 	public GroupRole getGroupRole() {
 		return mGroupRole;
 	}
 	public void setGroupRole(GroupRole groupRole) {
 		this.mGroupRole = groupRole;
 	}
-	
+
 	@Id
-    @GeneratedValue
-    @Column(unique = true, nullable = false)
-    public long getId() {
-        return mId;
-    }
+	@GeneratedValue
+	@Column(unique = true, nullable = false)
+	public long getId() {
+		return mId;
+	}
 	protected void setId(long id){
 		this.mId = id;
 	}

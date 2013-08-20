@@ -6,7 +6,7 @@ import com.google.gson.JsonPrimitive;
 public class HttpStatusFactory {
 
 	static public class Json {
-		
+
 		static public String clientBadRequest() {
 			return generate("Bad Request", 400);
 		}

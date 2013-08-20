@@ -13,39 +13,39 @@ import javax.persistence.Table;
 
 @Entity
 @Table(catalog="opennote")
-public class Group{
-	
+public class Group {
+
 	private long mId;
 	private String mSlug;
 	private String mName;
 	private Set<UserGroup> mUserGroups = new HashSet<UserGroup>();	
-	
+
 	public Group(){
 	}
-	
+
 	public Group(String slug, String name) {
 		this.mSlug = slug;
 		this.mName = name;
 	}
-	
+
 	// slug
 	@Column(name="[slug]", unique=true, nullable = false, length = 20)
 	public String getSlug() {
-	    return mSlug;
+		return mSlug;
 	}
 	public void setSlug(String slug){
 		this.mSlug = slug;
 	}
-	
+
 	// name
 	@Column(name="[name]", unique=false, nullable = false, length = 30)
 	public String getName() {
-	    return mName;
+		return mName;
 	}
 	public void setName(String name){
 		this.mName = name;
 	}
-	
+
 	// userGroups
 	@OneToMany(mappedBy="group", cascade=CascadeType.REFRESH)
 	public Set<UserGroup> getUserGroup() {
@@ -54,7 +54,7 @@ public class Group{
 	public void setUserGroup(Set<UserGroup> userGroups) {
 		this.mUserGroups = userGroups;
 	}
-	
+
 	@Id
 	@GeneratedValue
 	@Column(unique = true, nullable = false)
@@ -86,5 +86,5 @@ public class Group{
 			return false;
 		return true;
 	}
-	
+
 }
