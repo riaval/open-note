@@ -19,8 +19,7 @@
         android:layout_height="48dp"
         android:ems="10"
         android:hint="6—15 characters"
-        android:inputType="text"
-        android:text="qwerty" />
+        android:inputType="text" />
 
     <TextView
         android:id="@+id/fullNameUpView"
@@ -37,8 +36,7 @@
         android:layout_below="@+id/fullNameUpView"
         android:ems="10"
         android:hint="First and last name"
-        android:inputType="textPersonName"
-        android:text="Lorem Ipsum" />
+        android:inputType="textPersonName" />
 
     <TextView
         android:id="@+id/passUpView"
@@ -55,8 +53,7 @@
         android:ems="10"
         android:fontFamily="sans-serif"
         android:hint="At least 6 characters"
-        android:inputType="textPassword"
-        android:text="password" />
+        android:inputType="textPassword" />
 
     <CheckBox
         android:id="@+id/passUpChBx"

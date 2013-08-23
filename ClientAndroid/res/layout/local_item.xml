@@ -20,13 +20,13 @@
             android:layout_height="wrap_content"
             android:textColor="#636363"
             android:textSize="18sp"
+            android:layout_marginBottom="8dp"
             android:textStyle="bold" />
 
         <TextView
             android:id="@+id/local_body"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:textColor="#636363"
             android:textSize="16sp" />
 

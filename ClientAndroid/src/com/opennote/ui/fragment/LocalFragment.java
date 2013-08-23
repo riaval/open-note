@@ -16,7 +16,6 @@ import android.view.MenuItem;
 import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.TranslateAnimation;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -26,6 +25,7 @@ import com.opennote.R;
 import com.opennote.model.adapter.NoteLocalAdapter;
 import com.opennote.model.provider.LocalContact;
 import com.opennote.model.provider.LocalContact.LocalNotes;
+import com.opennote.ui.activity.CreateLocalListNoteActivity;
 import com.opennote.ui.activity.CreateLocalNoteActivity;
 
 import de.timroes.swipetodismiss.SwipeDismissList;
@@ -45,7 +45,8 @@ public class LocalFragment extends Fragment {
 			LocalNotes.TITLE,
 			LocalNotes.BODY,
 			LocalNotes.DATE,
-			LocalNotes.COLOR
+			LocalNotes.COLOR,
+			LocalNotes.LIST
 	    };
 	private NoteLocalAdapter mAdapter;
 	private MatrixCursor mMatrixCursor;
@@ -82,12 +83,13 @@ public class LocalFragment extends Fragment {
 				for(cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
 					if(cursor.getPosition() == position)
 						continue;
-					String id = cursor.getString(0);
-					String title = cursor.getString(1);
-					String body = cursor.getString(2);
-					String date = cursor.getString(3);
-					String color = cursor.getString(4);
-					mMatrixCursor.addRow(new String[]{id, title, body, date, color});
+					String id = cursor.getString(cursor.getColumnIndex(LocalNotes._ID));
+					String title = cursor.getString(cursor.getColumnIndex(LocalNotes.TITLE));
+					String body = cursor.getString(cursor.getColumnIndex(LocalNotes.BODY));
+					String date = cursor.getString(cursor.getColumnIndex(LocalNotes.DATE));
+					String color = cursor.getString(cursor.getColumnIndex(LocalNotes.COLOR));
+					String list = cursor.getString(cursor.getColumnIndex(LocalNotes.LIST));
+					mMatrixCursor.addRow(new String[]{id, title, body, date, color, list});
 				}
 				mAdapter.swapCursor(mMatrixCursor);
                 return new SwipeDismissList.Undoable() {
@@ -137,6 +139,16 @@ public class LocalFragment extends Fragment {
 			public boolean onMenuItemClick(MenuItem item) {
 				mSwipeLis.discardUndo();
 				Intent intent = new Intent(getActivity(), CreateLocalNoteActivity.class);
+				startActivity(intent);
+				return true;
+			}
+		});
+		item = menu.findItem(R.id.action_new_list);
+		item.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+			@Override
+			public boolean onMenuItemClick(MenuItem item) {
+				mSwipeLis.discardUndo();
+				Intent intent = new Intent(getActivity(), CreateLocalListNoteActivity.class);
 				startActivity(intent);
 				return true;
 			}

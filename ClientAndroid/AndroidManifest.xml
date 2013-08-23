@@ -37,6 +37,15 @@
                 android:value="com.opennote.ui.activity.MainActivity" />
         </activity>
         <activity
+            android:name="com.opennote.ui.activity.CreateLocalListNoteActivity"
+            android:label="@string/create_note"
+            android:parentActivityName="com.opennote.ui.activity.MainActivity"
+            android:windowSoftInputMode="adjustPan|stateVisible" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.opennote.ui.activity.MainActivity" />
+        </activity>
+        <activity
             android:name="com.opennote.ui.activity.CreateGroupNoteActivity"
             android:label="@string/create_note"
             android:parentActivityName="com.opennote.ui.activity.MainActivity"

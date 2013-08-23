@@ -47,7 +47,8 @@ public class LocalProvider extends ContentProvider {
 					LocalNotes.TITLE + " text, " +
 					LocalNotes.BODY + " text, " +
 					LocalNotes.DATE + " text, " +
-					LocalNotes.COLOR + " text " +
+					LocalNotes.COLOR + " text, " +
+					LocalNotes.LIST + " integer " +
 				")";
 			db.execSQL(sql);
 		}
