@@ -31,7 +31,7 @@ public class CreateLocalNoteActivity extends Activity{
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.create_note);
+		setContentView(R.layout.activity_create_note);
 		mRootView = getWindow().getDecorView().findViewById(android.R.id.content);
 		
 		// Get the message from the intent

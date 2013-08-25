@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
+import android.view.View.OnFocusChangeListener;
 import android.widget.EditText;
 import android.widget.ListView;
 
@@ -36,7 +37,7 @@ public class CreateLocalListNoteActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.create_list_note);
+		setContentView(R.layout.activity_create_list_note);
 		mRootView = getWindow().getDecorView().findViewById(android.R.id.content);
 
 		// Get the message from the intent
@@ -52,6 +53,7 @@ public class CreateLocalListNoteActivity extends Activity {
 	    
 		mAdapter = new ListNoteAddapter(this);
 		ListView list = (ListView) findViewById(R.id.list_note_list);
+		list.setItemsCanFocus(true);
 		list.setAdapter(mAdapter);
 		
 		if(mId != -1){

@@ -64,9 +64,9 @@ int id action_left 0x7f0b003d
 int id action_new 0x7f0b003f
 int id action_new_list 0x7f0b003e
 int id action_share 0x7f0b003a
-int id content_frame 0x7f0b0001
+int id content_frame 0x7f0b0004
 int id createGroupBt 0x7f0b000c
-int id drawer_layout 0x7f0b0000
+int id drawer_layout 0x7f0b0003
 int id fullNameUpEdit 0x7f0b0018
 int id fullNameUpView 0x7f0b0017
 int id groupName 0x7f0b000b
@@ -75,7 +75,7 @@ int id invitationFullName 0x7f0b0025
 int id invitationGroupName 0x7f0b0023
 int id invitationLogin 0x7f0b0026
 int id invitationSlug 0x7f0b0024
-int id left_drawer 0x7f0b0002
+int id left_drawer 0x7f0b0005
 int id listIn 0x7f0b002c
 int id listNoteCheck 0x7f0b002d
 int id listNoteEdit 0x7f0b002e
@@ -84,7 +84,7 @@ int id list_header_title 0x7f0b002b
 int id list_img 0x7f0b0030
 int id list_item_icon 0x7f0b0006
 int id list_item_title 0x7f0b0007
-int id list_note_list 0x7f0b0004
+int id list_note_list 0x7f0b0001
 int id list_text 0x7f0b0031
 int id local_author 0x7f0b0037
 int id local_body 0x7f0b0034
@@ -94,9 +94,9 @@ int id local_title 0x7f0b0033
 int id loginInEdit 0x7f0b0011
 int id loginUpEdit 0x7f0b0016
 int id loginUpView 0x7f0b0015
-int id note_body 0x7f0b0005
+int id note_body 0x7f0b0002
 int id note_local_list 0x7f0b0010
-int id note_title 0x7f0b0003
+int id note_title 0x7f0b0000
 int id passInChBx 0x7f0b0013
 int id passInEdit 0x7f0b0012
 int id passUpChBx 0x7f0b001b
@@ -122,10 +122,10 @@ int id userFullNameEdit 0x7f0b001f
 int id userLogOutBt 0x7f0b001e
 int id userLoginEdit 0x7f0b001d
 int id userSaveBt 0x7f0b0022
-int layout activity_main 0x7f030000
-int layout color 0x7f030001
-int layout create_list_note 0x7f030002
-int layout create_note 0x7f030003
+int layout activity_create_list_note 0x7f030000
+int layout activity_create_note 0x7f030001
+int layout activity_main 0x7f030002
+int layout color 0x7f030003
 int layout drawer_list_item 0x7f030004
 int layout fragment_create_group 0x7f030005
 int layout fragment_feedback 0x7f030006

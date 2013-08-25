@@ -23,7 +23,7 @@ public class CreateGroupNoteActivity extends Activity implements ActionBar.OnNav
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.create_note);
+		setContentView(R.layout.activity_create_note);
 		
 		// Get the message from the intent
 	    Intent intent = getIntent();

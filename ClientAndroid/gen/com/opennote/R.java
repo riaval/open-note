@@ -93,9 +93,9 @@ public final class R {
         public static final int action_new=0x7f0b003f;
         public static final int action_new_list=0x7f0b003e;
         public static final int action_share=0x7f0b003a;
-        public static final int content_frame=0x7f0b0001;
+        public static final int content_frame=0x7f0b0004;
         public static final int createGroupBt=0x7f0b000c;
-        public static final int drawer_layout=0x7f0b0000;
+        public static final int drawer_layout=0x7f0b0003;
         public static final int fullNameUpEdit=0x7f0b0018;
         public static final int fullNameUpView=0x7f0b0017;
         public static final int groupName=0x7f0b000b;
@@ -104,7 +104,7 @@ public final class R {
         public static final int invitationGroupName=0x7f0b0023;
         public static final int invitationLogin=0x7f0b0026;
         public static final int invitationSlug=0x7f0b0024;
-        public static final int left_drawer=0x7f0b0002;
+        public static final int left_drawer=0x7f0b0005;
         public static final int listIn=0x7f0b002c;
         public static final int listNoteCheck=0x7f0b002d;
         public static final int listNoteEdit=0x7f0b002e;
@@ -113,7 +113,7 @@ public final class R {
         public static final int list_img=0x7f0b0030;
         public static final int list_item_icon=0x7f0b0006;
         public static final int list_item_title=0x7f0b0007;
-        public static final int list_note_list=0x7f0b0004;
+        public static final int list_note_list=0x7f0b0001;
         public static final int list_text=0x7f0b0031;
         public static final int local_author=0x7f0b0037;
         public static final int local_body=0x7f0b0034;
@@ -123,9 +123,9 @@ public final class R {
         public static final int loginInEdit=0x7f0b0011;
         public static final int loginUpEdit=0x7f0b0016;
         public static final int loginUpView=0x7f0b0015;
-        public static final int note_body=0x7f0b0005;
+        public static final int note_body=0x7f0b0002;
         public static final int note_local_list=0x7f0b0010;
-        public static final int note_title=0x7f0b0003;
+        public static final int note_title=0x7f0b0000;
         public static final int passInChBx=0x7f0b0013;
         public static final int passInEdit=0x7f0b0012;
         public static final int passUpChBx=0x7f0b001b;
@@ -153,10 +153,10 @@ public final class R {
         public static final int userSaveBt=0x7f0b0022;
     }
     public static final class layout {
-        public static final int activity_main=0x7f030000;
-        public static final int color=0x7f030001;
-        public static final int create_list_note=0x7f030002;
-        public static final int create_note=0x7f030003;
+        public static final int activity_create_list_note=0x7f030000;
+        public static final int activity_create_note=0x7f030001;
+        public static final int activity_main=0x7f030002;
+        public static final int color=0x7f030003;
         public static final int drawer_list_item=0x7f030004;
         public static final int fragment_create_group=0x7f030005;
         public static final int fragment_feedback=0x7f030006;
