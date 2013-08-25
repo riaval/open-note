@@ -184,11 +184,20 @@ public class LocalFragment extends Fragment {
 		@Override
 		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 			String title = ((TextView) view.findViewById(R.id.local_title)).getText().toString();
-			String body = ((TextView) view.findViewById(R.id.local_body)).getText().toString();
+			String body = null;
+			
+			Intent intent;
+			try {
+				body = ((TextView) view.findViewById(R.id.local_body)).getText().toString();
+				intent = new Intent(getActivity(), CreateLocalNoteActivity.class);
+			} catch (Exception e) {
+				Cursor cursor = mAdapter.getCursor();
+				body = cursor.getString(cursor.getColumnIndex(LocalNotes.BODY));
+				intent = new Intent(getActivity(), CreateLocalListNoteActivity.class);
+			}
 			int backgroundColor = ((ColorDrawable) view.getBackground()).getColor();
 			
 			// Starting update activity
-			Intent intent = new Intent(getActivity(), CreateLocalNoteActivity.class);
 			intent.putExtra(ID_VALUE_MESSAGE, id);
 			intent.putExtra(TITLE_VALUE_MESSAGE, title);
 			intent.putExtra(BODY_VALUE_MESSAGE, body);

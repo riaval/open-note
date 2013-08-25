@@ -12,7 +12,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
 
@@ -20,12 +19,18 @@ import com.opennote.R;
 import com.opennote.model.adapter.ColorSpinnerAdapter;
 import com.opennote.model.adapter.ListNoteAddapter;
 import com.opennote.model.provider.LocalContact;
+import com.opennote.model.provider.LocalContact.LocalNotes;
 import com.opennote.ui.fragment.LocalFragment;
 
 public class CreateLocalListNoteActivity extends Activity {
 
+	private long mId;
+	private String mTitle;
+	private String mBody;
+	
 	private String mBackgroundColor;
 	private View mRootView;
+	
 	ListNoteAddapter mAdapter;
 	
 	@Override
@@ -36,14 +41,33 @@ public class CreateLocalListNoteActivity extends Activity {
 
 		// Get the message from the intent
 	    Intent intent = getIntent();
+	    mId = intent.getLongExtra(LocalFragment.ID_VALUE_MESSAGE, -1);
+	    mTitle = intent.getStringExtra(LocalFragment.TITLE_VALUE_MESSAGE);
+	    mBody = intent.getStringExtra(LocalFragment.BODY_VALUE_MESSAGE);
 	    String bkColorMessage = intent.getStringExtra(LocalFragment.COLOR_VALUE_MESSAGE);
 
+	    // Preload
+	    final EditText titleEditText = ((EditText) findViewById(R.id.note_title));
+	    titleEditText.setText(mTitle);
+	    
 		mAdapter = new ListNoteAddapter(this);
-		mAdapter.add();
-		
 		ListView list = (ListView) findViewById(R.id.list_note_list);
 		list.setAdapter(mAdapter);
 		
+		if(mId != -1){
+			String[] values = mBody.split("\n");
+			for (String s : values){
+				boolean state = false;
+				String value = null;
+				if (s.substring(0, 1).equals("@")){
+					state = true;
+				}
+				value = s.substring(1, s.length());
+				mAdapter.add(state, value);
+			}
+		}
+		mAdapter.add();
+
 		// Configure dropdown menu
 	    ColorSpinnerAdapter adapter = new ColorSpinnerAdapter(getBaseContext(), R.layout.color);
         final ActionBar actionBar = getActionBar();
@@ -67,20 +91,9 @@ public class CreateLocalListNoteActivity extends Activity {
 	    }
 
 	}
+	
+	
 
-	
-	public void click(View view){
-		mAdapter.add();
-		mAdapter.notifyDataSetChanged();
-	}
-	
-	public void checkAction(View view){
-		CheckBox checkBox = (CheckBox) view;
-		
-		if ( checkBox.isChecked() ){
-			System.out.println(view.getId());
-		}
-	}
 	
 	@Override
 	protected void onDestroy(){
@@ -102,14 +115,18 @@ public class CreateLocalListNoteActivity extends Activity {
 		if(!title.isEmpty()){
 			ContentValues note = new ContentValues();
 			note.put(LocalContact.LocalNotes.TITLE, title);
-			note.put(LocalContact.LocalNotes.BODY, data.substring(0, data.length()-2));
+			note.put(LocalContact.LocalNotes.BODY, data.substring(0, data.length()-1));
 			note.put(LocalContact.LocalNotes.DATE, date);
 			note.put(LocalContact.LocalNotes.COLOR, mBackgroundColor);
 			note.put(LocalContact.LocalNotes.LIST, 1);
 			
-			this.getContentResolver().insert(LocalContact.LocalNotes.CONTENT_URI, note);
+			if(mId == -1) {
+				this.getContentResolver().insert(LocalContact.LocalNotes.CONTENT_URI, note);
+			} else {
+				this.getContentResolver().update(LocalContact.LocalNotes.CONTENT_URI, note, LocalNotes._ID + " = ?", new String[]{String.valueOf(mId)});
+				this.getContentResolver().notifyChange(LocalContact.LocalNotes.CONTENT_URI, null);
+			}
 		}
-		
 		super.onDestroy();
 	}
 	

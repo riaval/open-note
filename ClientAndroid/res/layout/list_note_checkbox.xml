@@ -8,9 +8,7 @@
     <CheckBox
         android:id="@+id/listNoteCheck"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:enabled="false"
-        android:onClick="checkAction" />
+        android:layout_height="wrap_content" />
 
     <EditText
         android:id="@+id/listNoteEdit"
@@ -20,10 +18,22 @@
         android:background="@android:color/transparent"
         android:ems="10"
         android:hint="New item"
-        android:inputType="textCapSentences"
+		android:onClick="listItemClickAction"
+        android:inputType="textCapSentences|textNoSuggestions"
         android:singleLine="true"
         android:textColor="#626262"
         android:textColorHint="#acacac" >
     </EditText>
+
+    <ImageButton
+        android:id="@+id/list_dismiss_img"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_gravity="center_vertical|center_horizontal"
+        android:background="@drawable/action_button"
+        android:contentDescription="Dismiss item"
+        android:padding="5dp"
+        android:src="@drawable/content_remove"
+        android:visibility="invisible" />
 
 </LinearLayout>

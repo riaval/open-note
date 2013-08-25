@@ -94,10 +94,8 @@ public class CreateLocalNoteActivity extends Activity{
 			if(mId == -1) {
 				this.getContentResolver().insert(LocalContact.LocalNotes.CONTENT_URI, note);
 			} else {
-//				if ( !mTitle.equals(title) || !mBody.equals(body) ){
 				this.getContentResolver().update(LocalContact.LocalNotes.CONTENT_URI, note, LocalNotes._ID + " = ?", new String[]{String.valueOf(mId)});
 				this.getContentResolver().notifyChange(LocalContact.LocalNotes.CONTENT_URI, null);
-//				}
 			}
 		}
 		super.onDestroy();
