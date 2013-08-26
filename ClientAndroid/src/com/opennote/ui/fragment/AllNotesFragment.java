@@ -1,6 +1,6 @@
 package com.opennote.ui.fragment;
 
-import android.app.ListFragment;
+import android.app.Fragment;
 import android.app.LoaderManager.LoaderCallbacks;
 import android.content.CursorLoader;
 import android.content.Loader;
@@ -21,7 +21,7 @@ import com.opennote.model.adapter.NoteGroupAdapter;
 import com.opennote.model.provider.RestContact.Note;
 import com.opennote.ui.activity.MainActivity;
 
-public class AllNotesFragment extends ListFragment {
+public class AllNotesFragment extends Fragment {
 
 	private NoteGroupAdapter mAdapter;
 	RestRequestManager mRequestManager = RestRequestManager.from(getActivity());
@@ -37,11 +37,21 @@ public class AllNotesFragment extends ListFragment {
 	    };
 	
 	private View mRootView;
+	private ListView mListView;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {		
-		mRootView = inflater.inflate(R.layout.fragment_note_list, container, false);
-
+		mRootView = inflater.inflate(R.layout.fragment_note, container, false);
+		mAdapter = new NoteGroupAdapter(
+        		getActivity(),
+	            R.layout.simple_note_item, 
+	            null, 
+	            new String[]{ Note.TITLE, Note.BODY, Note.DATE, Note.FULL_NAME, Note.COLOR, Note.LOGIN },
+	            new int[]{ R.id.local_title, R.id.local_body , R.id.local_date, R.id.local_author}, 
+	            0);
+		mListView = (ListView) mRootView.findViewById(R.id.noteList);;
+        mListView.setAdapter(mAdapter);
+		
 		// DataDroid RequestManager
 		Request request = RequestFactory.getLoadAllNoteRequest(MainActivity.instance.getSessionHash());
 		mRequestManager.execute(request, mLoadRequestListener);
@@ -53,22 +63,12 @@ public class AllNotesFragment extends ListFragment {
 	private RequestListener mLoadRequestListener = new RequestListener() {
 		@Override
 		public void onRequestFinished(Request request, Bundle resultData) {
-			mAdapter = new NoteGroupAdapter(
-	        		getActivity(),
-		            R.layout.local_item, 
-		            null, 
-		            new String[]{ Note.TITLE, Note.BODY, Note.DATE, Note.FULL_NAME, Note.COLOR, Note.LOGIN },
-		            new int[]{ R.id.local_title, R.id.local_body , R.id.local_date, R.id.local_author}, 
-		            0);
-			ListView listView = (ListView) mRootView;
-	        listView.setAdapter(mAdapter);
 	        getLoaderManager().initLoader(LOADER_ID, null, loaderCallbacks);
-			Toast.makeText(getActivity(), "onRequestFinished", 5).show();
 		}
 
 		@Override
 		public void onRequestConnectionError(Request request, int statusCode) {
-			Toast.makeText(getActivity(), "onRequestConnectionError", 5).show();
+			mRootView.findViewById(R.id.connectionError).setVisibility(View.VISIBLE);
 		}
 
 		@Override
@@ -99,6 +99,14 @@ public class AllNotesFragment extends ListFragment {
 
         @Override
         public void onLoadFinished(Loader<Cursor> arg0, Cursor cursor) {
+        	mRootView.findViewById(R.id.connectionError).setVisibility(View.GONE);
+        	mRootView.findViewById(R.id.progressBarLayout).setVisibility(View.GONE);
+        	if(cursor.getCount() != 0){
+        		mListView.setVisibility(View.VISIBLE);
+        	} else {
+        		mListView.setVisibility(View.GONE);
+        		mRootView.findViewById(R.id.nothing).setVisibility(View.VISIBLE);
+        	}
             mAdapter.swapCursor(cursor);
             mAdapter.notifyDataSetChanged();
         }

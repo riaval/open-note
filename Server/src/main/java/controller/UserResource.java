@@ -53,10 +53,10 @@ public class UserResource extends ServerResource {
 					new SessionResponse(session)
 					);
 		} catch (IllegalArgumentException e) {
-			e.printStackTrace();
+			System.err.println(StatusFactory.getErrorMessage(e));
 			return new JacksonRepresentation<Status>( StatusFactory.clientBadRequest() );
 		} catch (Exception e) {
-			e.printStackTrace();
+			System.err.println(StatusFactory.getErrorMessage(e));
 			return new JacksonRepresentation<Status>( StatusFactory.serverInternalError() );
 		}
 	}
@@ -70,9 +70,10 @@ public class UserResource extends ServerResource {
 				return multi();
 			}
 		} catch (BadAuthenticationException e) {
-			e.printStackTrace();
+			System.err.println(StatusFactory.getErrorMessage(e));
 			return new JacksonRepresentation<Status>( StatusFactory.clientUnauthorized() );
 		} catch (Exception e) {
+			System.err.println(StatusFactory.getErrorMessage(e));
 			return new JacksonRepresentation<Status>( StatusFactory.serverInternalError() );
 		}
 	}
@@ -99,7 +100,7 @@ public class UserResource extends ServerResource {
 		
 		return new JacksonRepresentation<UserPrivateResponse>(
 				new UserPrivateResponse(user)
-				);
+			);
 	}
 
 }

@@ -41,7 +41,7 @@ public class LocalArrayAdapter extends ArrayAdapter<LocalItem> {
 			// ROW INFLATION
 			Log.d(tag, "Starting XML Row Inflation ... ");
 			LayoutInflater inflater = (LayoutInflater) this.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			row = inflater.inflate(R.layout.local_item, parent, false);
+			row = inflater.inflate(R.layout.simple_note_item, parent, false);
 			Log.d(tag, "Successfully completed XML Row Inflation!");
 		}
 

@@ -72,12 +72,11 @@ public class InvitationsFragment extends Fragment {
 	        mListView.setAdapter(mAdapter);
 	        mListView.setOnItemClickListener(new InvitationClickListener());
 	        getLoaderManager().initLoader(LOADER_ID, null, loaderCallbacks);
-			Toast.makeText(getActivity(), "onRequestFinished", 5).show();
 		}
 
 		@Override
 		public void onRequestConnectionError(Request request, int statusCode) {
-			Toast.makeText(getActivity(), "onRequestConnectionError", 5).show();
+			mRootView.findViewById(R.id.connectionError).setVisibility(View.VISIBLE);
 		}
 
 		@Override
@@ -108,10 +107,15 @@ public class InvitationsFragment extends Fragment {
 
         @Override
         public void onLoadFinished(Loader<Cursor> arg0, Cursor cursor) {
+        	mRootView.findViewById(R.id.connectionError).setVisibility(View.GONE);
+        	mRootView.findViewById(R.id.progressBarLayout).setVisibility(View.GONE);
+        	if(cursor.getCount() != 0){
+        		mListView.setVisibility(View.VISIBLE);
+        	} else {
+        		mListView.setVisibility(View.GONE);
+        		mRootView.findViewById(R.id.nothing).setVisibility(View.VISIBLE);
+        	}
             mAdapter.swapCursor(cursor);
-            if(cursor.getCount() == 0){
-            	mListView.setVisibility(View.GONE);
-            };
         }
 
         @Override
@@ -164,14 +168,13 @@ public class InvitationsFragment extends Fragment {
 		public void onRequestFinished(Request request, Bundle resultData) {
 			getActivity().getContentResolver().notifyChange(RestContact.Invitation.CONTENT_URI, null);
 			MainActivity mainActivity = (MainActivity) getActivity();
-//			mainActivity.addGroup(mGroupSlug, mGroupName, "member");
 			mainActivity.loadGroups();
 			mainActivity.updateGroups();
 		}
 
 		@Override
 		public void onRequestConnectionError(Request request, int statusCode) {
-			Toast.makeText(getActivity(), "onRequestConnectionError", 5).show();
+			mRootView.findViewById(R.id.connectionError).setVisibility(View.VISIBLE);
 		}
 
 		@Override
@@ -193,7 +196,7 @@ public class InvitationsFragment extends Fragment {
 
 		@Override
 		public void onRequestConnectionError(Request request, int statusCode) {
-			Toast.makeText(getActivity(), "onRequestConnectionError", 5).show();
+			mRootView.findViewById(R.id.connectionError).setVisibility(View.VISIBLE);
 		}
 
 		@Override

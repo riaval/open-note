@@ -37,13 +37,7 @@ public final class SignInOperation implements Operation {
 		String sessionHash;
         try {
 			JSONObject jsonBbject = new JSONObject(result.body);
-//			SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-//			SharedPreferences.Editor editor = sharedPref.edit();
-			
 			sessionHash = jsonBbject.get("session_hash").toString();
-//			editor.putString(context.getString(R.string.session_hash), sessionHash);
-//			editor.putString(context.getString(R.string.user_login), login);
-//			editor.commit();
         } catch (JSONException e) {
             throw new DataException(e.getMessage());
         }

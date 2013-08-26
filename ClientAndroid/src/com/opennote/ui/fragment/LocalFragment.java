@@ -15,6 +15,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
@@ -50,6 +51,9 @@ public class LocalFragment extends Fragment {
 	    };
 	private NoteLocalAdapter mAdapter;
 	private MatrixCursor mMatrixCursor;
+	private View mRootView;
+	private ListView mListView;
+	private View mNothingView;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -59,30 +63,33 @@ public class LocalFragment extends Fragment {
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		View rootView = inflater.inflate(R.layout.fragment_note_list, container, false);
-		
+		mRootView = inflater.inflate(R.layout.fragment_note, container, false);
+		mRootView.findViewById(R.id.progressBarLayout).setVisibility(View.GONE);
+		mNothingView = mRootView.findViewById(R.id.nothing);
         mAdapter = new NoteLocalAdapter(
         		getActivity(),
-	            R.layout.local_item, 
+	            R.layout.simple_note_item, 
 	            null, 
 	            new String[]{ LocalNotes.TITLE, LocalNotes.BODY, LocalNotes.DATE},
 	            new int[]{ R.id.local_title, R.id.local_body , R.id.local_date}, 
 	            0);
-        ListView listView = (ListView) rootView;
-        listView.setAdapter(mAdapter);
-        listView.setOnItemClickListener(new LocalListClickListener());
+        mListView = (ListView) mRootView.findViewById(R.id.noteList);
+        mListView.setAdapter(mAdapter);
+        mListView.setOnItemClickListener(new LocalListClickListener());
         
         SwipeDismissList.OnDismissCallback callback = new SwipeDismissList.OnDismissCallback() {
             // Gets called whenever the user deletes an item.
             public SwipeDismissList.Undoable onDismiss(AbsListView listView, final int position) {
-            	if(mMatrixCursor != null)
+            	if(mMatrixCursor != null){
             		mMatrixCursor.close();
+            	}
             	mMatrixCursor = new MatrixCursor(PROJECTION);
 				final Cursor cursor = mAdapter.getCursor();
 				final long deletedId = mAdapter.getItemId(position);;
 				for(cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
-					if(cursor.getPosition() == position)
+					if(cursor.getPosition() == position){
 						continue;
+					}
 					String id = cursor.getString(cursor.getColumnIndex(LocalNotes._ID));
 					String title = cursor.getString(cursor.getColumnIndex(LocalNotes.TITLE));
 					String body = cursor.getString(cursor.getColumnIndex(LocalNotes.BODY));
@@ -91,12 +98,19 @@ public class LocalFragment extends Fragment {
 					String list = cursor.getString(cursor.getColumnIndex(LocalNotes.LIST));
 					mMatrixCursor.addRow(new String[]{id, title, body, date, color, list});
 				}
+				if (mMatrixCursor.getCount() == 0){
+					mListView.setVisibility(View.GONE);
+            		mRootView.findViewById(R.id.nothing).setVisibility(View.VISIBLE);
+            	}
 				mAdapter.swapCursor(mMatrixCursor);
                 return new SwipeDismissList.Undoable() {
 
                     // Method is called when user undoes this deletion
                     public void undo() {
                         // Reinsert item to list
+                    	if (cursor.getCount() != 0){
+                    		mListView.setVisibility(View.VISIBLE);
+                    	}
                     	mAdapter.changeCursor(cursor);
                     }
 
@@ -108,19 +122,25 @@ public class LocalFragment extends Fragment {
                     // Called when user cannot undo the action anymore
                     public void discard() {
                     	getActivity().getContentResolver().delete(LocalContact.LocalNotes.CONTENT_URI, LocalNotes._ID + "=?", new String[]{String.valueOf(deletedId)});
-                    	getActivity().getContentResolver().notifyChange(LocalContact.LocalNotes.CONTENT_URI, null);
+//                    	getActivity().getContentResolver().notifyChange(LocalContact.LocalNotes.CONTENT_URI, null);
                     }
                 };
             }
         };
         
-        mSwipeLis = new SwipeDismissList(listView, callback, SwipeDismissList.UndoMode.SINGLE_UNDO);
+        mSwipeLis = new SwipeDismissList(mListView, callback, SwipeDismissList.UndoMode.SINGLE_UNDO);
         mSwipeLis.setSwipeDirection(SwipeDirection.START);
         mSwipeLis.setAutoHideDelay(1);
+        mNothingView.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				mSwipeLis.discardUndo();
+			}
+		});
         
         getLoaderManager().initLoader(LOADER_ID, null, loaderCallbacks);
         
-		return rootView;
+		return mRootView;
 	}
 
 	@Override
@@ -171,6 +191,12 @@ public class LocalFragment extends Fragment {
 
         @Override
         public void onLoadFinished(Loader<Cursor> arg0, Cursor cursor) {
+        	if(cursor.getCount() != 0){
+        		mListView.setVisibility(View.VISIBLE);
+        	} else {
+        		mListView.setVisibility(View.GONE);
+        		mRootView.findViewById(R.id.nothing).setVisibility(View.VISIBLE);
+        	}
         	mAdapter.swapCursor(cursor);
         }
 

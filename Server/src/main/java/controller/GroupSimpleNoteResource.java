@@ -42,13 +42,13 @@ public class GroupSimpleNoteResource extends ServerResource {
 
 			return new JacksonRepresentation<Status>( StatusFactory.created() );
 		} catch (BadAuthenticationException e) {
-			e.printStackTrace();
+			System.err.println(StatusFactory.getErrorMessage(e));
 			return new JacksonRepresentation<Status>( StatusFactory.clientUnauthorized() );
 		} catch (IllegalArgumentException e) {
-			e.printStackTrace();
+			System.err.println(StatusFactory.getErrorMessage(e));
 			return new JacksonRepresentation<Status>( StatusFactory.clientBadRequest() );
 		} catch (Exception e) {
-			e.printStackTrace();
+			System.err.println(StatusFactory.getErrorMessage(e));
 			return new JacksonRepresentation<Status>( StatusFactory.serverInternalError() );
 		}
 	}
@@ -67,13 +67,13 @@ public class GroupSimpleNoteResource extends ServerResource {
 
 			return new JacksonRepresentation<List<SimpleNoteResponse>>(simpleNotesResponse);
 		} catch (BadAuthenticationException e) {
-			e.printStackTrace();
+			System.err.println(StatusFactory.getErrorMessage(e));
 			return new JacksonRepresentation<Status>( StatusFactory.clientUnauthorized() );
 		} catch (IllegalArgumentException e) {
-			e.printStackTrace();
+			System.err.println(StatusFactory.getErrorMessage(e));
 			return new JacksonRepresentation<Status>( StatusFactory.clientBadRequest() );
 		} catch (Exception e) {
-			e.printStackTrace();
+			System.err.println(StatusFactory.getErrorMessage(e));
 			return new JacksonRepresentation<Status>( StatusFactory.serverInternalError() );
 		}
 	}

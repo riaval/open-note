@@ -112,9 +112,9 @@ public class MainActivity extends Activity {
 		};
 		mDrawerLayout.setDrawerListener(mDrawerToggle);
 
-		if (!authorized) {
-			selectItem("Local");
-		}
+//		if (!authorized) {
+		selectItem("Local");
+//		}
 		instance = this;
 	}
 	
@@ -335,7 +335,8 @@ public class MainActivity extends Activity {
 		@Override
 		public void onRequestFinished(Request request, Bundle resultData) {
 			loadGroups();
-			updateGroups("Local");
+			updateGroups();
+			mDrawerList.setItemChecked(adapter.getPossition("Local"), true);
 		}
 
 		@Override

@@ -61,7 +61,6 @@ public class NoteLocalAdapter extends SimpleCursorAdapter {
 			}
 			((ViewGroup) bodyTextView.getParent()).removeView(bodyTextView);
 			((ViewGroup) view.findViewById(R.id.selectableLocalItem)).addView(listBody, 1);
-			
 		}
 		
 		// set item color

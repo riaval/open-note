@@ -16,7 +16,6 @@ import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 
 import com.opennote.R;
 
@@ -25,16 +24,11 @@ public class ListNoteAddapter extends BaseAdapter {
 	private List<InList> mObjects;
 	private LayoutInflater mIInflater;
 	private Context mContext;
-	private int mRemovedPossition = -1;
-	private boolean mIsDeleted;
 	
 	public ListNoteAddapter(Context context) {
 		mContext = context;
 		mObjects = new ArrayList<InList>();;
 		mIInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//		editListeners = new ArrayList<OnEditListener>();
-//		add(true, "first");
-//		add(false, "second");
 	}
 	
 	@Override
@@ -94,7 +88,6 @@ public class ListNoteAddapter extends BaseAdapter {
 				editForDismiss.clearFocus();
 				mObjects.remove(position);
 				ListNoteAddapter.this.notifyDataSetChanged();
-				mRemovedPossition = position;
 			}
 		});
 

@@ -9,33 +9,34 @@ public class SessionService {
 
 	public Session openSession(String login, String password, String hostIp, String hostAgent) throws Exception {
 		HibernateUtil.beginTransaction(); // ---->
+		try {
+			User user = DAOFactory.getUserDAO().findByLogin(login);
+			if (user == null) {
+				throw new IllegalArgumentException("Wrong login.");
+			}
+			String passwordHash = ServiceUtil.getSaltMD5(password);
+			if (!user.getPasswordHash().equals(passwordHash)) {
+				throw new IllegalArgumentException("Wrong password.");
+			}
 
-		User user = DAOFactory.getUserDAO().findByLogin(login);
-		if (user == null) {
-			HibernateUtil.commitTransaction(); // <----
-			throw new IllegalArgumentException("Wrong login.");
-		}
+			String clientHash = ServiceUtil.getSaltMD5(login + hostIp + hostAgent);
+			Session session = DAOFactory.getSessionDAO().findByHash(clientHash);
+			if (!(session == null)) {
+				return session;
+			}
 
-		String passwordHash = ServiceUtil.getSaltMD5(password);
-		if (!user.getPasswordHash().equals(passwordHash)) {
-			HibernateUtil.commitTransaction(); // <----
-			throw new IllegalArgumentException("Wrong password.");
-		}
+			session = new Session(clientHash);
+			session.setUser(user);
 
-		String clientHash = ServiceUtil.getSaltMD5(login + hostIp + hostAgent);
-		Session session = DAOFactory.getSessionDAO().findByHash(clientHash);
-		if (!(session == null)) {
+			DAOFactory.getSessionDAO().save(session);
 			HibernateUtil.commitTransaction(); // <----
 			return session;
+		} catch (Exception e) {
+		    HibernateUtil.rollbackTransaction();
+		    throw e;
+		} finally {
+		    HibernateUtil.closeSession();
 		}
-
-		session = new Session(clientHash);
-		session.setUser(user);
-
-		DAOFactory.getSessionDAO().save(session);
-		HibernateUtil.commitTransaction(); // <----
-
-		return session;
 	}
 
 }

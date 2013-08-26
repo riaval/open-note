@@ -1,11 +1,17 @@
 package com.opennote.ui.fragment;
 
 import android.app.Fragment;
+import android.graphics.Typeface;
 import android.os.Bundle;
+import android.text.InputType;
+import android.text.method.PasswordTransformationMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -23,10 +29,22 @@ public class SignInFragment extends Fragment{
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		mRootView = inflater.inflate(R.layout.fragment_signin, container, false);
 		
-		// Get action button
 		Button button = (Button) mRootView.findViewById(R.id.signInBt);
+		CheckBox checkBox = (CheckBox) mRootView.findViewById(R.id.passInChBx);
 		// Add onClick listener
 		button.setOnClickListener(new SignInAction());
+		checkBox.setOnCheckedChangeListener(new OnCheckedChangeListener(){
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				EditText passEdit = (EditText) mRootView.findViewById(R.id.passInEdit);
+				if (isChecked) {
+					passEdit.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+					passEdit.setTypeface( Typeface.SANS_SERIF );
+				} else {
+					passEdit.setTransformationMethod(PasswordTransformationMethod.getInstance());
+				}
+			}
+		});
 		
 		return mRootView;
 	}
@@ -55,22 +73,21 @@ public class SignInFragment extends Fragment{
 			//reboot activity
 			getActivity().finish();
 			startActivity(getActivity().getIntent());
-			Toast.makeText(getActivity(), "onRequestFinished", 5).show();
+//			Toast.makeText(getActivity(), "onRequestFinished", 5).show();
 		}
 
 		@Override
 		public void onRequestConnectionError(Request request, int statusCode) {
-			Toast.makeText(getActivity(), "onRequestConnectionError", 5).show();
+			Toast.makeText(getActivity(), "Connection error.", Toast.LENGTH_LONG).show();
 		}
 
 		@Override
 		public void onRequestDataError(Request request) {
-			Toast.makeText(getActivity(), "onRequestDataError", 5).show();
+			Toast.makeText(getActivity(), "Wrong data.", Toast.LENGTH_LONG).show();
 		}
 
 		@Override
 		public void onRequestCustomError(Request request, Bundle resultData) {
-			Toast.makeText(getActivity(), "onRequestCustomError", 5).show();
 		}
 		
 	};

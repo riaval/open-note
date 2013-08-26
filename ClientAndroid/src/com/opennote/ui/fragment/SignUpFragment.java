@@ -1,13 +1,19 @@
 package com.opennote.ui.fragment;
 
 import android.app.Fragment;
+import android.graphics.Typeface;
 import android.os.Bundle;
+import android.text.InputType;
+import android.text.method.PasswordTransformationMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Toast;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 
 import com.foxykeep.datadroid.requestmanager.Request;
 import com.foxykeep.datadroid.requestmanager.RequestManager.RequestListener;
@@ -23,10 +29,22 @@ public class SignUpFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		mRootView = inflater.inflate(R.layout.fragment_signup, container, false);
 
-		// Get action button
 		Button button = (Button) mRootView.findViewById(R.id.signUpBt);
-		// Add onClick listener
+		CheckBox checkBox = (CheckBox) mRootView.findViewById(R.id.passUpChBx);
+		
 		button.setOnClickListener(new SignUpAction());
+		checkBox.setOnCheckedChangeListener(new OnCheckedChangeListener(){
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				EditText passEdit = (EditText) mRootView.findViewById(R.id.passUpEdit);
+				if (isChecked) {
+					passEdit.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+					passEdit.setTypeface( Typeface.SANS_SERIF );
+				} else {
+					passEdit.setTransformationMethod(PasswordTransformationMethod.getInstance());
+				}
+			}
+		});
 
 		return mRootView;
 	}
