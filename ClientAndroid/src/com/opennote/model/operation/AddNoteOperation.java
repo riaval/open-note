@@ -1,12 +1,13 @@
 package com.opennote.model.operation;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.HashMap;
-
-import org.json.JSONArray;
-import org.json.JSONException;
+import java.util.Locale;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import com.foxykeep.datadroid.exception.ConnectionException;
@@ -42,16 +43,23 @@ public class AddNoteOperation implements Operation {
 		connection.setMethod(Method.POST);
 		ConnectionResult result = connection.execute();
 
-//		// Generate SQLite insert 
-//		ContentValues note = new ContentValues();
-//		note.put("title", title);
-//		note.put("body", body);
-//		note.put("date", );
-//		note.put("user", groupsJson.getJSONObject(i).getString("user"));
-//		note.put("f_group", slug);
-//
-//
-//		context.getContentResolver().insert(RestContact.Note.CONTENT_URI, note);
+		SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+		String login = sharedPref.getString(context.getString(R.string.user_login), null);
+		String fullName = sharedPref.getString(context.getString(R.string.user_full_name), null);
+		String color = sharedPref.getString(context.getString(R.string.user_color), null);
+		
+		// Generate SQLite insert 
+		SimpleDateFormat sdf = new SimpleDateFormat("dd MMM. HH:mm", Locale.US);
+		ContentValues note = new ContentValues();
+		note.put(Note.TITLE, title);
+		note.put(Note.BODY, body);
+		note.put(Note.DATE, sdf.format(Calendar.getInstance().getTime()));
+		note.put(Note.FULL_NAME, fullName);
+		note.put(Note.LOGIN, login);
+		note.put(Note.GROUP, slug);
+		note.put(Note.COLOR, color);
+		
+		context.getContentResolver().insert(RestContact.Note.CONTENT_URI, note);
 
 		return null;
 	}

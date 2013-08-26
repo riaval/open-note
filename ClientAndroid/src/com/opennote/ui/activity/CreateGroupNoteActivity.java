@@ -1,6 +1,5 @@
 package com.opennote.ui.activity;
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,9 +10,10 @@ import com.foxykeep.datadroid.requestmanager.RequestManager.RequestListener;
 import com.opennote.R;
 import com.opennote.model.RequestFactory;
 import com.opennote.model.RestRequestManager;
+import com.opennote.model.provider.RestContact;
 import com.opennote.ui.fragment.GroupFragment;
 
-public class CreateGroupNoteActivity extends Activity implements ActionBar.OnNavigationListener{
+public class CreateGroupNoteActivity extends Activity {
 
 	private long mId;
 	private String mGroupSlug;
@@ -39,14 +39,6 @@ public class CreateGroupNoteActivity extends Activity implements ActionBar.OnNav
 	    titleEditText.setText(mTitle);
 	    bodyEditText.setText(mBody);
 	}
-	
-//	@Override
-//	public boolean onCreateOptionsMenu(Menu menu) {
-////	    MenuInflater inflater = getMenuInflater();
-////	    inflater.inflate(R.menu.notes, menu);
-////	    menu.removeItem(R.id.action_discard);
-//	    return true;
-//	}
 	
 	@Override
 	protected void onDestroy(){
@@ -78,8 +70,9 @@ public class CreateGroupNoteActivity extends Activity implements ActionBar.OnNav
 	private RequestListener mRequestListener = new RequestListener() {
 		@Override
 		public void onRequestFinished(Request request, Bundle resultData) {
-			MainActivity mainActivity = MainActivity.instance;
-			mainActivity.updateGroups(mGroupSlug);
+			MainActivity.instance.getContentResolver().notifyChange(RestContact.Note.CONTENT_URI, null);
+//			MainActivity mainActivity = MainActivity.instance;
+//			mainActivity.updateGroups(mGroupSlug);
 		}
 
 		@Override
@@ -98,11 +91,5 @@ public class CreateGroupNoteActivity extends Activity implements ActionBar.OnNav
 		}
 		
 	};
-
-	@Override
-	public boolean onNavigationItemSelected(int itemPosition, long itemId) {
-		// TODO Auto-generated method stub
-		return false;
-	}
 	
 }

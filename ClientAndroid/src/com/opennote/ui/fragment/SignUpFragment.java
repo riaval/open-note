@@ -76,7 +76,6 @@ public class SignUpFragment extends Fragment {
 			//reboot activity
 			getActivity().finish();
 			startActivity(getActivity().getIntent());
-			Toast.makeText(getActivity(), "onRequestFinished -- Sign Up", 5).show();
 		}
 
 		@Override

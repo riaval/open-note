@@ -52,11 +52,13 @@ public final class SignInOperation implements Operation {
 		
 		String fullName;
         String email;
+        String color;
         
         try {
 			JSONObject jsonBbject = new JSONObject(result.body);
 			fullName = jsonBbject.get("full_name").toString();	
 			email = jsonBbject.get("email").toString();
+			color = jsonBbject.get("color").toString();
 		} catch (JSONException e) {
 			throw new DataException(e.getMessage());
 		}
@@ -68,7 +70,7 @@ public final class SignInOperation implements Operation {
 		editor.putString(context.getString(R.string.user_login), login);
 		editor.putString(context.getString(R.string.user_full_name), fullName);
 		editor.putString(context.getString(R.string.user_email), email);
-		
+		editor.putString(context.getString(R.string.user_color), color);
 		editor.commit();
       
 		return null;

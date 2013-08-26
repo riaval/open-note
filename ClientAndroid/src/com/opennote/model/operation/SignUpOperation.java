@@ -38,19 +38,43 @@ public final class SignUpOperation implements Operation {
 		connection.setMethod(Method.POST);
 		ConnectionResult result = connection.execute();
 		
+		String sessionHash;
         try {
 			JSONObject jsonBbject = new JSONObject(result.body);
-			SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-			SharedPreferences.Editor editor = sharedPref.edit();
-			
-			editor.putString(context.getString(R.string.session_hash), jsonBbject.get("session_hash").toString());
-			editor.putString(context.getString(R.string.user_full_name), fullName);
-			editor.putString(context.getString(R.string.user_login), login);
-			editor.putString(context.getString(R.string.user_email), null);
-			editor.commit();
+			sessionHash = jsonBbject.get("session_hash").toString();
 		} catch (JSONException e) {
 			throw new DataException(e.getMessage());
 		}
+        
+        params.clear();
+		params.put("session_hash", sessionHash);
+		address = "http://" + host + "/api/users/";
+		connection = new NetworkConnection(context, address);
+		connection.setParameters(params);
+		connection.setMethod(Method.GET);
+		result = connection.execute();
+		
+        String email;
+        String color;
+        
+        try {
+			JSONObject jsonBbject = new JSONObject(result.body);
+			fullName = jsonBbject.get("full_name").toString();	
+			email = jsonBbject.get("email").toString();
+			color = jsonBbject.get("color").toString();
+		} catch (JSONException e) {
+			throw new DataException(e.getMessage());
+		}
+        
+        SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+		SharedPreferences.Editor editor = sharedPref.edit();
+		
+		editor.putString(context.getString(R.string.session_hash), sessionHash);
+		editor.putString(context.getString(R.string.user_login), login);
+		editor.putString(context.getString(R.string.user_full_name), fullName);
+		editor.putString(context.getString(R.string.user_email), email);
+		editor.putString(context.getString(R.string.user_color), color);
+		editor.commit();
       
         return null;
 	}

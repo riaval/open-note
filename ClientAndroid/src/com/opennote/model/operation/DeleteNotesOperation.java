@@ -19,7 +19,6 @@ import com.foxykeep.datadroid.requestmanager.Request;
 import com.foxykeep.datadroid.service.RequestService.Operation;
 import com.opennote.R;
 import com.opennote.model.provider.RestContact;
-import com.opennote.model.provider.RestContact.Invitation;
 
 public class DeleteNotesOperation implements Operation {
 
@@ -41,13 +40,18 @@ public class DeleteNotesOperation implements Operation {
 		}
 		connection.setParameters(params);
 		
+		String where = "(";
+		for (int i=0; i<IDs.size(); i++){
+			where += "?,";
+		}
+		where = where.substring(0, where.length()-1) + ")";
 
 		connection.setMethod(Method.DELETE);
 		ConnectionResult result = connection.execute();
-		
+		System.out.println(where);
 		context.getContentResolver().delete(
 				RestContact.Note.CONTENT_URI
-				, Note._ID+"=?"
+				, Note._ID+" in " + where
 				, IDs.toArray( new String[IDs.size()] )
 		);
 		

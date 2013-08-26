@@ -12,7 +12,12 @@ public class UserPrivateResponse extends UserPublicResponse {
 
 	@JsonProperty("email")
 	public String getEmail() {
-		return mUser.getEmail();
+		String email = mUser.getEmail();
+		if (email == null) {
+			return "";
+		} else {
+			return mUser.getEmail();
+		}
 	}
 
 }

@@ -2,6 +2,7 @@ package com.opennote.model.operation;
 
 import java.util.HashMap;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.os.Bundle;
 
@@ -14,6 +15,8 @@ import com.foxykeep.datadroid.network.NetworkConnection.Method;
 import com.foxykeep.datadroid.requestmanager.Request;
 import com.foxykeep.datadroid.service.RequestService.Operation;
 import com.opennote.R;
+import com.opennote.model.provider.RestContact;
+import com.opennote.model.provider.RestContact.Note;
 
 public class EditNoteOperation implements Operation {
 
@@ -36,16 +39,16 @@ public class EditNoteOperation implements Operation {
 		connection.setMethod(Method.PUT);
 		ConnectionResult result = connection.execute();
 		
-//		ContentValues note = new ContentValues();
-//		note.put(Note.TITLE, title);
-//		note.put(Note.BODY, body);
-//		
-//		context.getContentResolver().update(
-//				  RestContact.Note.CONTENT_URI
-//				, note
-//				, Note._ID+"=?"
-//				, new String[]{String.valueOf(noteID)}
-//		);
+		ContentValues note = new ContentValues();
+		note.put(Note.TITLE, title);
+		note.put(Note.BODY, body);
+		
+		context.getContentResolver().update(
+				  RestContact.Note.CONTENT_URI
+				, note
+				, Note._ID+"=?"
+				, new String[]{String.valueOf(noteID)}
+		);
 		
 		return null;
 	}

@@ -184,19 +184,19 @@ public final class R {
         public static final int notes=0x7f0a0001;
     }
     public static final class string {
-        public static final int action_discard=0x7f060016;
-        public static final int action_left=0x7f060018;
-        public static final int action_new=0x7f060014;
-        public static final int action_new_list=0x7f060015;
-        public static final int action_refresh=0x7f060019;
+        public static final int action_discard=0x7f060017;
+        public static final int action_left=0x7f060019;
+        public static final int action_new=0x7f060015;
+        public static final int action_new_list=0x7f060016;
+        public static final int action_refresh=0x7f06001a;
         public static final int action_settings=0x7f060006;
-        public static final int action_share=0x7f060017;
+        public static final int action_share=0x7f060018;
         public static final int app_name=0x7f060002;
-        public static final int app_not_available=0x7f06001a;
+        public static final int app_not_available=0x7f06001b;
         public static final int connectoin_error=0x7f06000b;
         public static final int create_note=0x7f060003;
-        public static final int drawer_close=0x7f060013;
-        public static final int drawer_open=0x7f060012;
+        public static final int drawer_close=0x7f060014;
+        public static final int drawer_open=0x7f060013;
         public static final int find_users=0x7f060004;
         public static final int host_name=0x7f06000c;
         public static final int nothing=0x7f06000a;
@@ -208,6 +208,7 @@ public final class R {
         public static final int title_welcome=0x7f060005;
         public static final int undo=0x7f060000;
         public static final int undoall=0x7f060001;
+        public static final int user_color=0x7f060012;
         public static final int user_email=0x7f060011;
         public static final int user_full_name=0x7f060010;
         public static final int user_login=0x7f06000f;

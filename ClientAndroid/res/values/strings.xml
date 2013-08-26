@@ -18,6 +18,7 @@
     <string name="user_login">user_login</string>
     <string name="user_full_name">user_full_name</string>
     <string name="user_email">user_email</string>
+    <string name="user_color">user_color</string>
     
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
