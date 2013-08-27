@@ -13,13 +13,14 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.foxykeep.datadroid.requestmanager.Request;
 import com.foxykeep.datadroid.requestmanager.RequestManager.RequestListener;
 import com.opennote.R;
+import com.opennote.model.ErrorFactory;
 import com.opennote.model.RequestFactory;
 import com.opennote.model.RestRequestManager;
+import com.opennote.model.service.RestService;
 
 public class SignInFragment extends Fragment{
 
@@ -73,21 +74,23 @@ public class SignInFragment extends Fragment{
 			//reboot activity
 			getActivity().finish();
 			startActivity(getActivity().getIntent());
-//			Toast.makeText(getActivity(), "onRequestFinished", 5).show();
 		}
 
 		@Override
 		public void onRequestConnectionError(Request request, int statusCode) {
-			Toast.makeText(getActivity(), "Connection error.", Toast.LENGTH_LONG).show();
+			ErrorFactory.showConnectionErrorMessage(getActivity());
 		}
 
 		@Override
 		public void onRequestDataError(Request request) {
-			Toast.makeText(getActivity(), "Wrong data.", Toast.LENGTH_LONG).show();
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public void onRequestCustomError(Request request, Bundle resultData) {
+			int code = resultData.getInt(RestService.STATUS_CODE);
+			String comment = resultData.getString(RestService.COMMENT);
+			ErrorFactory.doError(getActivity(), code, comment);
 		}
 		
 	};

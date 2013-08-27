@@ -11,15 +11,16 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.EditText;
-import android.widget.Toast;
 import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.EditText;
 
 import com.foxykeep.datadroid.requestmanager.Request;
 import com.foxykeep.datadroid.requestmanager.RequestManager.RequestListener;
 import com.opennote.R;
+import com.opennote.model.ErrorFactory;
 import com.opennote.model.RequestFactory;
 import com.opennote.model.RestRequestManager;
+import com.opennote.model.service.RestService;
 
 public class SignUpFragment extends Fragment {
 
@@ -80,17 +81,19 @@ public class SignUpFragment extends Fragment {
 
 		@Override
 		public void onRequestConnectionError(Request request, int statusCode) {
-			Toast.makeText(getActivity(), "onRequestConnectionError", 5).show();
+			ErrorFactory.showConnectionErrorMessage(getActivity());
 		}
 
 		@Override
 		public void onRequestDataError(Request request) {
-			Toast.makeText(getActivity(), "onRequestDataError", 5).show();
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public void onRequestCustomError(Request request, Bundle resultData) {
-			Toast.makeText(getActivity(), "onRequestCustomError", 5).show();
+			int code = resultData.getInt(RestService.STATUS_CODE);
+			String comment = resultData.getString(RestService.COMMENT);
+			ErrorFactory.doError(getActivity(), code, comment);
 		}
 		
 	};

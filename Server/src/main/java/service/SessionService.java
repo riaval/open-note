@@ -8,20 +8,22 @@ import domain.User;
 public class SessionService {
 
 	public Session openSession(String login, String password, String hostIp, String hostAgent) throws Exception {
+		String deffErrorMessage = "Login or password incorrect.";
 		HibernateUtil.beginTransaction(); // ---->
 		try {
 			User user = DAOFactory.getUserDAO().findByLogin(login);
 			if (user == null) {
-				throw new IllegalArgumentException("Wrong login.");
+				throw new IllegalArgumentException(deffErrorMessage);
 			}
 			String passwordHash = ServiceUtil.getSaltMD5(password);
 			if (!user.getPasswordHash().equals(passwordHash)) {
-				throw new IllegalArgumentException("Wrong password.");
+				throw new IllegalArgumentException(deffErrorMessage);
 			}
 
 			String clientHash = ServiceUtil.getSaltMD5(login + hostIp + hostAgent);
 			Session session = DAOFactory.getSessionDAO().findByHash(clientHash);
 			if (!(session == null)) {
+				HibernateUtil.commitTransaction(); // <----
 				return session;
 			}
 

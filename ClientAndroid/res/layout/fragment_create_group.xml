@@ -17,7 +17,8 @@
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:ems="10"
-        android:hint="6—15 characters" >
+        android:hint="6—15 characters"
+        android:inputType="textNoSuggestions" >
     </EditText>
 
     <TextView

@@ -19,20 +19,28 @@ public class InviteService {
 		try {
 			Session session = DAOFactory.getSessionDAO().findByHash(sessionHash);
 			if (session == null) {
-				throw new BadAuthenticationException("Session is empty");
+				throw new BadAuthenticationException("Session is empty.");
 			}
 			User userFrom = session.getUser();
 			User userTo = DAOFactory.getUserDAO().findByLogin(login);
 			if (userFrom.equals(userTo)) {
-				throw new IllegalArgumentException("Invitation to oneself");
+				throw new IllegalArgumentException("Invitation to oneself.");
 			}
 			Group group = DAOFactory.getGroupDAO().findBySlug(slug);
 			if (group == null || userTo == null) {
-				throw new IllegalArgumentException("User or group is null");
+				throw new IllegalArgumentException("User or group is null.");
 			}
 
-			Set<UserGroup> userGroups = userFrom.getUserGroups();
-			for (UserGroup each : userGroups) {
+			Set<UserGroup> userToGroups = userTo.getUserGroups();
+			for (UserGroup each : userToGroups) {
+				Group eachGroup = each.getGroup();
+				if (eachGroup.equals(group)){
+					throw new IllegalArgumentException("User is already accepted an invitation.");
+				}
+			}
+			
+			Set<UserGroup> userFromGroups = userFrom.getUserGroups();
+			for (UserGroup each : userFromGroups) {
 				if (each.getGroup().equals(group)) {
 					GroupRole groupRole = DAOFactory.getGroupRoleDAO().findByRole("member");
 					Invite invite = new Invite(userTo, each, groupRole);
@@ -40,7 +48,7 @@ public class InviteService {
 					Set<Invite> invitations = userTo.getInvites();
 					for (Invite eachInvitation : invitations) {
 						if (eachInvitation.getUserGroup().equals(each)) {
-							throw new IllegalArgumentException("Invitation is already created");
+							throw new IllegalArgumentException("Invitation is already created.");
 						}
 					}
 

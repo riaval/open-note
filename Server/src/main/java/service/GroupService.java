@@ -15,7 +15,10 @@ public class GroupService {
 
 	public void createGroup(String slug, String name, String sessionHash) throws Exception {
 		if (slug.length() < 4 || slug.length() > 15) {
-			throw new IllegalArgumentException("Wrong slug length");
+			throw new IllegalArgumentException("Goup short name must be between 6 and 15 characters long.");
+		}
+		if (name == null || name.length() == 0) {
+			throw new IllegalArgumentException("Goup name is empty.");
 		}
 		HibernateUtil.beginTransaction(); // ---->
 		try {
@@ -23,11 +26,15 @@ public class GroupService {
 			if (session == null) {
 				throw new BadAuthenticationException("Session is empty");
 			}
+			Group currentGroup = DAOFactory.getGroupDAO().findBySlug(slug);
+			if (currentGroup != null){
+				throw new IllegalArgumentException("A group with this short name already exists.");
+			}
 			User user = session.getUser();
-			Group group = new Group(slug, name);
+			Group newGroup = new Group(slug, name);
 			GroupRole groupRole = DAOFactory.getGroupRoleDAO().findByRole("creator");
-			UserGroup userGroup = new UserGroup(user, group, groupRole);
-			DAOFactory.getGroupDAO().save(group);
+			UserGroup userGroup = new UserGroup(user, newGroup, groupRole);
+			DAOFactory.getGroupDAO().save(newGroup);
 			DAOFactory.getUserGroupDAO().save(userGroup);
 			HibernateUtil.commitTransaction(); // <----
 		} catch (Exception e) {

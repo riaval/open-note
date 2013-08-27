@@ -48,7 +48,6 @@ public class FindUsersOperation implements Operation {
 				user.put("fullName", groupsJson.getJSONObject(i).getString("full_name"));
 				user.put("date", groupsJson.getJSONObject(i).getString("date"));
 				usersValues[i] = user;
-				System.out.println(groupsJson.getJSONObject(i).getString("login"));
 			}
 			
 		} catch (JSONException e) {

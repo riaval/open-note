@@ -14,8 +14,10 @@ import android.widget.Toast;
 import com.foxykeep.datadroid.requestmanager.Request;
 import com.foxykeep.datadroid.requestmanager.RequestManager.RequestListener;
 import com.opennote.R;
+import com.opennote.model.ErrorFactory;
 import com.opennote.model.RequestFactory;
 import com.opennote.model.RestRequestManager;
+import com.opennote.model.service.RestService;
 import com.opennote.ui.activity.MainActivity;
 
 public class CreateGroupFragment extends Fragment {
@@ -58,24 +60,26 @@ public class CreateGroupFragment extends Fragment {
 			MainActivity mainActivity = (MainActivity) getActivity();
 			mainActivity.loadGroups();
 			mainActivity.updateGroups(mGroupSlug);
-			Toast.makeText(getActivity(), mGroupName + " created", 5).show();
+			Toast.makeText(getActivity(), mGroupName + " created", Toast.LENGTH_LONG).show();
 			InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
 	    	imm.toggleSoftInput(InputMethodManager.HIDE_NOT_ALWAYS,0);
 		}
 
 		@Override
 		public void onRequestConnectionError(Request request, int statusCode) {
-			Toast.makeText(getActivity(), "onRequestConnectionError", 5).show();
+			ErrorFactory.showConnectionErrorMessage(getActivity());
 		}
 
 		@Override
 		public void onRequestDataError(Request request) {
-			Toast.makeText(getActivity(), "onRequestDataError", 5).show();
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public void onRequestCustomError(Request request, Bundle resultData) {
-			Toast.makeText(getActivity(), "onRequestCustomError", 5).show();
+			int code = resultData.getInt(RestService.STATUS_CODE);
+			String comment = resultData.getString(RestService.COMMENT);
+			ErrorFactory.doError(getActivity(), code, comment);
 		}
 		
 	};

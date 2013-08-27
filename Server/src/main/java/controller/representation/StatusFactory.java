@@ -2,72 +2,39 @@ package controller.representation;
 
 public class StatusFactory {
 
-	static private Status sOk;
-	static private Status sCreated;
-	static private Status sBadRequest;
-	static private Status sUnauthorized;
-	static private Status sNotFound;
-	static private Status sTooLarge;
-	static private Status sInternalError;
-	static private Status sServiceUnavailable;
-
 	static public Status ok() {
-		if (sOk == null) {
-			sOk = new Status("OK", 200);
-		}
-		return sOk;
+		return new Status("OK", 200, null);
 	}
 
 	static public Status created() {
-		if (sCreated == null) {
-			sCreated = new Status("Created ", 201);
-		}
-		return sCreated;
+		return new Status("Created ", 201, null);
 	}
 
-	static public Status clientBadRequest() {
-		if (sBadRequest == null) {
-			sBadRequest = new Status("Bad Request", 400);
-		}
-		return sBadRequest;
+	static public Status clientBadRequest(String comment) {
+		return new Status("Bad Request", 400, comment);
 	}
 
-	static public Status clientUnauthorized() {
-		if (sUnauthorized == null) {
-			sUnauthorized = new Status("Unauthorized", 401);
-		}
-		return sUnauthorized;
+	static public Status clientUnauthorized(String comment) {
+		return new Status("Unauthorized", 401, comment);
 	}
 
-	static public Status clientNotFound() {
-		if (sNotFound == null) {
-			sNotFound = new Status("Not Found", 404);
-		}
-		return sNotFound;
+	static public Status clientNotFound(String comment) {
+		return new Status("Not Found", 404, comment);
 	}
 
-	static public Status clientTooLargeEntity() {
-		if (sTooLarge == null) {
-			sTooLarge = new Status("Request Entity Too Large", 413);
-		}
-		return sTooLarge;
+	static public Status clientTooLargeEntity(String comment) {
+		return new Status("Request Entity Too Large", 413, comment);
 	}
 
 	static public Status serverInternalError() {
-		if (sInternalError == null) {
-			sInternalError = new Status("Internal Server Error", 500);
-		}
-		return sInternalError;
+		return new Status("Internal Server Error", 500, "Internal server error.");
 	}
 
-	static public Status serverServiceUnavailable() {
-		if (sServiceUnavailable == null) {
-			sServiceUnavailable = new Status("Service Unavailable", 503);
-		}
-		return sServiceUnavailable;
+	static public Status serverServiceUnavailable(String comment) {
+		return new Status("Service Unavailable", 503, comment);
 	}
 
-	// Show message about errors
+	// Show message about error
 	static public String getErrorMessage(Exception e) {
 		return e.getClass().getName() + " : " + e.getMessage();
 	}

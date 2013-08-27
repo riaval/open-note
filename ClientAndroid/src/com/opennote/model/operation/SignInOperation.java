@@ -39,7 +39,9 @@ public final class SignInOperation implements Operation {
 			JSONObject jsonBbject = new JSONObject(result.body);
 			sessionHash = jsonBbject.get("session_hash").toString();
         } catch (JSONException e) {
-            throw new DataException(e.getMessage());
+        	throw new CustomRequestException(result.body) {
+				private static final long serialVersionUID = 1L;
+			};
         }
         
 		params.clear();
@@ -60,7 +62,9 @@ public final class SignInOperation implements Operation {
 			email = jsonBbject.get("email").toString();
 			color = jsonBbject.get("color").toString();
 		} catch (JSONException e) {
-			throw new DataException(e.getMessage());
+			throw new CustomRequestException(result.body) {
+				private static final long serialVersionUID = 1L;
+			};
 		}
         
         SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
@@ -75,5 +79,4 @@ public final class SignInOperation implements Operation {
       
 		return null;
 	}
-	
 }

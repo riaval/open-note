@@ -7,8 +7,12 @@ public class Status {
 	@JsonProperty("status")
 	public StatusValue mStatus;
 
-	public Status(String message, int code) {
+	@JsonProperty("comment")
+	public String mComment;
+
+	public Status(String message, int code, String comment) {
 		mStatus = new StatusValue(message, code);
+		mComment = comment;
 	}
 
 	class StatusValue {

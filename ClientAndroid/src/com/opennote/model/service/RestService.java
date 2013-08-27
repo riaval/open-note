@@ -1,5 +1,12 @@
 package com.opennote.model.service;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import android.os.Bundle;
+
+import com.foxykeep.datadroid.exception.CustomRequestException;
+import com.foxykeep.datadroid.requestmanager.Request;
 import com.foxykeep.datadroid.service.RequestService;
 import com.opennote.model.RequestFactory;
 import com.opennote.model.operation.AcceptInvitationOperation;
@@ -20,6 +27,10 @@ import com.opennote.model.operation.SignInOperation;
 import com.opennote.model.operation.SignUpOperation;
 
 public class RestService extends RequestService{
+	
+	public static String STATUS_CODE = "RestService.statusCode";
+	public static String MESSAGE = "RestService.message";
+	public static String COMMENT = "RestService.comment";
 
 	@Override
 	public Operation getOperationForType(int requestType) {
@@ -60,5 +71,32 @@ public class RestService extends RequestService{
 			return null;
 		}
 	}
+	
+	@Override
+	protected Bundle onCustomRequestException(Request request, CustomRequestException exception) {
+		String body = exception.getMessage();
+		
+		try {
+			// parse JSON
+			JSONObject JSONRoot = new JSONObject(body);
+			JSONObject JSONStatus = JSONRoot.getJSONObject("status");
+			
+			int code = JSONStatus.getInt("code");
+			String message = JSONStatus.getString("message");
+			String comment = JSONRoot.getString("comment");
+			
+			// Create bandle
+			Bundle bundle = new Bundle();
+			bundle.putInt(STATUS_CODE, code);
+			bundle.putString(MESSAGE, message);
+			bundle.putString(COMMENT, comment);
+			
+			return bundle;
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+
+        return null;
+    }
 
 }

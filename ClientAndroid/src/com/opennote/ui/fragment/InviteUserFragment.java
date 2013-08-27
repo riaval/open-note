@@ -6,16 +6,16 @@ import java.util.List;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.LoaderManager.LoaderCallbacks;
-import android.content.Context;
 import android.content.CursorLoader;
 import android.content.DialogInterface;
 import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -27,11 +27,13 @@ import android.widget.Toast;
 import com.foxykeep.datadroid.requestmanager.Request;
 import com.foxykeep.datadroid.requestmanager.RequestManager.RequestListener;
 import com.opennote.R;
+import com.opennote.model.ErrorFactory;
 import com.opennote.model.RequestFactory;
 import com.opennote.model.RestRequestManager;
 import com.opennote.model.provider.RestContact;
 import com.opennote.model.provider.RestContact.Group;
 import com.opennote.model.provider.RestContact.User;
+import com.opennote.model.service.RestService;
 import com.opennote.ui.activity.MainActivity;
 
 public class InviteUserFragment extends Fragment {
@@ -74,7 +76,18 @@ public class InviteUserFragment extends Fragment {
 		
 		mSearchEdit = (EditText) rootView.findViewById(R.id.searchEdit);
 		ImageButton searchBt = (ImageButton) rootView.findViewById(R.id.searchBt);
-
+		
+		mSearchEdit.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+		    @Override
+		    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+		        if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+		            performSearch();
+		            return true;
+		        }
+		        return false;
+		    }
+		});
+		
 		searchBt.setOnClickListener(new FindUsersAction());
 		return rootView;
 	}
@@ -82,34 +95,47 @@ public class InviteUserFragment extends Fragment {
 	private class FindUsersAction implements View.OnClickListener {
 		@Override
 		public void onClick(View view) {			
-			String searchValue = mSearchEdit.getText().toString();
-
-			// DataDroid RequestManager
-			RestRequestManager requestManager = RestRequestManager.from(getActivity());
-			Request request = RequestFactory.getInviteUserRequest(MainActivity.instance.getSessionHash(), searchValue);
-			requestManager.execute(request, mRequestListener);
+			performSearch();
 		}		
 	}
 	
+	private void performSearch(){
+		String searchValue = mSearchEdit.getText().toString();
+		
+		// DataDroid RequestManager
+		RestRequestManager requestManager = RestRequestManager.from(getActivity());
+		Request request = RequestFactory.getInviteUserRequest(MainActivity.instance.getSessionHash(), searchValue);
+		requestManager.execute(request, mRequestListener);
+	}
+	
 	private RequestListener mRequestListener = new RequestListener() {
+		private boolean mark;
+		
 		@Override
 		public void onRequestFinished(Request request, Bundle resultData) {
-	        getLoaderManager().initLoader(LOADER_ID, null, loaderCallbacks);
+			if (!mark){
+				getLoaderManager().initLoader(LOADER_ID, null, loaderCallbacks);
+				mark = true;
+			} else {
+				getActivity().getContentResolver().notifyChange(RestContact.User.CONTENT_URI, null);
+			}
 		}
 
 		@Override
 		public void onRequestConnectionError(Request request, int statusCode) {
-			Toast.makeText(getActivity(), "onRequestConnectionError", 5).show();
+			ErrorFactory.showConnectionErrorMessage(getActivity());
 		}
 
 		@Override
 		public void onRequestDataError(Request request) {
-			Toast.makeText(getActivity(), "onRequestDataError", 5).show();
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public void onRequestCustomError(Request request, Bundle resultData) {
-			Toast.makeText(getActivity(), "onRequestCustomError", 5).show();
+			int code = resultData.getInt(RestService.STATUS_CODE);
+			String comment = resultData.getString(RestService.COMMENT);
+			ErrorFactory.doError(getActivity(), code, comment);
 		}
 	};
 	
@@ -129,10 +155,10 @@ public class InviteUserFragment extends Fragment {
 
         @Override
         public void onLoadFinished(Loader<Cursor> arg0, Cursor cursor) {
-            mAdapter.swapCursor(cursor);
             if(cursor.getCount() == 0){
             	Toast.makeText(getActivity(), "Nothing found", Toast.LENGTH_LONG).show();
             }
+            mAdapter.swapCursor(cursor);
         }
 
         @Override
@@ -210,22 +236,23 @@ public class InviteUserFragment extends Fragment {
                             }
                         });
                 builderInner.show();
-		        Toast.makeText(getActivity(), "onRequestFinished", 5).show();
 			}
 
 			@Override
 			public void onRequestConnectionError(Request request, int statusCode) {
-				Toast.makeText(getActivity(), "onRequestConnectionError", 5).show();
+				ErrorFactory.showConnectionErrorMessage(getActivity());
 			}
 
 			@Override
 			public void onRequestDataError(Request request) {
-				Toast.makeText(getActivity(), "onRequestDataError", 5).show();
+				throw new UnsupportedOperationException();
 			}
 
 			@Override
 			public void onRequestCustomError(Request request, Bundle resultData) {
-				Toast.makeText(getActivity(), "onRequestCustomError", 5).show();
+				int code = resultData.getInt(RestService.STATUS_CODE);
+				String comment = resultData.getString(RestService.COMMENT);
+				ErrorFactory.doError(getActivity(), code, comment);
 			}
 		};
 	}

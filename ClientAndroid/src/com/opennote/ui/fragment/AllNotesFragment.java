@@ -10,15 +10,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.foxykeep.datadroid.requestmanager.Request;
 import com.foxykeep.datadroid.requestmanager.RequestManager.RequestListener;
 import com.opennote.R;
+import com.opennote.model.ErrorFactory;
 import com.opennote.model.RequestFactory;
 import com.opennote.model.RestRequestManager;
 import com.opennote.model.adapter.NoteGroupAdapter;
 import com.opennote.model.provider.RestContact.Note;
+import com.opennote.model.service.RestService;
 import com.opennote.ui.activity.MainActivity;
 
 public class AllNotesFragment extends Fragment {
@@ -73,12 +74,14 @@ public class AllNotesFragment extends Fragment {
 
 		@Override
 		public void onRequestDataError(Request request) {
-			Toast.makeText(getActivity(), "onRequestDataError", 5).show();
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public void onRequestCustomError(Request request, Bundle resultData) {
-			Toast.makeText(getActivity(), "onRequestCustomError", 5).show();
+			int code = resultData.getInt(RestService.STATUS_CODE);
+			String comment = resultData.getString(RestService.COMMENT);
+			ErrorFactory.doError(getActivity(), code, comment);
 		}
 		
 	};

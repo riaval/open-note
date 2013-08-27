@@ -18,7 +18,7 @@
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:ems="10"
-        android:hint="6—15 characters"
+        android:hint="4—15 characters"
         android:inputType="text" />
 
     <TextView
@@ -27,6 +27,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="11dp"
         android:layout_marginTop="10dp"
+        android:inputType="textPersonName|textCapSentences"
         android:text="Full name" />
 
     <EditText

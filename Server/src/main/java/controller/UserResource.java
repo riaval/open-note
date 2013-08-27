@@ -54,7 +54,7 @@ public class UserResource extends ServerResource {
 					);
 		} catch (IllegalArgumentException e) {
 			System.err.println(StatusFactory.getErrorMessage(e));
-			return new JacksonRepresentation<Status>( StatusFactory.clientBadRequest() );
+			return new JacksonRepresentation<Status>( StatusFactory.clientBadRequest(e.getMessage()) );
 		} catch (Exception e) {
 			System.err.println(StatusFactory.getErrorMessage(e));
 			return new JacksonRepresentation<Status>( StatusFactory.serverInternalError() );
@@ -71,7 +71,7 @@ public class UserResource extends ServerResource {
 			}
 		} catch (BadAuthenticationException e) {
 			System.err.println(StatusFactory.getErrorMessage(e));
-			return new JacksonRepresentation<Status>( StatusFactory.clientUnauthorized() );
+			return new JacksonRepresentation<Status>( StatusFactory.clientUnauthorized(e.getMessage()) );
 		} catch (Exception e) {
 			System.err.println(StatusFactory.getErrorMessage(e));
 			return new JacksonRepresentation<Status>( StatusFactory.serverInternalError() );

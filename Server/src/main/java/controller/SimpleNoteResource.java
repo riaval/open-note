@@ -47,10 +47,10 @@ public class SimpleNoteResource extends ServerResource {
 			return new JacksonRepresentation<List<SimpleNoteResponse>>(simpleNotesResponse);
 		} catch (BadAuthenticationException e) {
 			System.err.println(StatusFactory.getErrorMessage(e));
-			return new JacksonRepresentation<Status>( StatusFactory.clientUnauthorized() );
+			return new JacksonRepresentation<Status>( StatusFactory.clientUnauthorized(e.getMessage()) );
 		} catch (IllegalArgumentException e) {
 			System.err.println(StatusFactory.getErrorMessage(e));
-			return new JacksonRepresentation<Status>( StatusFactory.clientBadRequest() );
+			return new JacksonRepresentation<Status>( StatusFactory.clientBadRequest(e.getMessage()) );
 		} catch (Exception e) {
 			System.err.println(StatusFactory.getErrorMessage(e));
 			return new JacksonRepresentation<Status>( StatusFactory.serverInternalError() );
@@ -70,10 +70,10 @@ public class SimpleNoteResource extends ServerResource {
 			return new JacksonRepresentation<Status>( StatusFactory.ok() );
 		} catch (BadAuthenticationException e) {
 			System.err.println(StatusFactory.getErrorMessage(e));
-			return new JacksonRepresentation<Status>( StatusFactory.clientUnauthorized() );
+			return new JacksonRepresentation<Status>( StatusFactory.clientUnauthorized(e.getMessage()) );
 		} catch (IllegalArgumentException e) {
 			System.err.println(StatusFactory.getErrorMessage(e));
-			return new JacksonRepresentation<Status>( StatusFactory.clientBadRequest() );
+			return new JacksonRepresentation<Status>( StatusFactory.clientBadRequest(e.getMessage()) );
 		} catch (Exception e) {
 			System.err.println(StatusFactory.getErrorMessage(e));
 			return new JacksonRepresentation<Status>( StatusFactory.serverInternalError() );
@@ -95,10 +95,10 @@ public class SimpleNoteResource extends ServerResource {
 			return new JacksonRepresentation<Status>( StatusFactory.ok() );
 		} catch (BadAuthenticationException e) {
 			System.err.println(StatusFactory.getErrorMessage(e));
-			return new JacksonRepresentation<Status>( StatusFactory.clientUnauthorized() );
+			return new JacksonRepresentation<Status>( StatusFactory.clientUnauthorized(e.getMessage()) );
 		} catch (IllegalArgumentException e) {
 			System.err.println(StatusFactory.getErrorMessage(e));
-			return new JacksonRepresentation<Status>( StatusFactory.clientBadRequest() );
+			return new JacksonRepresentation<Status>( StatusFactory.clientBadRequest(e.getMessage()) );
 		} catch (Exception e) {
 			System.err.println(StatusFactory.getErrorMessage(e));
 			return new JacksonRepresentation<Status>( StatusFactory.serverInternalError() );

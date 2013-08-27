@@ -1,5 +1,8 @@
 package service;
 
+import java.awt.Color;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import service.exception.BadAuthenticationException;
@@ -10,23 +13,35 @@ import domain.User;
 
 public class UserService {
 
-	public Session createUser(String login, String fullName, String password, String hostIp, String hostAgent)
-			throws Exception {
-		if (login.length() < 4) {
-			throw new IllegalArgumentException("Login length < 4 characters.");
+	public Session createUser(String login, String fullName, String password, String hostIp, String hostAgent) throws Exception {
+		if (login == null || login.length() < 4 || login.length() > 15) {
+			throw new IllegalArgumentException("Login must be between 6 and 15 characters long.");
 		}
-		if (password.length() < 6) {
-			throw new IllegalArgumentException("Password length < 6 characters.");
+		if (password == null || password.length() < 6) {
+			throw new IllegalArgumentException("Password must be at least 6 characters long.");
+		}
+		if (password.length() > 64) {
+			throw new IllegalArgumentException("Password is too long.");
+		}
+		if (fullName == null || fullName.length() == 0){
+			throw new IllegalArgumentException("Full name field is required.");
 		}
 
 		String passwordHash = ServiceUtil.getSaltMD5(password);
 		String clientHash = ServiceUtil.getSaltMD5(login + hostIp + hostAgent);
-		User user = new User(login, fullName, passwordHash);
+		Date date = Calendar.getInstance().getTime();
+		int color = ServiceUtil.generateRandomColor(new Color(255, 255, 255)).getRGB();
+		User user = new User(login, fullName, passwordHash, date, color);
 		Session session = new Session(clientHash);
 		session.setUser(user);
 
 		HibernateUtil.beginTransaction(); // ---->
 		try {
+			User defUser = DAOFactory.getUserDAO().findByLogin(login);
+			if (defUser != null) {
+				throw new IllegalArgumentException("An account with this login already exists.");
+			}
+			
 			DAOFactory.getUserDAO().save(user);
 			DAOFactory.getSessionDAO().save(session);
 			HibernateUtil.commitTransaction(); // <----

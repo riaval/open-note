@@ -1,7 +1,5 @@
 package domain;
 
-import java.awt.Color;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -31,14 +29,12 @@ public class User {
 	public User(){
 	}
 
-	public User(String login, String fullName, String passwordHash) {
+	public User(String login, String fullName, String passwordHash, Date date, int color) {
 		mLogin = login;
 		mFullName = fullName;
 		mPasswordHash = passwordHash;
-		mDate = Calendar.getInstance().getTime();
-		mColor = DomainUtil.generateRandomColor(
-				new Color(255, 255, 255)
-				).getRGB();
+		mDate = date;
+		mColor = color;
 	}
 
 	// login

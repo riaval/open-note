@@ -58,7 +58,9 @@ public class LoadAllNotesOperation implements Operation {
 				notesValues[i] = note;
 			}
 		} catch (JSONException e) {
-			throw new DataException(e.getMessage());
+			throw new CustomRequestException(result.body) {
+				private static final long serialVersionUID = 1L;
+			};
 		}
         context.getContentResolver().delete(RestContact.Note.CONTENT_URI, null, null);
         context.getContentResolver().bulkInsert(RestContact.Note.CONTENT_URI, notesValues);

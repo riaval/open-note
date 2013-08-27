@@ -37,7 +37,7 @@ public class SessionResource extends ServerResource {
 			return new JacksonRepresentation<SessionResponse>(new SessionResponse(session));
 		} catch (IllegalArgumentException e) {
 			System.err.println(StatusFactory.getErrorMessage(e));
-			return new JacksonRepresentation<Status>( StatusFactory.clientBadRequest() );
+			return new JacksonRepresentation<Status>( StatusFactory.clientBadRequest(e.getMessage()));
 		} catch (Exception e) {
 			System.err.println(StatusFactory.getErrorMessage(e));
 			return new JacksonRepresentation<Status>( StatusFactory.serverInternalError() );

@@ -38,15 +38,15 @@ public class GroupSimpleNoteResource extends ServerResource {
 			String body = form.getFirstValue("body");
 			String sessionHash = form.getFirstValue("session_hash");
 
-			simpleNoteService.createSimpleNote(title, body, groupSlug, sessionHash);
+			SimpleNote simpleNote = simpleNoteService.createSimpleNote(title, body, groupSlug, sessionHash);
 
-			return new JacksonRepresentation<Status>( StatusFactory.created() );
+			return new JacksonRepresentation<SimpleNoteResponse>( new SimpleNoteResponse(simpleNote) );
 		} catch (BadAuthenticationException e) {
 			System.err.println(StatusFactory.getErrorMessage(e));
-			return new JacksonRepresentation<Status>( StatusFactory.clientUnauthorized() );
+			return new JacksonRepresentation<Status>( StatusFactory.clientUnauthorized(e.getMessage()) );
 		} catch (IllegalArgumentException e) {
 			System.err.println(StatusFactory.getErrorMessage(e));
-			return new JacksonRepresentation<Status>( StatusFactory.clientBadRequest() );
+			return new JacksonRepresentation<Status>( StatusFactory.clientBadRequest(e.getMessage()) );
 		} catch (Exception e) {
 			System.err.println(StatusFactory.getErrorMessage(e));
 			return new JacksonRepresentation<Status>( StatusFactory.serverInternalError() );
@@ -68,10 +68,10 @@ public class GroupSimpleNoteResource extends ServerResource {
 			return new JacksonRepresentation<List<SimpleNoteResponse>>(simpleNotesResponse);
 		} catch (BadAuthenticationException e) {
 			System.err.println(StatusFactory.getErrorMessage(e));
-			return new JacksonRepresentation<Status>( StatusFactory.clientUnauthorized() );
+			return new JacksonRepresentation<Status>( StatusFactory.clientUnauthorized(e.getMessage()) );
 		} catch (IllegalArgumentException e) {
 			System.err.println(StatusFactory.getErrorMessage(e));
-			return new JacksonRepresentation<Status>( StatusFactory.clientBadRequest() );
+			return new JacksonRepresentation<Status>( StatusFactory.clientBadRequest(e.getMessage()) );
 		} catch (Exception e) {
 			System.err.println(StatusFactory.getErrorMessage(e));
 			return new JacksonRepresentation<Status>( StatusFactory.serverInternalError() );

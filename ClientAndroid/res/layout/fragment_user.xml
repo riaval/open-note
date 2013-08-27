@@ -53,7 +53,7 @@
         android:layout_below="@+id/fullNameUpView"
         android:ems="10"
         android:hint="First and last name"
-        android:inputType="textPersonName"
+        android:inputType="textPersonName|textCapSentences"
         android:text="[Full name]" />
 
     <TextView

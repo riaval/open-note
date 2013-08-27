@@ -16,15 +16,16 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.foxykeep.datadroid.requestmanager.Request;
 import com.foxykeep.datadroid.requestmanager.RequestManager.RequestListener;
 import com.opennote.R;
+import com.opennote.model.ErrorFactory;
 import com.opennote.model.RequestFactory;
 import com.opennote.model.RestRequestManager;
 import com.opennote.model.provider.RestContact;
 import com.opennote.model.provider.RestContact.Invitation;
+import com.opennote.model.service.RestService;
 import com.opennote.ui.activity.MainActivity;
 
 public class InvitationsFragment extends Fragment {
@@ -81,12 +82,14 @@ public class InvitationsFragment extends Fragment {
 
 		@Override
 		public void onRequestDataError(Request request) {
-			Toast.makeText(getActivity(), "onRequestDataError", 5).show();
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public void onRequestCustomError(Request request, Bundle resultData) {
-			Toast.makeText(getActivity(), "onRequestCustomError", 5).show();
+			int code = resultData.getInt(RestService.STATUS_CODE);
+			String comment = resultData.getString(RestService.COMMENT);
+			ErrorFactory.doError(getActivity(), code, comment);
 		}
 		
 	};
@@ -142,8 +145,8 @@ public class InvitationsFragment extends Fragment {
 			alertDialog.setTitle("Accept invitation");
 			alertDialog.setMessage("Group: " + mGroupName + "\n" + "From: " + invitationAuthor);
 			
-			String joinToGroup = "Join to group";
-			String deleteInvitation = "Delete invitation";
+			String joinToGroup = "Accept this invitation";
+			String deleteInvitation = "Decline the Invitation";
 			alertDialog.setPositiveButton(joinToGroup, new OnClickListener() {
 				public void onClick(DialogInterface dialog, int arg1) {
 					RestRequestManager requestManager = RestRequestManager.from(getActivity());
@@ -174,17 +177,19 @@ public class InvitationsFragment extends Fragment {
 
 		@Override
 		public void onRequestConnectionError(Request request, int statusCode) {
-			mRootView.findViewById(R.id.connectionError).setVisibility(View.VISIBLE);
+			ErrorFactory.showConnectionErrorMessage(getActivity());
 		}
 
 		@Override
 		public void onRequestDataError(Request request) {
-			Toast.makeText(getActivity(), "onRequestDataError", 5).show();
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public void onRequestCustomError(Request request, Bundle resultData) {
-			Toast.makeText(getActivity(), "onRequestCustomError", 5).show();
+			int code = resultData.getInt(RestService.STATUS_CODE);
+			String comment = resultData.getString(RestService.COMMENT);
+			ErrorFactory.doError(getActivity(), code, comment);
 		}
 		
 	};
@@ -196,17 +201,19 @@ public class InvitationsFragment extends Fragment {
 
 		@Override
 		public void onRequestConnectionError(Request request, int statusCode) {
-			mRootView.findViewById(R.id.connectionError).setVisibility(View.VISIBLE);
+			ErrorFactory.showConnectionErrorMessage(getActivity());
 		}
 
 		@Override
 		public void onRequestDataError(Request request) {
-			Toast.makeText(getActivity(), "onRequestDataError", 5).show();
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public void onRequestCustomError(Request request, Bundle resultData) {
-			Toast.makeText(getActivity(), "onRequestCustomError", 5).show();
+			int code = resultData.getInt(RestService.STATUS_CODE);
+			String comment = resultData.getString(RestService.COMMENT);
+			ErrorFactory.doError(getActivity(), code, comment);
 		}
 		
 	};

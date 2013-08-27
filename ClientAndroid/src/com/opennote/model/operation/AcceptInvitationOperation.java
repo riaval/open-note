@@ -2,6 +2,9 @@ package com.opennote.model.operation;
 
 import java.util.HashMap;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.os.Bundle;
@@ -34,6 +37,20 @@ public class AcceptInvitationOperation implements Operation {
 		
 		connection.setMethod(Method.POST);
 		ConnectionResult result = connection.execute();
+		
+		try {
+        	JSONObject JSONRoot = new JSONObject(result.body);
+			JSONObject JSONStatus = JSONRoot.getJSONObject("status");
+			
+			int code = JSONStatus.getInt("code");
+			if (code < 200 || code >= 300){
+				throw new JSONException("ok message not found");
+			}
+		} catch (JSONException e) {
+			throw new CustomRequestException(result.body) {
+				private static final long serialVersionUID = 1L;
+			};
+		}
 		
 		context.getContentResolver().delete(
 				RestContact.Invitation.CONTENT_URI

@@ -1,6 +1,5 @@
 package domain;
 
-import java.util.Calendar;
 import java.util.Date;
 
 import javax.persistence.CascadeType;
@@ -23,10 +22,10 @@ public class SimpleNote {
 	public SimpleNote(){
 	}
 
-	public SimpleNote(String title, String body) {
+	public SimpleNote(String title, String body, Date date) {
 		mTitle = title;
 		mBody = body;
-		mDate = Calendar.getInstance().getTime();
+		mDate = date;
 	}
 
 	// title
@@ -54,9 +53,6 @@ public class SimpleNote {
 	}
 	public void setDate(Date date) {
 		this.mDate = date;
-	}
-	public void updateDate(){
-		this.mDate = Calendar.getInstance().getTime();
 	}
 
 	// userGroup
