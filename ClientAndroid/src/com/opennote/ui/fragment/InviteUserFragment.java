@@ -185,13 +185,13 @@ public class InviteUserFragment extends Fragment {
 			cursor.close();
 			AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 			builder.setTitle("Create invitation");
-			builder.setNegativeButton("Cancel",
-					new DialogInterface.OnClickListener() {
-						@Override
-						public void onClick(DialogInterface dialog, int index) {
-							dialog.dismiss();
-						}
-					});
+//			builder.setNegativeButton("Cancel",
+//					new DialogInterface.OnClickListener() {
+//						@Override
+//						public void onClick(DialogInterface dialog, int index) {
+//							dialog.dismiss();
+//						}
+//					});
 			try {
 				final Object[] groupSlugs = groupSlugsList.toArray();
 				builder.setItems(groupSlugsList.toArray(new String[groupSlugsList.size() - 1]),

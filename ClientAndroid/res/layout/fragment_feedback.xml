@@ -1,15 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<AbsoluteLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp" >
 
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
+    <EditText
+        android:id="@+id/editText1"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:ems="10"
+        android:hint="Theme" >
+    </EditText>
+
+    <EditText
+        android:id="@+id/editText2"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:ems="10"
+        android:hint="Email"
+        android:inputType="textEmailAddress" />
+
+    <EditText
+        android:id="@+id/editText3"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_x="101dp"
-        android:layout_y="172dp"
-        android:text="Feedback"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        android:ems="10"
+        android:hint="Your message"
+        android:layout_marginTop="5dp"
+        android:padding="5dp"
+        android:gravity="top|left"
+        android:lines="5"
+        android:background="@drawable/multiline_edit"
+        android:inputType="textMultiLine" />
 
-</AbsoluteLayout>
+    <Button
+        android:id="@+id/button1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/button"
+        android:text="Button"
+        android:textColor="#fff" />
+
+</LinearLayout>

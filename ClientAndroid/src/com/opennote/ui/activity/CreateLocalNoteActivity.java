@@ -1,32 +1,50 @@
 package com.opennote.ui.activity;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 
 import android.app.ActionBar;
+import android.app.AlertDialog;
 import android.app.ActionBar.OnNavigationListener;
 import android.app.Activity;
 import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
+import com.foxykeep.datadroid.requestmanager.Request;
+import com.foxykeep.datadroid.requestmanager.RequestManager.RequestListener;
 import com.opennote.R;
+import com.opennote.model.ErrorFactory;
+import com.opennote.model.RequestFactory;
+import com.opennote.model.RestRequestManager;
 import com.opennote.model.adapter.ColorSpinnerAdapter;
 import com.opennote.model.provider.LocalContact;
+import com.opennote.model.provider.RestContact;
 import com.opennote.model.provider.LocalContact.LocalNotes;
+import com.opennote.model.provider.RestContact.Group;
+import com.opennote.model.service.RestService;
 import com.opennote.ui.fragment.LocalFragment;
 
-public class CreateLocalNoteActivity extends Activity{
+public class CreateLocalNoteActivity extends Activity {
 	private long mId;
 	private String mTitle;
 	private String mBody;
 	
 	private String mBackgroundColor;
 	private View mRootView;
+	private boolean isShared;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +90,10 @@ public class CreateLocalNoteActivity extends Activity{
 	
 	@Override
 	protected void onDestroy(){
+		if (isShared) {
+			super.onDestroy();
+		}
+		
 		EditText editTextTitle= (EditText) this.findViewById(R.id.note_title);
 		EditText editTextBody= (EditText) this.findViewById(R.id.note_body);
 		
@@ -100,5 +122,98 @@ public class CreateLocalNoteActivity extends Activity{
 		}
 		super.onDestroy();
 	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		if (MainActivity.instance.getSessionHash() != null){
+			MenuInflater inflater = getMenuInflater();
+		    inflater.inflate(R.menu.single_note, menu);
+		    return true;
+		}
+	    return false;
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+	    switch (item.getItemId()) {
+	        case R.id.action_share:
+	            shareItem();
+	            return true;
+	        default:
+	            return super.onOptionsItemSelected(item);
+	    }
+	}
 
+	private void shareItem(){
+		Cursor cursor = this
+				.getApplicationContext()
+				.getContentResolver()
+				.query(RestContact.Group.CONTENT_URI, null, Group.ROLE + "=?", new String[]{"creator"}, Group.NAME);
+		List<String> groupSlugsList = new ArrayList<String>();
+		List<String> groupNamesList = new ArrayList<String>();
+		while (cursor.moveToNext()) {
+			groupSlugsList.add(cursor.getString(1));
+			groupNamesList.add(cursor.getString(2));
+		}
+		
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setTitle("Share note");
+		
+		final Object[] groupSlugs = groupSlugsList.toArray();
+		builder.setItems(groupSlugsList.toArray(new String[groupSlugsList.size() - 1]),
+				new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int index) {
+						RestRequestManager requestManager = RestRequestManager.from(CreateLocalNoteActivity.this);
+						EditText editTextTitle= (EditText) CreateLocalNoteActivity.this.findViewById(R.id.note_title);
+						EditText editTextBody= (EditText) CreateLocalNoteActivity.this.findViewById(R.id.note_body);
+						String sessionHash = MainActivity.instance.getSessionHash();
+						String groupSlug = groupSlugs[index].toString();
+						Request request = RequestFactory.getAddNoteRequest(
+								sessionHash
+								, groupSlug
+								, editTextTitle.getText().toString()
+								, editTextBody.getText().toString());
+						requestManager.execute(request, shareNoteRequestListener);
+						isShared = true;
+						CreateLocalNoteActivity.this.finish();
+					}
+				});
+		AlertDialog alert = builder.create();
+		alert.show();
+	}
+	
+	private RequestListener shareNoteRequestListener = new RequestListener() {
+		@Override
+		public void onRequestFinished(Request request, Bundle resultData) {
+            AlertDialog.Builder builderInner = new AlertDialog.Builder(MainActivity.instance);
+            builderInner.setTitle("Success");
+            builderInner.setMessage("Note created.");
+            builderInner.setPositiveButton("OK",
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int index) {
+                            dialog.dismiss();
+                        }
+                    });
+            builderInner.show();
+		}
+
+		@Override
+		public void onRequestConnectionError(Request request, int statusCode) {
+			ErrorFactory.showConnectionErrorMessage(MainActivity.instance);
+		}
+
+		@Override
+		public void onRequestDataError(Request request) {
+			throw new UnsupportedOperationException();
+		}
+
+		@Override
+		public void onRequestCustomError(Request request, Bundle resultData) {
+			int code = resultData.getInt(RestService.STATUS_CODE);
+			String comment = resultData.getString(RestService.COMMENT);
+			ErrorFactory.doError(MainActivity.instance, code, comment);
+		}
+	};
+	
 }
