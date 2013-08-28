@@ -36,7 +36,7 @@ import com.opennote.model.provider.RestContact.User;
 import com.opennote.model.service.RestService;
 import com.opennote.ui.activity.MainActivity;
 
-public class InviteUserFragment extends Fragment {
+public class FindUserFragment extends Fragment {
 
 	View rootView;
 	ListView mListView;

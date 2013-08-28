@@ -148,7 +148,7 @@ public class CreateLocalNoteActivity extends Activity {
 		Cursor cursor = this
 				.getApplicationContext()
 				.getContentResolver()
-				.query(RestContact.Group.CONTENT_URI, null, Group.ROLE + "=?", new String[]{"creator"}, Group.NAME);
+				.query(RestContact.Group.CONTENT_URI, null, null, null, Group.NAME);
 		List<String> groupSlugsList = new ArrayList<String>();
 		List<String> groupNamesList = new ArrayList<String>();
 		while (cursor.moveToNext()) {

@@ -27,11 +27,11 @@ public final class R {
 		public static final int undo_btn_bg_pressed = 0x7f020024;
 	}
 	public static final class id {
-		public static final int text = 0x7f0b003e;
-		public static final int undo = 0x7f0b003f;
+		public static final int text = 0x7f0b0041;
+		public static final int undo = 0x7f0b0042;
 	}
 	public static final class layout {
-		public static final int undo_popup = 0x7f030015;
+		public static final int undo_popup = 0x7f030016;
 	}
 	public static final class string {
 		public static final int undo = 0x7f060000;

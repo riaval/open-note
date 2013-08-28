@@ -51,8 +51,8 @@ public class User {
 	public String getFullName() {
 		return mFullName;
 	}
-	public void setFullName(String firstName){
-		this.mFullName = firstName;
+	public void setFullName(String fullName){
+		this.mFullName = fullName;
 	}
 
 	// passwordHash

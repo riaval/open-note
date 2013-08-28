@@ -97,5 +97,65 @@ public class UserService {
 			HibernateUtil.closeSession();
 		}
 	}
+	
+	public void editSimpleData(String sessionHash, String fullName, String email) throws Exception {
+		if (fullName == null || fullName.length() == 0){
+			throw new IllegalArgumentException("Full name field is required.");
+		}
+		
+		HibernateUtil.beginTransaction(); // ---->
+		try {
+			Session session = DAOFactory.getSessionDAO().findByHash(sessionHash);
+			if (session == null) {
+				throw new BadAuthenticationException("Session is empty.");
+			}
+			User user = session.getUser();
+			user.setFullName(fullName);
+			user.setEmail(email);
+			
+			DAOFactory.getUserDAO().save(user);
+			HibernateUtil.commitTransaction(); // <----
+		} catch (Exception e) {
+			HibernateUtil.rollbackTransaction();
+			throw e;
+		} finally {
+			HibernateUtil.closeSession();
+		}
+	}
+	
+	public void editPassword(String sessionHash, String oldPassword, String newPassword) throws Exception {
+		if (newPassword == null || newPassword.length() < 6) {
+			throw new IllegalArgumentException("Password must be at least 6 characters long.");
+		}
+		if (newPassword.length() > 64) {
+			throw new IllegalArgumentException("Password is too long.");
+		}
+		
+		HibernateUtil.beginTransaction(); // ---->
+		try {
+			Session session = DAOFactory.getSessionDAO().findByHash(sessionHash);
+			if (session == null) {
+				throw new BadAuthenticationException("Session is empty.");
+			}
+			User user = session.getUser();
+			
+			String userPassHash = user.getPasswordHash();
+			String requestPassHash = ServiceUtil.getSaltMD5(oldPassword);
+			
+			if (!userPassHash.equals(requestPassHash)) {
+				throw new IllegalArgumentException("Wrong old password.");
+			}
+			
+			user.setPasswordHash(ServiceUtil.getSaltMD5(newPassword));
+			
+			DAOFactory.getUserDAO().save(user);
+			HibernateUtil.commitTransaction(); // <----
+		} catch (Exception e) {
+			HibernateUtil.rollbackTransaction();
+			throw e;
+		} finally {
+			HibernateUtil.closeSession();
+		}
+	}
 
 }

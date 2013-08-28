@@ -21,7 +21,7 @@ import com.opennote.R;
 import com.opennote.model.provider.RestContact;
 import com.opennote.model.provider.RestContact.Note;
 
-public class AddNoteOperation implements Operation {
+public class CreateNoteOperation implements Operation {
 
 	@Override
 	public Bundle execute(Context context, Request request) throws ConnectionException, DataException, CustomRequestException {

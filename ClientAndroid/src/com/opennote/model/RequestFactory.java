@@ -20,14 +20,16 @@ public class RequestFactory {
 	public static final int EDIT_NOTE = 14;
 	public static final int LOAD_ALL_NOTES = 15;
 	public static final int DELETE_NOTES = 16;
-	
+	public static final int EDIT_SIMPLE_DATA = 17;
+	public static final int EDIT_PASSWORD = 18;
+
 	public static Request getSignInRequest(String login, String password) {
 		Request request = new Request(SIGN_IN);
 		request.put("login", login);
 		request.put("password", password);
 		return request;
 	}
-	
+
 	public static Request getSignUpRequest(String login, String fullName, String password) {
 		Request request = new Request(SIGN_UP);
 		request.put("login", login);
@@ -35,15 +37,15 @@ public class RequestFactory {
 		request.put("password", password);
 		return request;
 	}
-	
-	public static Request getLoadNotesRequest(String sessionHash, String groupSlug){
+
+	public static Request getLoadNotesRequest(String sessionHash, String groupSlug) {
 		Request request = new Request(LOAD_NOTES);
 		request.put("session_hash", sessionHash);
 		request.put("slug", groupSlug);
 		return request;
 	}
-	
-	public static Request getAddNoteRequest(String sessionHash, String groupSlug, String title, String body){
+
+	public static Request getAddNoteRequest(String sessionHash, String groupSlug, String title, String body) {
 		Request request = new Request(ADD_NOTE);
 		request.put("session_hash", sessionHash);
 		request.put("slug", groupSlug);
@@ -51,72 +53,73 @@ public class RequestFactory {
 		request.put("body", body);
 		return request;
 	}
-	
-	public static Request getCreateGroupRequest(String sessionHash, String groupSlug, String groupName){
+
+	public static Request getCreateGroupRequest(String sessionHash, String groupSlug, String groupName) {
 		Request request = new Request(CREATE_GROUP);
 		request.put("session_hash", sessionHash);
 		request.put("slug", groupSlug);
 		request.put("name", groupName);
 		return request;
 	}
-	
-	public static Request getLoadGroupsRequest(String sessionHash){
+
+	public static Request getLoadGroupsRequest(String sessionHash) {
 		Request request = new Request(LOAD_GROUPS);
 		request.put("session_hash", sessionHash);
 		return request;
 	}
-	
-	public static Request getInviteUserRequest(String sessionHash, String searchValue){
+
+	public static Request getInviteUserRequest(String sessionHash,
+			String searchValue) {
 		Request request = new Request(INVITE_USER);
 		request.put("session_hash", sessionHash);
 		request.put("search", searchValue);
 		return request;
 	}
-	
-	public static Request getLoadInvitationsRequest(String sessionHash){
+
+	public static Request getLoadInvitationsRequest(String sessionHash) {
 		Request request = new Request(LOAD_INVITATIONS);
 		request.put("session_hash", sessionHash);
 		return request;
 	}
-	
-	public static Request getDeleteInvitationsRequest(String sessionHash, String invitationId){
+
+	public static Request getDeleteInvitationsRequest(String sessionHash, String invitationId) {
 		Request request = new Request(DELETE_INVITATION);
 		request.put("session_hash", sessionHash);
 		request.put("invitation_id", invitationId);
 		return request;
 	}
-	
-	public static Request getCreateInvitationsRequest(String sessionHash, String userLogin, String groupSlug){
+
+	public static Request getCreateInvitationsRequest(String sessionHash, String userLogin, String groupSlug) {
 		Request request = new Request(CREATE_INVITATION);
 		request.put("session_hash", sessionHash);
 		request.put("login", userLogin);
 		request.put("slug", groupSlug);
 		return request;
 	}
-	
-	public static Request getAcceptInvitationsRequest(String sessionHash, String groupSlug, String groupName){
+
+	public static Request getAcceptInvitationsRequest(String sessionHash, String groupSlug, String groupName) {
 		Request request = new Request(ACCEPT_INVITATION);
 		request.put("session_hash", sessionHash);
 		request.put("slug", groupSlug);
 		request.put("name", groupName);
 		return request;
 	}
-	
-	public static Request getDeleteGroupRequest(String sessionHash, String groupSlug){
+
+	public static Request getDeleteGroupRequest(String sessionHash, String groupSlug) {
 		Request request = new Request(DELETE_GROUP);
 		request.put("session_hash", sessionHash);
 		request.put("slug", groupSlug);
 		return request;
 	}
-	
-	public static Request getRemoveUserFromGroupRequest(String sessionHash, String groupSlug){
+
+	public static Request getRemoveUserFromGroupRequest(String sessionHash, String groupSlug) {
 		Request request = new Request(REMOVE_USER);
 		request.put("session_hash", sessionHash);
 		request.put("slug", groupSlug);
 		return request;
 	}
-	
-	public static Request getEditNoteRequest(String sessionHash, long id, String title, String body){
+
+	public static Request getEditNoteRequest(String sessionHash, long id, String title, String body) {
 		Request request = new Request(EDIT_NOTE);
 		request.put("session_hash", sessionHash);
 		request.put("id", id);
@@ -124,26 +127,42 @@ public class RequestFactory {
 		request.put("body", body);
 		return request;
 	}
-	
-	public static Request getLoadAllNoteRequest(String sessionHash){
+
+	public static Request getLoadAllNoteRequest(String sessionHash) {
 		Request request = new Request(LOAD_ALL_NOTES);
 		request.put("session_hash", sessionHash);
 		return request;
 	}
-	
-	public static Request getDeleteNotesRequest(String sessionHash, long[] IDs){
+
+	public static Request getDeleteNotesRequest(String sessionHash, long[] IDs) {
 		Request request = new Request(DELETE_NOTES);
 		request.put("session_hash", sessionHash);
 		int counter = 0;
-		for (long id : IDs){
-			request.put("id"+counter++, id);
+		for (long id : IDs) {
+			request.put("id" + counter++, id);
 		}
 		request.put("length", counter);
-		
+
+		return request;
+	}
+
+	public static Request getEditSimpleDataOperation(String sessionHash, String fullName, String email) {
+		Request request = new Request(EDIT_SIMPLE_DATA);
+		request.put("session_hash", sessionHash);
+		request.put("full_name", fullName);
+		request.put("email", email);
 		return request;
 	}
 	
+	public static Request getEditPasswordOperation(String sessionHash, String oldPassword, String newPassword) {
+		Request request = new Request(EDIT_PASSWORD);
+		request.put("session_hash", sessionHash);
+		request.put("old_password", oldPassword);
+		request.put("new_password", newPassword);
+		return request;
+	}
+
 	private RequestFactory() {
 	}
-	
+
 }

@@ -87,12 +87,12 @@ public final class R {
         public static final int user_foto_default=0x7f020026;
     }
     public static final class id {
-        public static final int action_delete=0x7f0b0041;
-        public static final int action_discard=0x7f0b0042;
-        public static final int action_left=0x7f0b0043;
-        public static final int action_new=0x7f0b0045;
-        public static final int action_new_list=0x7f0b0044;
-        public static final int action_share=0x7f0b0040;
+        public static final int action_delete=0x7f0b0044;
+        public static final int action_discard=0x7f0b0045;
+        public static final int action_left=0x7f0b0046;
+        public static final int action_new=0x7f0b0048;
+        public static final int action_new_list=0x7f0b0047;
+        public static final int action_share=0x7f0b0043;
         public static final int connectionError=0x7f0b0010;
         public static final int content_frame=0x7f0b0004;
         public static final int createGroupBt=0x7f0b000c;
@@ -119,11 +119,11 @@ public final class R {
         public static final int list_item_title=0x7f0b0007;
         public static final int list_note_list=0x7f0b0001;
         public static final int list_text=0x7f0b0037;
-        public static final int local_author=0x7f0b003d;
-        public static final int local_body=0x7f0b003a;
-        public static final int local_date=0x7f0b003c;
+        public static final int local_author=0x7f0b0040;
+        public static final int local_body=0x7f0b003d;
+        public static final int local_date=0x7f0b003f;
         public static final int local_item=0x7f0b002d;
-        public static final int local_title=0x7f0b0039;
+        public static final int local_title=0x7f0b003c;
         public static final int loginInEdit=0x7f0b0017;
         public static final int loginUpEdit=0x7f0b001c;
         public static final int loginUpView=0x7f0b001b;
@@ -133,6 +133,9 @@ public final class R {
         public static final int nothing=0x7f0b0012;
         public static final int passInChBx=0x7f0b0019;
         public static final int passInEdit=0x7f0b0018;
+        public static final int passNewPassEdit=0x7f0b0039;
+        public static final int passOldPassEdit=0x7f0b0038;
+        public static final int passShowPassChBx=0x7f0b003a;
         public static final int passUpChBx=0x7f0b0021;
         public static final int passUpEdit=0x7f0b0020;
         public static final int passUpView=0x7f0b001f;
@@ -143,15 +146,15 @@ public final class R {
         public static final int searchFullNameTextView=0x7f0b002e;
         public static final int searchListView=0x7f0b0011;
         public static final int searchLoginTextView=0x7f0b002f;
-        public static final int selectableLocalItem=0x7f0b0038;
+        public static final int selectableLocalItem=0x7f0b003b;
         public static final int signInBt=0x7f0b001a;
         public static final int signUpBt=0x7f0b0022;
-        public static final int signature=0x7f0b003b;
-        public static final int text=0x7f0b003e;
+        public static final int signature=0x7f0b003e;
+        public static final int text=0x7f0b0041;
         public static final int textView1=0x7f0b0008;
         public static final int textView2=0x7f0b000a;
-        public static final int undo=0x7f0b003f;
-        public static final int userEditPassImgBt=0x7f0b0027;
+        public static final int undo=0x7f0b0042;
+        public static final int userEditPassBt=0x7f0b0027;
         public static final int userEmailEdit=0x7f0b0026;
         public static final int userFullNameEdit=0x7f0b0025;
         public static final int userLogOutBt=0x7f0b0024;
@@ -178,9 +181,10 @@ public final class R {
         public static final int list_header=0x7f030010;
         public static final int list_note_checkbox=0x7f030011;
         public static final int list_note_view_item=0x7f030012;
-        public static final int nothing=0x7f030013;
-        public static final int simple_note_item=0x7f030014;
-        public static final int undo_popup=0x7f030015;
+        public static final int new_password=0x7f030013;
+        public static final int nothing=0x7f030014;
+        public static final int simple_note_item=0x7f030015;
+        public static final int undo_popup=0x7f030016;
     }
     public static final class menu {
         public static final int context=0x7f0a0000;

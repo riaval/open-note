@@ -10,13 +10,15 @@ import com.foxykeep.datadroid.requestmanager.Request;
 import com.foxykeep.datadroid.service.RequestService;
 import com.opennote.model.RequestFactory;
 import com.opennote.model.operation.AcceptInvitationOperation;
-import com.opennote.model.operation.AddNoteOperation;
 import com.opennote.model.operation.CreateGroupOperation;
 import com.opennote.model.operation.CreateInvitationOperation;
+import com.opennote.model.operation.CreateNoteOperation;
 import com.opennote.model.operation.DeleteGroupOperation;
 import com.opennote.model.operation.DeleteInvitationOperation;
 import com.opennote.model.operation.DeleteNotesOperation;
 import com.opennote.model.operation.EditNoteOperation;
+import com.opennote.model.operation.EditPasswordOperation;
+import com.opennote.model.operation.EditSimpleDataOperation;
 import com.opennote.model.operation.FindUsersOperation;
 import com.opennote.model.operation.LoadAllNotesOperation;
 import com.opennote.model.operation.LoadGroupsOperation;
@@ -42,7 +44,7 @@ public class RestService extends RequestService{
 		case RequestFactory.LOAD_NOTES:
 			return new LoadNotesOperation();
 		case RequestFactory.ADD_NOTE:
-			return new AddNoteOperation();
+			return new CreateNoteOperation();
 		case RequestFactory.CREATE_GROUP:
 			return new CreateGroupOperation();
 		case RequestFactory.LOAD_GROUPS:
@@ -67,6 +69,10 @@ public class RestService extends RequestService{
 			return new LoadAllNotesOperation();
 		case RequestFactory.DELETE_NOTES:
 			return new DeleteNotesOperation();
+		case RequestFactory.EDIT_SIMPLE_DATA:
+			return new EditSimpleDataOperation();
+		case RequestFactory.EDIT_PASSWORD:
+			return new EditPasswordOperation();
 		default:
 			return null;
 		}

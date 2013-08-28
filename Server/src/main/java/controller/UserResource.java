@@ -8,6 +8,7 @@ import org.restlet.ext.jackson.JacksonRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.resource.Get;
 import org.restlet.resource.Post;
+import org.restlet.resource.Put;
 import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
 
@@ -78,6 +79,18 @@ public class UserResource extends ServerResource {
 		}
 	}
 	
+	@Put
+	public Representation editData(Representation entity){
+		Form form = new Form(entity);
+		String password = form.getFirstValue("old_password");
+		
+		if (password == null){
+			return editSimpleData(form);
+		} else {
+			return editPasswordData(form);
+		}
+	}
+	
 	private Representation multi() throws Exception {
 		UserService userService = new UserService();
 		String sessionHash = getQuery().getValues("session_hash");
@@ -101,6 +114,52 @@ public class UserResource extends ServerResource {
 		return new JacksonRepresentation<UserPrivateResponse>(
 				new UserPrivateResponse(user)
 			);
+	}
+	
+	private Representation editSimpleData(Form form) {
+		String sessionHash = form.getFirstValue("session_hash");
+		String fullName = form.getFirstValue("full_name");
+		String email = form.getFirstValue("email");
+		
+		try {
+			UserService userService = new UserService();
+			
+			userService.editSimpleData(sessionHash, fullName, email);
+			
+			return new JacksonRepresentation<Status>( StatusFactory.ok() );
+		} catch (BadAuthenticationException e) {
+			System.err.println(StatusFactory.getErrorMessage(e));
+			return new JacksonRepresentation<Status>( StatusFactory.clientUnauthorized(e.getMessage()) );
+		} catch (IllegalArgumentException e) {
+			System.err.println(StatusFactory.getErrorMessage(e));
+			return new JacksonRepresentation<Status>( StatusFactory.clientBadRequest(e.getMessage()) );
+		} catch (Exception e) {
+			System.err.println(StatusFactory.getErrorMessage(e));
+			return new JacksonRepresentation<Status>( StatusFactory.serverInternalError() );
+		}
+	}
+	
+	private Representation editPasswordData(Form form) {
+		String sessionHash = form.getFirstValue("session_hash");
+		String oldPassword = form.getFirstValue("old_password");
+		String newPassword = form.getFirstValue("new_password");
+		
+		try {
+			UserService userService = new UserService();
+			
+			userService.editPassword(sessionHash, oldPassword, newPassword);
+			
+			return new JacksonRepresentation<Status>( StatusFactory.ok() );
+		} catch (BadAuthenticationException e) {
+			System.err.println(StatusFactory.getErrorMessage(e));
+			return new JacksonRepresentation<Status>( StatusFactory.clientUnauthorized(e.getMessage()) );
+		} catch (IllegalArgumentException e) {
+			System.err.println(StatusFactory.getErrorMessage(e));
+			return new JacksonRepresentation<Status>( StatusFactory.clientBadRequest(e.getMessage()) );
+		} catch (Exception e) {
+			System.err.println(StatusFactory.getErrorMessage(e));
+			return new JacksonRepresentation<Status>( StatusFactory.serverInternalError() );
+		}
 	}
 
 }

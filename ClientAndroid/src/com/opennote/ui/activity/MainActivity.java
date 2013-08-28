@@ -42,7 +42,7 @@ import com.opennote.ui.fragment.CreateGroupFragment;
 import com.opennote.ui.fragment.FeedbackFragment;
 import com.opennote.ui.fragment.GroupFragment;
 import com.opennote.ui.fragment.InvitationsFragment;
-import com.opennote.ui.fragment.InviteUserFragment;
+import com.opennote.ui.fragment.FindUserFragment;
 import com.opennote.ui.fragment.LocalFragment;
 import com.opennote.ui.fragment.SettingsFragment;
 import com.opennote.ui.fragment.SignInFragment;
@@ -233,7 +233,7 @@ public class MainActivity extends Activity {
 		} else if (text.equals("Invitations")){
 			fragment = new InvitationsFragment();
 		} else if (text.equals("Invite user")){
-			fragment = new InviteUserFragment();
+			fragment = new FindUserFragment();
 		} else if (text.equals("All notes")){
 			fragment = new AllNotesFragment();
 		} else if (text.equals("Local")){
