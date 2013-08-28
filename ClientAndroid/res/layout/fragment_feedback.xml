@@ -5,14 +5,7 @@
     android:orientation="vertical"
     android:padding="16dp" >
 
-    <EditText
-        android:id="@+id/editText1"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:ems="10"
-        android:hint="Theme" >
-    </EditText>
-
+    <!--
     <EditText
         android:id="@+id/editText2"
         android:layout_width="match_parent"
@@ -20,22 +13,31 @@
         android:ems="10"
         android:hint="Email"
         android:inputType="textEmailAddress" />
+    -->
 
     <EditText
-        android:id="@+id/editText3"
+        android:id="@+id/feedSubjectEdit"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:ems="10"
+        android:hint="Subject"
+        android:inputType="textCapSentences" >
+    </EditText>
+
+    <EditText
+        android:id="@+id/feedBodyEdit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="Your message"
         android:layout_marginTop="5dp"
-        android:padding="5dp"
+        android:ems="10"
         android:gravity="top|left"
-        android:lines="5"
-        android:background="@drawable/multiline_edit"
-        android:inputType="textMultiLine" />
+        android:hint="Your message"
+        android:inputType="textMultiLine|textCapSentences"
+        android:lines="8"
+        android:padding="10dp" />
 
     <Button
-        android:id="@+id/button1"
+        android:id="@+id/feedBt"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
