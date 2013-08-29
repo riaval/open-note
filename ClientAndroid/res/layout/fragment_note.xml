@@ -14,7 +14,7 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="#626262"
         android:visibility="gone" />
-    
+
     <ListView
         android:id="@+id/noteList"
         android:layout_width="match_parent"

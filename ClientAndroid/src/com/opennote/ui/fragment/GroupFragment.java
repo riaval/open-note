@@ -1,5 +1,8 @@
 package com.opennote.ui.fragment;
 
+import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshAttacher.OnRefreshListener;
+import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshAttacher;
+import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.LoaderManager.LoaderCallbacks;
@@ -52,9 +55,11 @@ public class GroupFragment extends Fragment {
 	    };
 	
 	private View mRootView;
-	ListView mListView;
+	private ListView mListView;
 	private String mSessionHash;
 	private RestGroup mCurrentGroup;
+	
+	private PullToRefreshAttacher mPullToRefreshAttacher;
 	
 	public static final String CREATOR = "creator";
 	public static final String GROUP_SLUG_MESSAGE = "group_slug";
@@ -83,6 +88,16 @@ public class GroupFragment extends Fragment {
 		mAdapter.setmCurrentLogin(MainActivity.instance.getUserLogin());
 		mListView = (ListView) mRootView.findViewById(R.id.noteList);;
         mListView.setAdapter(mAdapter);
+        
+        // PullToRefreshAttacher library
+        mPullToRefreshAttacher = MainActivity.instance.getPullToRefreshAttacher();
+	    mPullToRefreshAttacher.addRefreshableView(mListView, new OnRefreshListener() {
+			@Override
+			public void onRefreshStarted(View view) {
+				goLoading();
+				
+			}
+		});
         
         mListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
         mListView.setMultiChoiceModeListener(new MultiChoiceModeListener() {
@@ -145,11 +160,15 @@ public class GroupFragment extends Fragment {
             }
         });
 
+        goLoading();
+		
+		return mRootView;
+	}
+	
+	private void goLoading() {
 		// DataDroid RequestManager
 		Request request = RequestFactory.getLoadNotesRequest(mSessionHash, mCurrentGroup.getSlug());
 		mRequestManager.execute(request, mLoadRequestListener);
-		
-		return mRootView;
 	}
 	
 	public void setValues(String sessionHash, RestGroup refGroup){
@@ -248,10 +267,12 @@ public class GroupFragment extends Fragment {
 			mListView.setOnItemClickListener(new GroupListClickListener());
 	        getLoaderManager().initLoader(LOADER_ID, null, loaderCallbacks);
 	        getActivity().getContentResolver().notifyChange(RestContact.Note.CONTENT_URI, null);
+	        mPullToRefreshAttacher.setRefreshComplete();
 		}
 		@Override
 		public void onRequestConnectionError(Request request, int statusCode) {
 			mRootView.findViewById(R.id.connectionError).setVisibility(View.VISIBLE);
+			mPullToRefreshAttacher.setRefreshComplete();
 		}
 		@Override
 		public void onRequestDataError(Request request) {
@@ -262,6 +283,7 @@ public class GroupFragment extends Fragment {
 			int code = resultData.getInt(RestService.STATUS_CODE);
 			String comment = resultData.getString(RestService.COMMENT);
 			ErrorFactory.doError(getActivity(), code, comment);
+			mPullToRefreshAttacher.setRefreshComplete();
 		}
 		
 	};

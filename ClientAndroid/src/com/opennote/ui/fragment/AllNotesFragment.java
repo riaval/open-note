@@ -1,5 +1,7 @@
 package com.opennote.ui.fragment;
 
+import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshAttacher;
+import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshAttacher.OnRefreshListener;
 import android.app.Fragment;
 import android.app.LoaderManager.LoaderCallbacks;
 import android.content.CursorLoader;
@@ -25,7 +27,7 @@ import com.opennote.ui.activity.MainActivity;
 public class AllNotesFragment extends Fragment {
 
 	private NoteGroupAdapter mAdapter;
-	RestRequestManager mRequestManager = RestRequestManager.from(getActivity());
+	private RestRequestManager mRequestManager = RestRequestManager.from(getActivity());
 	private static final int LOADER_ID = 1;
 	private final String[] PROJECTION = { 
 			Note._ID,
@@ -37,6 +39,7 @@ public class AllNotesFragment extends Fragment {
 			Note.LOGIN
 	    };
 	
+	private PullToRefreshAttacher mPullToRefreshAttacher;
 	private View mRootView;
 	private ListView mListView;
 	
@@ -53,23 +56,37 @@ public class AllNotesFragment extends Fragment {
 		mListView = (ListView) mRootView.findViewById(R.id.noteList);;
         mListView.setAdapter(mAdapter);
 		
-		// DataDroid RequestManager
-		Request request = RequestFactory.getLoadAllNoteRequest(MainActivity.instance.getSessionHash());
-		mRequestManager.execute(request, mLoadRequestListener);
+        // PullToRefreshAttacher library
+        mPullToRefreshAttacher = MainActivity.instance.getPullToRefreshAttacher();
+	    mPullToRefreshAttacher.addRefreshableView(mListView, new OnRefreshListener() {
+			@Override
+			public void onRefreshStarted(View view) {
+				goLoading();
+			}
+		});
+        
+	    goLoading();
 		
 		return mRootView;
 	}
 
+	private void goLoading(){
+		// DataDroid RequestManager
+		Request request = RequestFactory.getLoadAllNoteRequest(MainActivity.instance.getSessionHash());
+		mRequestManager.execute(request, mLoadRequestListener);
+	}
 	
 	private RequestListener mLoadRequestListener = new RequestListener() {
 		@Override
 		public void onRequestFinished(Request request, Bundle resultData) {
 	        getLoaderManager().initLoader(LOADER_ID, null, loaderCallbacks);
+	        mPullToRefreshAttacher.setRefreshComplete();
 		}
 
 		@Override
 		public void onRequestConnectionError(Request request, int statusCode) {
 			mRootView.findViewById(R.id.connectionError).setVisibility(View.VISIBLE);
+			mPullToRefreshAttacher.setRefreshComplete();
 		}
 
 		@Override
@@ -82,6 +99,7 @@ public class AllNotesFragment extends Fragment {
 			int code = resultData.getInt(RestService.STATUS_CODE);
 			String comment = resultData.getString(RestService.COMMENT);
 			ErrorFactory.doError(getActivity(), code, comment);
+			mPullToRefreshAttacher.setRefreshComplete();
 		}
 		
 	};

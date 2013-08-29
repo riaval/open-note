@@ -6,6 +6,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshAttacher;
+import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshAttacher.OnRefreshListener;
+import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -40,9 +43,9 @@ import com.opennote.model.provider.RestContact.Group;
 import com.opennote.ui.fragment.AllNotesFragment;
 import com.opennote.ui.fragment.CreateGroupFragment;
 import com.opennote.ui.fragment.FeedbackFragment;
+import com.opennote.ui.fragment.FindUserFragment;
 import com.opennote.ui.fragment.GroupFragment;
 import com.opennote.ui.fragment.InvitationsFragment;
-import com.opennote.ui.fragment.FindUserFragment;
 import com.opennote.ui.fragment.LocalFragment;
 import com.opennote.ui.fragment.SettingsFragment;
 import com.opennote.ui.fragment.SignInFragment;
@@ -65,6 +68,8 @@ public class MainActivity extends Activity {
 	private String mUserLogin;
 	private Map<String, RestGroup> mGroups;
 	private String mSessionHash;
+	
+	private PullToRefreshAttacher mPullToRefreshAttacher;
 	
 	// Adapter for ListView Contents
 	private SeparatedListAdapter adapter;
@@ -111,7 +116,10 @@ public class MainActivity extends Activity {
 			}
 		};
 		mDrawerLayout.setDrawerListener(mDrawerToggle);
-
+		
+		// Create a PullToRefreshAttacher instance
+	    mPullToRefreshAttacher = PullToRefreshAttacher.get(this);
+	    
 //		if (!authorized) {
 		selectItem("Local");
 //		}
@@ -274,6 +282,9 @@ public class MainActivity extends Activity {
 	}
 	public String getUserLogin(){
 		return mUserLogin;
+	}
+	public PullToRefreshAttacher getPullToRefreshAttacher(){
+		return mPullToRefreshAttacher;
 	}
 	
 	@Override
