@@ -1,20 +1,20 @@
-package domain.response;
+package controller.representation;
 
 import org.codehaus.jackson.annotate.JsonProperty;
 
 import domain.UserGroup;
 
-public class UserGroupResponse {
+public class UserGroupRepresentation {
 
 	protected UserGroup mUserGroup;
 
-	public UserGroupResponse(UserGroup userGroup) {
+	public UserGroupRepresentation(UserGroup userGroup) {
 		mUserGroup = userGroup;
 	}
 
 	@JsonProperty("group")
-	public GroupResponse getSlug() {
-		return new GroupResponse(
+	public GroupRepresentation getSlug() {
+		return new GroupRepresentation(
 				mUserGroup.getGroup()
 				);
 	}

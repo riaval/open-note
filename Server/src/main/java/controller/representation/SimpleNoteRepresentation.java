@@ -1,4 +1,4 @@
-package domain.response;
+package controller.representation;
 
 import java.text.SimpleDateFormat;
 import java.util.Locale;
@@ -7,11 +7,11 @@ import org.codehaus.jackson.annotate.JsonProperty;
 
 import domain.SimpleNote;
 
-public class SimpleNoteResponse {
+public class SimpleNoteRepresentation {
 
 	protected SimpleNote mSimpleNote;
 
-	public SimpleNoteResponse(SimpleNote simpleNote) {
+	public SimpleNoteRepresentation(SimpleNote simpleNote) {
 		mSimpleNote = simpleNote;
 	}
 
@@ -37,15 +37,15 @@ public class SimpleNoteResponse {
 	}
 
 	@JsonProperty("user")
-	public UserPublicResponse getUser() {
-		return new UserPublicResponse(
+	public UserPublicRepresentation getUser() {
+		return new UserPublicRepresentation(
 				mSimpleNote.getUserGroup().getUser()
 				);
 	}
 
 	@JsonProperty("group")
-	public GroupResponse getGroup() {
-		return new GroupResponse(
+	public GroupRepresentation getGroup() {
+		return new GroupRepresentation(
 				mSimpleNote.getUserGroup().getGroup()
 				);
 	}

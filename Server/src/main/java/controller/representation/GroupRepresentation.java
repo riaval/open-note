@@ -1,14 +1,14 @@
-package domain.response;
+package controller.representation;
 
 import org.codehaus.jackson.annotate.JsonProperty;
 
 import domain.Group;
 
-public class GroupResponse {
+public class GroupRepresentation {
 
 	protected Group mGroup;
 
-	public GroupResponse(Group group) {
+	public GroupRepresentation(Group group) {
 		mGroup = group;
 	}
 

@@ -13,38 +13,40 @@ import org.restlet.resource.Put;
 import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
 
+import service.ServiceFactory;
 import service.SimpleNoteService;
 import service.exception.BadAuthenticationException;
+import controller.representation.SimpleNoteRepresentation;
 import controller.representation.Status;
 import controller.representation.StatusFactory;
 import domain.SimpleNote;
-import domain.response.SimpleNoteResponse;
 
 public class SimpleNoteResource extends ServerResource {
 
-	private long snoteID;
+	private long mSnoteID;
+	private SimpleNoteService mSimpleNoteService;
 
 	@Override
 	protected void doInit() throws ResourceException {
+		mSimpleNoteService = ServiceFactory.getSimpleNoteService();
 		Object snoteIDObj = getRequest().getAttributes().get("snoteID");
 		if (snoteIDObj != null){
-			this.snoteID = Long.parseLong(snoteIDObj.toString());
+			this.mSnoteID = Long.parseLong(snoteIDObj.toString());
 		}
 	}
 
 	@Get("json")
 	public Representation getAllSimpleNotes(){
-		SimpleNoteService simpleNoteService = new SimpleNoteService();
 		try {
 			String sessionHash = getQuery().getValues("session_hash");
-			Set<SimpleNote> simpleNotes = simpleNoteService.getAllSimpleNotes(sessionHash);
+			Set<SimpleNote> simpleNotes = mSimpleNoteService.getAllSimpleNotes(sessionHash);
 
-			List<SimpleNoteResponse> simpleNotesResponse = new ArrayList<SimpleNoteResponse>();
+			List<SimpleNoteRepresentation> simpleNotesResponse = new ArrayList<SimpleNoteRepresentation>();
 			for (SimpleNote each : simpleNotes) {
-				simpleNotesResponse.add(new SimpleNoteResponse(each));
+				simpleNotesResponse.add(new SimpleNoteRepresentation(each));
 			}
 
-			return new JacksonRepresentation<List<SimpleNoteResponse>>(simpleNotesResponse);
+			return new JacksonRepresentation<List<SimpleNoteRepresentation>>(simpleNotesResponse);
 		} catch (BadAuthenticationException e) {
 			System.err.println(StatusFactory.getErrorMessage(e));
 			return new JacksonRepresentation<Status>( StatusFactory.clientUnauthorized(e.getMessage()) );
@@ -60,12 +62,11 @@ public class SimpleNoteResource extends ServerResource {
 	@Put
 	public Representation editSimpleNote(Representation entity){
 		Form form = new Form(entity);
-		SimpleNoteService simpleNoteService = new SimpleNoteService();
 		try {
 			String sessionHash = form.getFirstValue("session_hash");
 			String title = form.getFirstValue("title");
 			String body = form.getFirstValue("body");
-			simpleNoteService.editSimpleNote(sessionHash, snoteID, title, body);
+			mSimpleNoteService.editSimpleNote(sessionHash, mSnoteID, title, body);
 
 			return new JacksonRepresentation<Status>( StatusFactory.ok() );
 		} catch (BadAuthenticationException e) {
@@ -82,7 +83,6 @@ public class SimpleNoteResource extends ServerResource {
 
 	@Delete
 	public Representation deleteSimpleNotes(){
-		SimpleNoteService simpleNoteService = new SimpleNoteService();
 		try {
 			String sessionHash = getQuery().getValues("session_hash");
 			String[] stringIDs = getQuery().getValuesArray("id");
@@ -90,7 +90,7 @@ public class SimpleNoteResource extends ServerResource {
 			for(int i=0; i<IDs.length; i++){
 				IDs[i] = Long.parseLong(stringIDs[i]);
 			}
-			simpleNoteService.deleteSimpleNotes(sessionHash, IDs);
+			mSimpleNoteService.deleteSimpleNotes(sessionHash, IDs);
 
 			return new JacksonRepresentation<Status>( StatusFactory.ok() );
 		} catch (BadAuthenticationException e) {

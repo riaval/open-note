@@ -9,6 +9,7 @@ import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
 
 import service.InviteService;
+import service.ServiceFactory;
 import service.UserGroupService;
 import service.exception.BadAuthenticationException;
 import controller.representation.Status;
@@ -27,7 +28,7 @@ public class UserGroupResource extends ServerResource{
 	public Representation addUserToGroup(Representation entity) {
 		Form form = new Form(entity);
 		try {
-			InviteService inviteService = new InviteService();
+			InviteService inviteService = ServiceFactory.getInviteService();
 			String sessionHash = form.getFirstValue("session_hash");
 			inviteService.acceptInvitation(sessionHash, groupSlug);
 
@@ -47,7 +48,7 @@ public class UserGroupResource extends ServerResource{
 	@Delete
 	public Representation deleteUserFromGroup(){
 		try {
-			UserGroupService userGroupService = new UserGroupService();
+			UserGroupService userGroupService = ServiceFactory.getUserGroupService();
 			String sessionHash = getQuery().getValues("session_hash");
 			userGroupService.deleteUserFromGroup(sessionHash, groupSlug);
 

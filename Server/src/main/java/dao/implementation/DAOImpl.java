@@ -1,9 +1,12 @@
-package dao;
+package dao.implementation;
 
 import java.util.List;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
+
+import dao.DAO;
+import dao.HibernateUtil;
 
 public abstract class DAOImpl<T> implements DAO<T> {
 

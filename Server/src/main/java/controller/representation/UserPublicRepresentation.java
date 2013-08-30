@@ -1,4 +1,4 @@
-package domain.response;
+package controller.representation;
 
 import java.text.SimpleDateFormat;
 import java.util.Locale;
@@ -7,11 +7,11 @@ import org.codehaus.jackson.annotate.JsonProperty;
 
 import domain.User;
 
-public class UserPublicResponse {
+public class UserPublicRepresentation {
 
 	protected User mUser;
 
-	public UserPublicResponse(User user){
+	public UserPublicRepresentation(User user){
 		mUser = user;
 	}
 

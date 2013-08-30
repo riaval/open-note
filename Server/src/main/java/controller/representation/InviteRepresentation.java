@@ -1,14 +1,14 @@
-package domain.response;
+package controller.representation;
 
 import org.codehaus.jackson.annotate.JsonProperty;
 
 import domain.Invite;
 
-public class InviteResponse {
+public class InviteRepresentation {
 
 	protected Invite mInvite;
 
-	public InviteResponse(Invite invite) {
+	public InviteRepresentation(Invite invite) {
 		mInvite = invite;
 	}
 
@@ -18,15 +18,15 @@ public class InviteResponse {
 	}
 
 	@JsonProperty("user")
-	public UserPublicResponse getUser() {
-		return new UserPublicResponse(
+	public UserPublicRepresentation getUser() {
+		return new UserPublicRepresentation(
 				mInvite.getUserGroup().getUser()
 				);
 	}
 
 	@JsonProperty("group")
-	public GroupResponse getGroup() {
-		return new GroupResponse(
+	public GroupRepresentation getGroup() {
+		return new GroupRepresentation(
 				mInvite.getUserGroup().getGroup()
 				);
 	}

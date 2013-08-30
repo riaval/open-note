@@ -12,22 +12,25 @@ import org.restlet.resource.Put;
 import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
 
+import service.ServiceFactory;
 import service.UserService;
 import service.exception.BadAuthenticationException;
+import controller.representation.SessionRepresentation;
 import controller.representation.Status;
 import controller.representation.StatusFactory;
+import controller.representation.UserPrivateRepresentation;
+import controller.representation.UserPublicRepresentation;
 import domain.Session;
 import domain.User;
-import domain.response.SessionResponse;
-import domain.response.UserPrivateResponse;
-import domain.response.UserPublicResponse;
 
 public class UserResource extends ServerResource {
 
 	private String mLogin;
+	private UserService mUserService;
 
 	@Override
 	protected void doInit() throws ResourceException {
+		mUserService = ServiceFactory.getUserService();
 		mLogin = (String) getRequest().getAttributes().get("login");
 	}
 
@@ -35,14 +38,12 @@ public class UserResource extends ServerResource {
 	public Representation createUser(Representation entity) {
 		Form form = new Form(entity);
 		try {
-			UserService userService = new UserService();
-
 			String fullName = form.getFirstValue("full_name");
 			String password = form.getFirstValue("password");
 			String hostIp = getClientInfo().getAddress();
 			String hostAgent = getClientInfo().getAgent();
 
-			Session session = userService.createUser(
+			Session session = mUserService.createUser(
 					  mLogin
 					, fullName
 					, password
@@ -50,8 +51,8 @@ public class UserResource extends ServerResource {
 					, hostAgent
 					);
 
-			return new JacksonRepresentation<SessionResponse>(
-					new SessionResponse(session)
+			return new JacksonRepresentation<SessionRepresentation>(
+					new SessionRepresentation(session)
 					);
 		} catch (IllegalArgumentException e) {
 			System.err.println(StatusFactory.getErrorMessage(e));
@@ -92,27 +93,25 @@ public class UserResource extends ServerResource {
 	}
 	
 	private Representation multi() throws Exception {
-		UserService userService = new UserService();
 		String sessionHash = getQuery().getValues("session_hash");
 		String search = getQuery().getValues("search");
 
-		List<User> users = userService.getUsers(sessionHash, search);
-		List<UserPublicResponse> usersResponse = new ArrayList<UserPublicResponse>();
+		List<User> users = mUserService.getUsers(sessionHash, search);
+		List<UserPublicRepresentation> usersResponse = new ArrayList<UserPublicRepresentation>();
 		for (User each : users) {
-			usersResponse.add(new UserPublicResponse(each));
+			usersResponse.add(new UserPublicRepresentation(each));
 		}
 
-		return new JacksonRepresentation<List<UserPublicResponse>>(usersResponse);
+		return new JacksonRepresentation<List<UserPublicRepresentation>>(usersResponse);
 	}
 	
 	private Representation mono() throws Exception {
-		UserService userService = new UserService();
 		String sessionHash = getQuery().getValues("session_hash");
 		
-		User user = userService.getCurrentUser(sessionHash);
+		User user = mUserService.getCurrentUser(sessionHash);
 		
-		return new JacksonRepresentation<UserPrivateResponse>(
-				new UserPrivateResponse(user)
+		return new JacksonRepresentation<UserPrivateRepresentation>(
+				new UserPrivateRepresentation(user)
 			);
 	}
 	
@@ -122,9 +121,7 @@ public class UserResource extends ServerResource {
 		String email = form.getFirstValue("email");
 		
 		try {
-			UserService userService = new UserService();
-			
-			userService.editSimpleData(sessionHash, fullName, email);
+			mUserService.editSimpleData(sessionHash, fullName, email);
 			
 			return new JacksonRepresentation<Status>( StatusFactory.ok() );
 		} catch (BadAuthenticationException e) {
@@ -145,9 +142,7 @@ public class UserResource extends ServerResource {
 		String newPassword = form.getFirstValue("new_password");
 		
 		try {
-			UserService userService = new UserService();
-			
-			userService.editPassword(sessionHash, oldPassword, newPassword);
+			mUserService.editPassword(sessionHash, oldPassword, newPassword);
 			
 			return new JacksonRepresentation<Status>( StatusFactory.ok() );
 		} catch (BadAuthenticationException e) {

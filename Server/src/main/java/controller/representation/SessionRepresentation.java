@@ -1,14 +1,14 @@
-package domain.response;
+package controller.representation;
 
 import org.codehaus.jackson.annotate.JsonProperty;
 
 import domain.Session;
 
-public class SessionResponse {
+public class SessionRepresentation {
 
 	protected Session mSession;
 
-	public SessionResponse(Session session) {
+	public SessionRepresentation(Session session) {
 		mSession = session;
 	}
 

@@ -1,12 +1,12 @@
-package domain.response;
+package controller.representation;
 
 import org.codehaus.jackson.annotate.JsonProperty;
 
 import domain.User;
 
-public class UserPrivateResponse extends UserPublicResponse {
+public class UserPrivateRepresentation extends UserPublicRepresentation {
 
-	public UserPrivateResponse(User user) {
+	public UserPrivateRepresentation(User user) {
 		super(user);
 	}
 

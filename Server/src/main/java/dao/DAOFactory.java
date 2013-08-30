@@ -1,62 +1,70 @@
 package dao;
 
+import dao.implementation.GroupDAOImpl;
+import dao.implementation.GroupRoleDAOImpl;
+import dao.implementation.InviteDAOImpl;
+import dao.implementation.SessionDAOImpl;
+import dao.implementation.SimpleNoteDAOImpl;
+import dao.implementation.UserDAOImpl;
+import dao.implementation.UserGroupDAOImpl;
+
 public class DAOFactory {
 
-	private static GroupDAOImpl sGroupDAO;
-	private static GroupRoleDAOImpl sGroupRoleDAO;
-	private static InviteDAOImpl sInviteDAO;
-	private static SessionDAOImpl sSessionDAO;
-	private static SimpleNoteDAOImpl sSimpleNoteDAO;
-	private static UserDAOImpl sUserDAO;
-	private static UserGroupDAOImpl sUserGroupDAO;
+	private static GroupDAOImpl sGroupDAOImpl;
+	private static GroupRoleDAOImpl sGroupRoleDAOImpl;
+	private static InviteDAOImpl sInviteDAOImpl;
+	private static SessionDAOImpl sSessionDAOImpl;
+	private static SimpleNoteDAOImpl sSimpleNoteDAOImpl;
+	private static UserDAOImpl sUserDAOImpl;
+	private static UserGroupDAOImpl sUserGroupDAOImpl;
 
-	public static GroupDAOImpl getGroupDAO() {
-		if (sGroupDAO == null) {
-			sGroupDAO = new GroupDAOImpl();
+	public static GroupDAO getGroupDAO() {
+		if (sGroupDAOImpl == null) {
+			sGroupDAOImpl = new GroupDAOImpl();
 		}
-		return sGroupDAO;
+		return sGroupDAOImpl;
 	}
 
-	public static GroupRoleDAOImpl getGroupRoleDAO() {
-		if (sGroupRoleDAO == null) {
-			sGroupRoleDAO = new GroupRoleDAOImpl();
+	public static GroupRoleDAO getGroupRoleDAO() {
+		if (sGroupRoleDAOImpl == null) {
+			sGroupRoleDAOImpl = new GroupRoleDAOImpl();
 		}
-		return sGroupRoleDAO;
+		return sGroupRoleDAOImpl;
 	}
 
-	public static InviteDAOImpl getInviteDAO() {
-		if (sInviteDAO == null) {
-			sInviteDAO = new InviteDAOImpl();
+	public static InviteDAO getInviteDAO() {
+		if (sInviteDAOImpl == null) {
+			sInviteDAOImpl = new InviteDAOImpl();
 		}
-		return sInviteDAO;
+		return sInviteDAOImpl;
 	}
 
-	public static SessionDAOImpl getSessionDAO() {
-		if (sSessionDAO == null) {
-			sSessionDAO = new SessionDAOImpl();
+	public static SessionDAO getSessionDAO() {
+		if (sSessionDAOImpl == null) {
+			sSessionDAOImpl = new SessionDAOImpl();
 		}
-		return sSessionDAO;
+		return sSessionDAOImpl;
 	}
 
-	public static SimpleNoteDAOImpl getSimpleNoteDAO() {
-		if (sSimpleNoteDAO == null) {
-			sSimpleNoteDAO = new SimpleNoteDAOImpl();
+	public static SimpleNoteDAO getSimpleNoteDAO() {
+		if (sSimpleNoteDAOImpl == null) {
+			sSimpleNoteDAOImpl = new SimpleNoteDAOImpl();
 		}
-		return sSimpleNoteDAO;
+		return sSimpleNoteDAOImpl;
 	}
 
-	public static UserDAOImpl getUserDAO() {
-		if (sUserDAO == null) {
-			sUserDAO = new UserDAOImpl();
+	public static UserDAO getUserDAO() {
+		if (sUserDAOImpl == null) {
+			sUserDAOImpl = new UserDAOImpl();
 		}
-		return sUserDAO;
+		return sUserDAOImpl;
 	}
 
-	public static UserGroupDAOImpl getUserGroupDAO() {
-		if (sUserGroupDAO == null) {
-			sUserGroupDAO = new UserGroupDAOImpl();
+	public static UserGroupDAO getUserGroupDAO() {
+		if (sUserGroupDAOImpl == null) {
+			sUserGroupDAOImpl = new UserGroupDAOImpl();
 		}
-		return sUserGroupDAO;
+		return sUserGroupDAOImpl;
 	}
 
 }

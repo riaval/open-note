@@ -14,30 +14,31 @@ import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
 
 import service.GroupService;
+import service.ServiceFactory;
 import service.exception.BadAuthenticationException;
 import controller.representation.Status;
 import controller.representation.StatusFactory;
+import controller.representation.UserGroupRepresentation;
 import domain.UserGroup;
-import domain.response.UserGroupResponse;
 
 public class GroupResource extends ServerResource {
 
-	private String slug;
+	private String mSlug;
+	private GroupService mGroupService;
 
 	@Override
 	protected void doInit() throws ResourceException {
-		this.slug = (String) getRequest().getAttributes().get("slug");
+		mGroupService = ServiceFactory.getGroupService();
+		this.mSlug = (String) getRequest().getAttributes().get("slug");
 	}
 
 	@Post
 	public Representation createGroup(Representation entity) {
 		Form form = new Form(entity);
 		try {
-			GroupService groupService = new GroupService();
-
 			String name = form.getFirstValue("name");
 			String sessionHash = form.getFirstValue("session_hash");
-			groupService.createGroup(slug, name, sessionHash);
+			mGroupService.createGroup(mSlug, name, sessionHash);
 
 			return new JacksonRepresentation<Status>( StatusFactory.created() );
 		} catch (BadAuthenticationException e) {
@@ -55,16 +56,15 @@ public class GroupResource extends ServerResource {
 	@Get("json")
 	public Representation getGroups() {
 		try {
-			GroupService groupService = new GroupService();
 			String sessionHash = getQuery().getValues("session_hash");
-			Set<UserGroup> userGroups = groupService.getGroups(sessionHash);
+			Set<UserGroup> userGroups = mGroupService.getGroups(sessionHash);
 
-			List<UserGroupResponse> groupsResponse = new ArrayList<UserGroupResponse>();
+			List<UserGroupRepresentation> groupsResponse = new ArrayList<UserGroupRepresentation>();
 			for (UserGroup each : userGroups) {
-				groupsResponse.add(new UserGroupResponse(each));
+				groupsResponse.add(new UserGroupRepresentation(each));
 			}
 
-			return new JacksonRepresentation<List<UserGroupResponse>>(groupsResponse);
+			return new JacksonRepresentation<List<UserGroupRepresentation>>(groupsResponse);
 		} catch (BadAuthenticationException e) {
 			System.err.println(StatusFactory.getErrorMessage(e));
 			return new JacksonRepresentation<Status>( StatusFactory.clientUnauthorized(e.getMessage()) );
@@ -77,9 +77,8 @@ public class GroupResource extends ServerResource {
 	@Delete
 	public Representation deleteGroup(){
 		try {
-			GroupService groupService = new GroupService();
 			String sessionHash = getQuery().getValues("session_hash");
-			groupService.deleteGroup(slug, sessionHash);
+			mGroupService.deleteGroup(mSlug, sessionHash);
 
 			return new JacksonRepresentation<Status>( StatusFactory.ok() );
 		} catch (BadAuthenticationException e) {

@@ -14,25 +14,28 @@ import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
 
 import service.InviteService;
+import service.ServiceFactory;
 import service.exception.BadAuthenticationException;
+import controller.representation.InviteRepresentation;
 import controller.representation.Status;
 import controller.representation.StatusFactory;
 import domain.Invite;
-import domain.response.InviteResponse;
 
 public class InviteResource extends ServerResource {
 
-	private String slug;
-	private String login;
-	private long invitationId;
+	private String mSlug;
+	private String mLogin;
+	private long mInvitationId;
+	private InviteService mInviteService;
 
 	@Override
 	protected void doInit() throws ResourceException {
-		this.slug = (String) getRequest().getAttributes().get("slug");
-		this.login = (String) getRequest().getAttributes().get("login");
+		mInviteService = ServiceFactory.getInviteService();
+		this.mSlug = (String) getRequest().getAttributes().get("slug");
+		this.mLogin = (String) getRequest().getAttributes().get("login");
 		String invitationId = (String) getRequest().getAttributes().get("invitationId");
 		if(invitationId != null){
-			this.invitationId = Long.parseLong(invitationId);
+			this.mInvitationId = Long.parseLong(invitationId);
 		}
 	}
 
@@ -40,9 +43,8 @@ public class InviteResource extends ServerResource {
 	public Representation createInvite(Representation entity) {
 		Form form = new Form(entity);
 		try {
-			InviteService inviteService = new InviteService();
 			String sessionHash = form.getFirstValue("session_hash");
-			inviteService.createInvitation(slug, login, sessionHash);
+			mInviteService.createInvitation(mSlug, mLogin, sessionHash);
 
 			return new JacksonRepresentation<Status>( StatusFactory.created() );
 		} catch (BadAuthenticationException e) {
@@ -60,16 +62,15 @@ public class InviteResource extends ServerResource {
 	@Get
 	public Representation getInvites() {
 		try {
-			InviteService inviteService = new InviteService();
 			String sessionHash = getQuery().getValues("session_hash");
-			Set<Invite> invites = inviteService.getInvitations(sessionHash);
+			Set<Invite> invites = mInviteService.getInvitations(sessionHash);
 
-			List<InviteResponse> invitationsResponse = new ArrayList<InviteResponse>();
+			List<InviteRepresentation> invitationsResponse = new ArrayList<InviteRepresentation>();
 			for (Invite each : invites) {
-				invitationsResponse.add(new InviteResponse(each));
+				invitationsResponse.add(new InviteRepresentation(each));
 			}
 
-			return new JacksonRepresentation<List<InviteResponse>>(invitationsResponse);
+			return new JacksonRepresentation<List<InviteRepresentation>>(invitationsResponse);
 		} catch (BadAuthenticationException e) {
 			System.err.println(StatusFactory.getErrorMessage(e));
 			return new JacksonRepresentation<Status>( StatusFactory.clientUnauthorized(e.getMessage()) );
@@ -82,9 +83,8 @@ public class InviteResource extends ServerResource {
 	@Delete
 	public Representation deleteInvite() {
 		try {
-			InviteService inviteService = new InviteService();
 			String sessionHash = getQuery().getValues("session_hash");
-			inviteService.deleteInvitation(sessionHash, invitationId);
+			mInviteService.deleteInvitation(sessionHash, mInvitationId);
 
 			return new JacksonRepresentation<Status>( StatusFactory.ok() );
 		} catch (BadAuthenticationException e) {

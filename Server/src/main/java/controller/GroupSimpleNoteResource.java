@@ -12,35 +12,36 @@ import org.restlet.resource.Post;
 import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
 
+import service.ServiceFactory;
 import service.SimpleNoteService;
 import service.exception.BadAuthenticationException;
+import controller.representation.SimpleNoteRepresentation;
 import controller.representation.Status;
 import controller.representation.StatusFactory;
 import domain.SimpleNote;
-import domain.response.SimpleNoteResponse;
 
 public class GroupSimpleNoteResource extends ServerResource {
 
-	private String groupSlug;
+	private String mGroupSlug;
+	private SimpleNoteService mSimpleNoteService;
 
 	@Override
 	protected void doInit() throws ResourceException {
-		this.groupSlug = getRequest().getAttributes().get("groupSlug").toString();
+		mSimpleNoteService = ServiceFactory.getSimpleNoteService();
+		this.mGroupSlug = getRequest().getAttributes().get("groupSlug").toString();
 	}
 
 	@Post
 	public Representation createSimpleNote(Representation entity) {
 		Form form = new Form(entity);
 		try {
-			SimpleNoteService simpleNoteService = new SimpleNoteService();
-
 			String title = form.getFirstValue("title");
 			String body = form.getFirstValue("body");
 			String sessionHash = form.getFirstValue("session_hash");
 
-			SimpleNote simpleNote = simpleNoteService.createSimpleNote(title, body, groupSlug, sessionHash);
+			SimpleNote simpleNote = mSimpleNoteService.createSimpleNote(title, body, mGroupSlug, sessionHash);
 
-			return new JacksonRepresentation<SimpleNoteResponse>( new SimpleNoteResponse(simpleNote) );
+			return new JacksonRepresentation<SimpleNoteRepresentation>( new SimpleNoteRepresentation(simpleNote) );
 		} catch (BadAuthenticationException e) {
 			System.err.println(StatusFactory.getErrorMessage(e));
 			return new JacksonRepresentation<Status>( StatusFactory.clientUnauthorized(e.getMessage()) );
@@ -55,17 +56,16 @@ public class GroupSimpleNoteResource extends ServerResource {
 
 	@Get("json")
 	public Representation getSimpleNotes() {
-		SimpleNoteService simpleNoteService = new SimpleNoteService();
 		try {
 			String sessionHash = getQuery().getValues("session_hash");
-			Set<SimpleNote> simpleNotes = simpleNoteService.getSimpleNotes(groupSlug, sessionHash);
+			Set<SimpleNote> simpleNotes = mSimpleNoteService.getSimpleNotes(mGroupSlug, sessionHash);
 
-			List<SimpleNoteResponse> simpleNotesResponse = new ArrayList<SimpleNoteResponse>();
+			List<SimpleNoteRepresentation> simpleNotesResponse = new ArrayList<SimpleNoteRepresentation>();
 			for (SimpleNote each : simpleNotes) {
-				simpleNotesResponse.add(new SimpleNoteResponse(each));
+				simpleNotesResponse.add(new SimpleNoteRepresentation(each));
 			}
 
-			return new JacksonRepresentation<List<SimpleNoteResponse>>(simpleNotesResponse);
+			return new JacksonRepresentation<List<SimpleNoteRepresentation>>(simpleNotesResponse);
 		} catch (BadAuthenticationException e) {
 			System.err.println(StatusFactory.getErrorMessage(e));
 			return new JacksonRepresentation<Status>( StatusFactory.clientUnauthorized(e.getMessage()) );
