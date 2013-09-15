@@ -12,7 +12,7 @@
     <string name="nothing">Nothing so far</string>
     <string name="connectoin_error">Connection error</string>
     
-    <string name="host_name">192.168.0.101:8080</string>
+    <string name="host_name">opennote-opennote.rhcloud.com</string>
     <string name="preference_file_key">pref_file</string>
     <string name="session_hash">session_hash</string>
     <string name="user_login">user_login</string>

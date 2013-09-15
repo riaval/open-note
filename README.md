@@ -13,3 +13,14 @@ OpenNote is a client-server application for Android that implements service for 
 - users create groups and add group notes
 - users have a choice: create notes in their own sandbox or in one of the public groups
 - additional type of note: 'for acquaintance'
+
+Usage
+===========
+
+### Run server side in-memory:
+```
+clean install tomcat7:run
+```
+
+### Demo:
+[Project on OpenShift](http://opennote-opennote.rhcloud.com)
