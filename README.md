@@ -1,6 +1,6 @@
 Description
 ===========
-###### BIONIC University, JavaEE June 2013. Course project.  
+###### BIONIC University, JavaSE June 2013. Course project.  
 OpenNote is a client-server application for Android that implements service for group notes.
 
 ### Features:
